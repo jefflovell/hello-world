@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Signal Bloom is a sound-reactive audio sampler and visualizer built with OGL, Howler, Web Audio, and Vite."
+    />
+    <title>Signal Bloom | Kaizen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../styles.css" />
+    <script src="../../script.js" defer></script>
+  </head>
+  <body class="case-study-page">
+    <header class="site-header">
+      <a class="brand" href="../../" aria-label="Kaizen home">KAIZEN<span>.</span></a>
+      <button
+        class="menu-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="site-nav"
+      >
+        <span class="sr-only">Toggle navigation</span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav id="site-nav" class="site-nav" aria-label="Main navigation">
+        <a href="../../#about">About</a>
+        <a href="../../#work">Work</a>
+        <a href="../../#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="case-hero" aria-labelledby="project-title">
+        <div class="case-kicker">
+          <a href="../../#work">← All work</a>
+          <span>Project 01</span>
+        </div>
+        <div class="case-title">
+          <h1 id="project-title">Signal Bloom</h1>
+          <p>Audio Sampler &amp; Visualizer</p>
+        </div>
+        <div class="case-actions">
+          <a
+            class="button"
+            href="https://jefflovell.github.io/signal-bloom/"
+            rel="noreferrer"
+          >
+            Play Signal Bloom
+          </a>
+          <a
+            class="text-link"
+            href="https://github.com/jefflovell/signal-bloom"
+            rel="noreferrer"
+          >
+            View GitHub repo <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+        <div class="signal-preview" aria-hidden="true">
+          <div class="signal-grid"></div>
+          <div class="signal-wave"></div>
+          <span class="signal-shard shard-one"></span>
+          <span class="signal-shard shard-two"></span>
+          <span class="signal-shard shard-three"></span>
+          <span class="signal-shard shard-four"></span>
+          <span class="signal-label">Sound / Light / Input</span>
+        </div>
+      </section>
+
+      <section class="case-content">
+        <div class="case-section">
+          <p class="case-section-label">Inspiration &amp; purpose</p>
+          <div class="case-section-copy">
+            <h2>A familiar idea, rebuilt for the modern browser.</h2>
+            <p>
+              Signal Bloom began as a modernization of an earlier
+              <a href="https://github.com/jefflovell/Patatap-Clone" rel="noreferrer"
+                >Patatap clone</a
+              >. Inspired by
+              <a href="https://patatap.com/" rel="noreferrer">Patatap</a>, the
+              original idea was simple and joyful: press a key, hear a sound,
+              and see a color respond.
+            </p>
+            <p>
+              This version keeps that immediacy while giving it a darker,
+              digital character. Sound envelopes drive neon fragments, a
+              frequency trace, and a reactive grid, turning a keyboard or
+              touchscreen into a small audiovisual instrument.
+            </p>
+          </div>
+        </div>
+
+        <div class="case-section">
+          <p class="case-section-label">Tech stack</p>
+          <div class="stack-list">
+            <article>
+              <span>01</span>
+              <h3>
+                <a href="https://github.com/oframe/ogl" rel="noreferrer">OGL</a>
+              </h3>
+              <p>GPU-rendered fragments, particles, and reactive visuals.</p>
+            </article>
+            <article>
+              <span>02</span>
+              <h3>
+                <a href="https://howlerjs.com/" rel="noreferrer">Howler</a>
+              </h3>
+              <p>Reliable, cross-browser sample loading and playback.</p>
+            </article>
+            <article>
+              <span>03</span>
+              <h3>
+                <a
+                  href="https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API"
+                  rel="noreferrer"
+                  >Web Audio</a
+                >
+              </h3>
+              <p>Real-time frequency and energy analysis from each sound.</p>
+            </article>
+            <article>
+              <span>04</span>
+              <h3>
+                <a href="https://vite.dev/" rel="noreferrer">Vite</a>
+              </h3>
+              <p>A fast development loop and a small static production build.</p>
+            </article>
+          </div>
+        </div>
+
+        <div class="case-section case-decision">
+          <p class="case-section-label">Why this stack</p>
+          <div class="case-section-copy">
+            <h2>Small tools with clear jobs.</h2>
+            <p>
+              The project needed responsive graphics and dependable audio
+              without the weight of a large application framework. OGL keeps
+              the WebGL layer compact, Howler smooths over browser audio
+              differences, and the native Web Audio API exposes the signal
+              data that connects sound to motion.
+            </p>
+            <p>
+              Vite ties those pieces together with minimal setup and produces a
+              static site that can be served directly from GitHub Pages. The
+              result stays quick to load, easy to deploy, and focused on the
+              interaction itself.
+            </p>
+          </div>
+        </div>
+
+        <div class="case-footer">
+          <p>Source code and sound credits are available in the repository.</p>
+          <a
+            class="button"
+            href="https://github.com/jefflovell/signal-bloom"
+            rel="noreferrer"
+          >
+            Explore the code
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer id="contact" class="site-footer">
+      <p>Built with care and a little curiosity.</p>
+      <a href="https://github.com/jefflovell" rel="me">@jefflovell</a>
+      <a class="back-to-top" href="#" aria-label="Back to top">↑</a>
+    </footer>
+  </body>
+</html>
