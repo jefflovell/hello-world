@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Game of Life is an interactive Canvas 2D study of Conway's cellular automaton."
+    />
+    <title>Game of Life | Kaizen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../styles.css" />
+    <script src="../../script.js" defer></script>
+  </head>
+  <body class="case-study-page">
+    <header class="site-header">
+      <a class="brand" href="../../" aria-label="Kaizen home">KAIZEN<span>.</span></a>
+      <button
+        class="menu-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="site-nav"
+      >
+        <span class="sr-only">Toggle navigation</span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav id="site-nav" class="site-nav" aria-label="Main navigation">
+        <a href="../../#about">About</a>
+        <a href="../../#work">Work</a>
+        <a href="../../#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="case-hero" aria-labelledby="project-title">
+        <div class="case-kicker">
+          <a href="../../#work">← All work</a>
+          <span>Project 03</span>
+        </div>
+        <div class="case-title">
+          <h1 id="project-title">Game of Life</h1>
+          <p>Cellular Automaton Study</p>
+        </div>
+        <div class="case-actions">
+          <a
+            class="button"
+            href="https://jefflovell.github.io/game-of-life/"
+            rel="noreferrer"
+          >
+            Run Game of Life
+          </a>
+          <a
+            class="text-link"
+            href="https://github.com/jefflovell/game-of-life"
+            rel="noreferrer"
+          >
+            View GitHub repo <span aria-hidden="true">↗</span>
+          </a>
+        </div>
+        <div class="life-preview" aria-hidden="true">
+          <span class="life-cell cell-a"></span>
+          <span class="life-cell cell-b"></span>
+          <span class="life-cell cell-c"></span>
+          <span class="life-cell cell-d"></span>
+          <span class="life-cell cell-e"></span>
+          <span class="life-cell cell-f"></span>
+          <span class="life-label">B3 / S23 · Seed field</span>
+        </div>
+      </section>
+
+      <section class="case-content">
+        <div class="case-section">
+          <p class="case-section-label">Inspiration &amp; purpose</p>
+          <div class="case-section-copy">
+            <h2>Small rules, visible emergence.</h2>
+            <p>
+              Conway's Game of Life runs on a spare rule: dead cells are born
+              with three neighbors, and live cells survive with two or three.
+              Everything else comes from the starting seed.
+            </p>
+            <p>
+              This version turns that system into a compact simulation console
+              with classic specimens, adjustable grid density, speed control,
+              and direct drawing on the field.
+            </p>
+          </div>
+        </div>
+
+        <div class="case-section">
+          <p class="case-section-label">Tech stack</p>
+          <div class="stack-list">
+            <article>
+              <span>01</span>
+              <h3>
+                <a
+                  href="https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API"
+                  rel="noreferrer"
+                  >Canvas 2D</a
+                >
+              </h3>
+              <p>The simulation field, glow passes, cell age, and trails.</p>
+            </article>
+            <article>
+              <span>02</span>
+              <h3>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" rel="noreferrer"
+                  >JavaScript</a
+                >
+              </h3>
+              <p>Rule evaluation, RLE preset parsing, drawing, and controls.</p>
+            </article>
+            <article>
+              <span>03</span>
+              <h3>
+                <a href="https://developer.mozilla.org/en-US/docs/Web/CSS" rel="noreferrer"
+                  >CSS</a
+                >
+              </h3>
+              <p>The responsive instrument panel and neon visual system.</p>
+            </article>
+            <article>
+              <span>04</span>
+              <h3>
+                <a href="https://pages.github.com/" rel="noreferrer">GitHub Pages</a>
+              </h3>
+              <p>A static deployment path with no runtime server.</p>
+            </article>
+          </div>
+        </div>
+
+        <div class="case-section case-decision">
+          <p class="case-section-label">Why this stack</p>
+          <div class="case-section-copy">
+            <h2>Lightweight, but still expressive.</h2>
+            <p>
+              Game of Life is mostly grid state and rule evaluation, so Canvas
+              2D gives the piece enough rendering control without the weight of
+              a WebGL layer. The result stays small and direct.
+            </p>
+            <p>
+              The interface focuses on inspection: choose a known seed, adjust
+              the grid, change speed, step through generations, or draw cells
+              into the field by hand.
+            </p>
+          </div>
+        </div>
+
+        <div class="case-footer">
+          <p>The live simulation and source code are available on GitHub.</p>
+          <a
+            class="button"
+            href="https://github.com/jefflovell/game-of-life"
+            rel="noreferrer"
+          >
+            Explore the code
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer id="contact" class="site-footer">
+      <p>Built with care and a little curiosity.</p>
+      <a href="https://github.com/jefflovell" rel="me">@jefflovell</a>
+      <a class="back-to-top" href="#" aria-label="Back to top">↑</a>
+    </footer>
+  </body>
+</html>

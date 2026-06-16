@@ -441,6 +441,11 @@ h1 {
   background: #19172c;
 }
 
+.project-life {
+  border-top: 1px solid rgb(255 255 255 / 12%);
+  background: #07101f;
+}
+
 .chromatic-preview {
   display: grid;
   grid-template-columns: 1fr 0.8fr 1fr;
@@ -483,6 +488,102 @@ h1 {
   color: #cf73ff;
   font-size: 0.65rem;
   letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.life-preview {
+  position: relative;
+  min-height: 430px;
+  margin-top: 84px;
+  overflow: hidden;
+  border: 2px solid var(--ink);
+  background:
+    linear-gradient(rgba(75, 243, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(75, 243, 255, 0.08) 1px, transparent 1px),
+    radial-gradient(circle at 54% 44%, rgba(49, 85, 245, 0.32), transparent 28%),
+    #060916;
+  background-size: 24px 24px, 24px 24px, 100% 100%, 100% 100%;
+  box-shadow: 10px 10px 0 var(--coral), 0 36px 90px rgb(22 29 60 / 24%);
+}
+
+.life-preview::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.03) 0,
+    rgba(255, 255, 255, 0.03) 1px,
+    transparent 1px,
+    transparent 18px
+  );
+}
+
+.life-cell {
+  position: absolute;
+  width: 18px;
+  aspect-ratio: 1;
+  background: #4bf3ff;
+  box-shadow: 0 0 18px rgba(75, 243, 255, 0.72);
+}
+
+.life-cell::after {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  background: rgba(247, 246, 241, 0.4);
+}
+
+.cell-a {
+  top: 34%;
+  left: 32%;
+}
+
+.cell-b {
+  top: 40%;
+  left: 36%;
+  background: var(--coral);
+  box-shadow: 0 0 18px rgba(255, 117, 95, 0.72);
+}
+
+.cell-c {
+  top: 46%;
+  left: 28%;
+}
+
+.cell-d {
+  top: 46%;
+  left: 32%;
+  background: var(--coral);
+  box-shadow: 0 0 18px rgba(255, 117, 95, 0.72);
+}
+
+.cell-e {
+  top: 46%;
+  left: 36%;
+}
+
+.cell-f {
+  top: 42%;
+  left: 58%;
+  box-shadow:
+    0 0 18px rgba(75, 243, 255, 0.72),
+    34px 18px 0 rgba(75, 243, 255, 0.5),
+    52px 18px 0 rgba(255, 117, 95, 0.6),
+    68px 36px 0 rgba(75, 243, 255, 0.5);
+}
+
+.life-label {
+  position: absolute;
+  right: 28px;
+  bottom: 22px;
+  z-index: 1;
+  color: rgba(75, 243, 255, 0.72);
+  font-family: var(--display);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-shadow: 0 0 12px rgba(75, 243, 255, 0.46);
   text-transform: uppercase;
 }
 
@@ -1022,6 +1123,11 @@ h1 {
     min-height: 280px;
     margin-top: 64px;
     border-radius: 22px 46px 28px 40px;
+  }
+
+  .life-preview {
+    min-height: 280px;
+    margin-top: 64px;
   }
 
   .signal-grid {
