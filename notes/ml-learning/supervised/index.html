@@ -16,7 +16,7 @@
     />
     <link rel="stylesheet" href="../../../styles.css" />
     <script src="../../../script.js" defer></script>
-    <script src="supervised.js" defer></script>
+    <script src="supervised.js?v=3" defer></script>
   </head>
   <body class="note-page">
     <header class="site-header">
@@ -60,15 +60,36 @@
           It teaches a machine to look at what specific information about an
           example matters in deciding how it is labeled. By practicing on these
           labeled examples, the machine can give the right answer when shown a
-          brand-new, never-before-seen example without a label. This kind of
-          learning is useful for things like predicting the sale price of a house
-          based on its neighborhood and number of bedrooms, deciding whether an
-          email is spam, or deciding whether an example belongs to group A or
-          group B. Supervised learning is the most common kind of machine
-          learning and the style of learning that content
-          recommendations, social media feeds, frequently bought together
-          suggestions, and large language models use.
+          brand-new, never-before-seen example without a label.
         </p>
+        <p>
+          This kind of learning is useful when the answer can be learned from
+          examples: predicting a house's sale price from its neighborhood and
+          bedrooms, deciding whether an email is spam, ranking recommendations,
+          or guessing whether a new example belongs to group A or group B.
+          Supervised learning is the most common kind of machine learning and
+          the style behind recommendation systems, social feeds, frequently
+          bought together suggestions, image classifiers, and large language
+          models.
+        </p>
+      </section>
+
+      <section class="learning-loop" aria-label="Supervised learning loop">
+        <article>
+          <span>01</span>
+          <h2>Train on labels</h2>
+          <p>Start with examples that already include the right answer.</p>
+        </article>
+        <article>
+          <span>02</span>
+          <h2>Adjust after mistakes</h2>
+          <p>Compare each guess with the label and nudge the rule.</p>
+        </article>
+        <article>
+          <span>03</span>
+          <h2>Predict without labels</h2>
+          <p>Use the learned rule on new examples where the answer is unknown.</p>
+        </article>
       </section>
 
       <section class="learning-intro supervised-intro">
@@ -155,19 +176,19 @@
             <p class="case-section-label">Current evaluation</p>
             <dl>
               <div>
-                <dt>Point</dt>
+                <dt>Features (position)</dt>
                 <dd id="trace-point">Waiting</dd>
               </div>
               <div>
-                <dt>Score</dt>
+                <dt>Score (distance)</dt>
                 <dd id="trace-score">0.00</dd>
               </div>
               <div>
-                <dt>Guess → label</dt>
+                <dt>Guess (label)</dt>
                 <dd id="trace-guess">Waiting</dd>
               </div>
               <div>
-                <dt>Adjustment</dt>
+                <dt>Adjustment (to line)</dt>
                 <dd id="trace-update">Step to evaluate</dd>
               </div>
             </dl>
@@ -193,8 +214,20 @@
             </div>
           </div>
 
+          <aside class="watch-panel" aria-label="What to watch in the classifier">
+            <p class="case-section-label">What to watch</p>
+            <ul>
+              <li>Dots are labeled examples.</li>
+              <li>The white line is the decision boundary.</li>
+              <li>Score shows signed distance from the line.</li>
+              <li>Mistakes nudge the line toward better guesses.</li>
+            </ul>
+          </aside>
+
           <div class="classifier-caption">
-            <p>
+            <section>
+              <h3>Features</h3>
+              <p>
               Each training example in this demonstration (a dot on the graph)
               is simply a list of numbers and a label: a horizontal
               position (x-axis), a vertical position (y-axis),
@@ -203,8 +236,11 @@
               <em>features</em>, and the list of these feature values is called
               a <em>feature vector</em>. All feature vectors, or training
               examples, have the same number of features in the same order.
-            </p>
-            <p>
+              </p>
+            </section>
+            <section>
+              <h3>Weights</h3>
+              <p>
               The equation <code>w ← w + η(y - ŷ)x</code> says: if the guess is
               wrong, adjust the machine's weights to redraw the boundary line.
               You can think of weights like tuneable knobs that the machine can
@@ -214,22 +250,29 @@
               adjustment to make after each wrong guess, <code>y</code> is the
               label of the example (cyan or coral), <code>ŷ</code> (y-hat) is
               the machine's guess, and <code>x</code> is the training example.
-            </p>
-            <p>
+              </p>
+            </section>
+            <section>
+              <h3>Epochs</h3>
+              <p>
               The machine looks at each training example (feature vector) and
               makes a guess, then adjusts the line based on wrong answers,
               trying to improve the accuracy of guesses as much as possible.
               The machine repeats this process over and over without
               understanding anything about the data. It simply tries to make
-              the best fit. This type of process is called <em>brute force</em>,
-              like trying every combination on a lock. One full pass through
+              the best fit through <em>iterative training</em>: guess, compare,
+              adjust, and repeat. Training uses labels. Prediction uses the
+              learned rule on new examples without labels. One full pass through
               all of the training examples is called a training <em>epoch</em>.
               For real-world problems, which frequently have hundreds or
               thousands of features and millions of training examples, it can
               take thousands or more training epochs to get a useful model.
               That's billions or trillions or even more guesses.
-            </p>
-            <p>
+              </p>
+            </section>
+            <section>
+              <h3>Outliers</h3>
+              <p>
               Step through the model or train a few epochs until the model
               accuracy hits 100%. Then try placing a cyan dot or three in the
               cluster of coral dots, or stick some dots way off on the edges of
@@ -237,7 +280,8 @@
               unusual kinds of examples that do not fit the rest of the data are
               called <em>outliers</em>, and they are one of the main challenges
               of real-world problems where data is messy.
-            </p>
+              </p>
+            </section>
           </div>
         </div>
       </section>
