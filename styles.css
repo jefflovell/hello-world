@@ -502,6 +502,16 @@ h1 {
   font-size: 1.15rem;
 }
 
+.note-title p.key-idea {
+  margin-bottom: 0;
+  padding: 22px 24px;
+  border: 2px solid var(--ink);
+  background: #fff;
+  box-shadow: 8px 8px 0 var(--lavender);
+  color: var(--ink);
+  font-style: italic;
+}
+
 .learning-orbit {
   position: relative;
   min-height: 430px;
@@ -597,6 +607,14 @@ h1 {
   font-weight: 600;
   letter-spacing: -0.035em;
   line-height: 1.08;
+}
+
+.supervised-intro p {
+  color: var(--coral);
+}
+
+.supervised-intro strong {
+  color: var(--ink);
 }
 
 .learning-basics {
@@ -754,16 +772,31 @@ h1 {
   text-underline-offset: 5px;
 }
 
+.supervised-overview {
+  width: min(1200px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 52px 0;
+  border-top: 1px solid var(--line);
+}
+
+.supervised-overview p {
+  margin-bottom: 0;
+  color: var(--muted);
+  font-size: 1.12rem;
+}
+
 .algo-grid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 18px;
+  align-items: center;
   width: min(1200px, calc(100% - 48px));
   margin: 0 auto;
   padding: 80px 0;
 }
 
 .algo-card {
+  position: relative;
   min-height: 230px;
   padding: 24px;
   border: 2px solid var(--ink);
@@ -772,10 +805,15 @@ h1 {
 }
 
 .algo-card.is-active {
+  z-index: 1;
   background:
     linear-gradient(135deg, rgba(75, 243, 255, 0.14), transparent 58%),
     #fff;
-  box-shadow: 6px 6px 0 #9deeff;
+  box-shadow:
+    0 0 0 3px rgba(49, 85, 245, 0.18),
+    8px 8px 0 #9deeff;
+  transform: scale(1.035);
+  transform-origin: center;
 }
 
 .algo-card span {
@@ -790,6 +828,10 @@ h1 {
   font-size: clamp(1.35rem, 2vw, 1.8rem);
   letter-spacing: -0.035em;
   line-height: 1.05;
+}
+
+.algo-card.is-active h2 {
+  color: var(--blue);
 }
 
 .algo-card p {
@@ -1563,6 +1605,10 @@ h1 {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .algo-card.is-active {
+    transform: none;
+  }
+
   .lab-panel {
     grid-template-columns: 1fr;
   }
@@ -1583,6 +1629,7 @@ h1 {
     width: min(100% - 32px, 1200px);
   }
 
+  .supervised-overview,
   .algo-grid,
   .lab-panel {
     width: min(100% - 32px, 1200px);
@@ -1811,6 +1858,10 @@ h1 {
 
   .learning-summary {
     padding: 64px 0 86px;
+  }
+
+  .supervised-overview {
+    padding: 42px 0;
   }
 
   .algo-grid {
