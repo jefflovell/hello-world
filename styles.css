@@ -949,14 +949,17 @@ h1 {
 }
 
 .classifier-caption {
-  max-width: 680px;
-  padding-top: 28px;
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px 48px;
+  max-width: none;
+  padding-top: 34px;
   border-top: 1px solid var(--line);
 }
 
-.classifier-caption section + section {
-  margin-top: 26px;
-  padding-top: 22px;
+.classifier-caption section {
+  padding-top: 18px;
   border-top: 1px solid var(--line);
 }
 
@@ -1711,6 +1714,10 @@ h1 {
   }
 
   .lab-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .classifier-caption {
     grid-template-columns: 1fr;
   }
 

@@ -57,10 +57,11 @@
 
       <section class="supervised-overview">
         <p>
-          It teaches a machine to look at what specific information about an
-          example matters in deciding how it is labeled. By practicing on these
-          labeled examples, the machine can give the right answer when shown a
-          brand-new, never-before-seen example without a label.
+          Supervised learning teaches a machine to look at what specific
+          information about an example matters in deciding how it is labeled. By
+          practicing on these labeled examples, the machine can give the right
+          answer when shown a brand-new, never-before-seen example without a
+          label.
         </p>
         <p>
           This kind of learning is useful when the answer can be learned from
@@ -146,7 +147,7 @@
             line.
           </p>
           <div class="step-explainer">
-            <p class="case-section-label">One step</p>
+            <p class="case-section-label">One training step</p>
             <ol>
               <li>Read one labeled point.</li>
               <li>Guess which side of the line it belongs on.</li>
@@ -223,11 +224,12 @@
               <li>Mistakes nudge the line toward better guesses.</li>
             </ul>
           </aside>
+        </div>
 
-          <div class="classifier-caption">
-            <section>
-              <h3>Features</h3>
-              <p>
+        <div class="classifier-caption">
+          <section>
+            <h3>Features</h3>
+            <p>
               Each training example in this demonstration (a dot on the graph)
               is simply a list of numbers and a label: a horizontal
               position (x-axis), a vertical position (y-axis),
@@ -236,11 +238,11 @@
               <em>features</em>, and the list of these feature values is called
               a <em>feature vector</em>. All feature vectors, or training
               examples, have the same number of features in the same order.
-              </p>
-            </section>
-            <section>
-              <h3>Weights</h3>
-              <p>
+            </p>
+          </section>
+          <section>
+            <h3>Weights</h3>
+            <p>
               The equation <code>w ← w + η(y - ŷ)x</code> says: if the guess is
               wrong, adjust the machine's weights to redraw the boundary line.
               You can think of weights like tuneable knobs that the machine can
@@ -250,11 +252,11 @@
               adjustment to make after each wrong guess, <code>y</code> is the
               label of the example (cyan or coral), <code>ŷ</code> (y-hat) is
               the machine's guess, and <code>x</code> is the training example.
-              </p>
-            </section>
-            <section>
-              <h3>Epochs</h3>
-              <p>
+            </p>
+          </section>
+          <section>
+            <h3>Epochs</h3>
+            <p>
               The machine looks at each training example (feature vector) and
               makes a guess, then adjusts the line based on wrong answers,
               trying to improve the accuracy of guesses as much as possible.
@@ -268,11 +270,11 @@
               thousands of features and millions of training examples, it can
               take thousands or more training epochs to get a useful model.
               That's billions or trillions or even more guesses.
-              </p>
-            </section>
-            <section>
-              <h3>Outliers</h3>
-              <p>
+            </p>
+          </section>
+          <section>
+            <h3>Outliers</h3>
+            <p>
               Step through the model or train a few epochs until the model
               accuracy hits 100%. Then try placing a cyan dot or three in the
               cluster of coral dots, or stick some dots way off on the edges of
@@ -280,9 +282,8 @@
               unusual kinds of examples that do not fit the rest of the data are
               called <em>outliers</em>, and they are one of the main challenges
               of real-world problems where data is messy.
-              </p>
-            </section>
-          </div>
+            </p>
+          </section>
         </div>
       </section>
     </main>
