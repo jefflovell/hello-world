@@ -73,6 +73,11 @@ function scorePoint([x, y]) {
   return state.weights.x * x + state.weights.y * y + state.weights.bias;
 }
 
+function signedDistance(rawScore, weights = state.weights) {
+  const magnitude = Math.hypot(weights.x, weights.y);
+  return magnitude ? rawScore / magnitude : 0;
+}
+
 function trainOne() {
   if (!state.points.length) return;
 
@@ -200,10 +205,11 @@ function updateTrace() {
   const score = step?.score ?? scorePoint(point);
   const guess = step?.guess ?? (score >= 0 ? 1 : -1);
   const label = step?.label ?? point[2];
+  const distance = step ? signedDistance(step.score, step.before) : signedDistance(score);
 
-  ui.tracePoint.textContent = `x=${point[0].toFixed(2)}, y=${point[1].toFixed(2)}`;
-  ui.traceScore.textContent = score.toFixed(2);
-  ui.traceGuess.textContent = `${formatClass(guess)} → ${formatClass(label)}`;
+  ui.tracePoint.textContent = `x-axis = ${point[0].toFixed(2)} | y-axis = ${point[1].toFixed(2)}`;
+  ui.traceScore.textContent = distance.toFixed(2);
+  ui.traceGuess.textContent = `${formatClass(guess)} (${formatClass(label)})`;
 
   if (!step) {
     ui.traceUpdate.textContent = "Press Step to evaluate the first point.";

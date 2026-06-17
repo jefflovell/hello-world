@@ -785,11 +785,60 @@ h1 {
   font-size: 1.12rem;
 }
 
+.supervised-overview p + p {
+  margin-top: 18px;
+}
+
+.learning-loop {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  width: min(1200px, calc(100% - 48px));
+  margin: 0 auto;
+  padding: 0 0 74px;
+}
+
+.learning-loop article {
+  min-height: 190px;
+  padding: 24px;
+  border: 2px solid var(--ink);
+  background: #fff;
+  box-shadow: 6px 6px 0 var(--lavender);
+}
+
+.learning-loop article:nth-child(2) {
+  box-shadow: 6px 6px 0 #ffd0c7;
+}
+
+.learning-loop article:nth-child(3) {
+  box-shadow: 6px 6px 0 #9deeff;
+}
+
+.learning-loop span {
+  color: var(--blue);
+  font-family: var(--display);
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.learning-loop h2 {
+  margin: 18px 0 12px;
+  font-size: clamp(1.45rem, 2.2vw, 2rem);
+  letter-spacing: -0.04em;
+  line-height: 1.02;
+}
+
+.learning-loop p {
+  margin-bottom: 0;
+  color: var(--muted);
+  font-size: 0.98rem;
+}
+
 .algo-grid {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 18px;
-  align-items: center;
+  align-items: stretch;
   width: min(1200px, calc(100% - 48px));
   margin: 0 auto;
   padding: 80px 0;
@@ -797,6 +846,8 @@ h1 {
 
 .algo-card {
   position: relative;
+  display: flex;
+  flex-direction: column;
   min-height: 230px;
   padding: 24px;
   border: 2px solid var(--ink);
@@ -810,10 +861,8 @@ h1 {
     linear-gradient(135deg, rgba(75, 243, 255, 0.14), transparent 58%),
     #fff;
   box-shadow:
-    0 0 0 3px rgba(49, 85, 245, 0.18),
+    inset 0 0 0 3px rgba(49, 85, 245, 0.16),
     8px 8px 0 #9deeff;
-  transform: scale(1.035);
-  transform-origin: center;
 }
 
 .algo-card span {
@@ -824,6 +873,7 @@ h1 {
 }
 
 .algo-card h2 {
+  min-height: 5.7rem;
   margin: 18px 0 12px;
   font-size: clamp(1.35rem, 2vw, 1.8rem);
   letter-spacing: -0.035em;
@@ -835,6 +885,7 @@ h1 {
 }
 
 .algo-card p {
+  margin-top: auto;
   margin-bottom: 0;
   color: var(--muted);
   font-size: 0.95rem;
@@ -896,13 +947,41 @@ h1 {
 
 .classifier-column {
   display: grid;
-  gap: 34px;
+  gap: 28px;
+}
+
+.classifier-lede {
+  padding: 22px 0 0;
+  border-top: 1px solid var(--line);
+}
+
+.classifier-lede p {
+  margin-bottom: 0;
+  color: var(--muted);
+  font-size: 1.06rem;
 }
 
 .classifier-caption {
-  max-width: 680px;
-  padding-top: 28px;
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px 48px;
+  max-width: none;
+  padding-top: 34px;
   border-top: 1px solid var(--line);
+}
+
+.classifier-caption section {
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.classifier-caption h3 {
+  margin-bottom: 10px;
+  color: var(--ink);
+  font-size: 1.45rem;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
 }
 
 .classifier-caption p {
@@ -920,6 +999,40 @@ h1 {
   color: var(--ink);
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   font-size: 0.95em;
+}
+
+.watch-panel {
+  padding: 22px;
+  border: 1px solid rgba(18, 24, 43, 0.2);
+  background:
+    linear-gradient(90deg, rgba(255, 117, 95, 0.1), transparent 70%),
+    rgba(255, 255, 255, 0.68);
+}
+
+.watch-panel ul {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px 18px;
+  padding: 0;
+  margin: 14px 0 0;
+  list-style: none;
+}
+
+.watch-panel li {
+  position: relative;
+  padding-left: 18px;
+  color: var(--muted);
+}
+
+.watch-panel li::before {
+  content: "";
+  position: absolute;
+  top: 0.7em;
+  left: 0;
+  width: 7px;
+  height: 7px;
+  background: var(--coral);
+  box-shadow: 0 0 0 4px rgba(255, 117, 95, 0.14);
 }
 
 .step-explainer,
@@ -965,7 +1078,7 @@ h1 {
 
 .trace-panel div {
   display: grid;
-  grid-template-columns: 120px 1fr;
+  grid-template-columns: 170px 1fr;
   gap: 16px;
   padding-top: 12px;
   border-top: 1px solid var(--line);
@@ -1601,15 +1714,25 @@ h1 {
     grid-template-columns: 1fr;
   }
 
+  .learning-loop {
+    grid-template-columns: 1fr;
+  }
+
   .algo-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .algo-card.is-active {
-    transform: none;
+    box-shadow:
+      inset 0 0 0 3px rgba(49, 85, 245, 0.16),
+      6px 6px 0 #9deeff;
   }
 
   .lab-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .classifier-caption {
     grid-template-columns: 1fr;
   }
 
@@ -1625,6 +1748,7 @@ h1 {
   .learning-intro,
   .learning-basics,
   .learning-grid,
+  .learning-loop,
   .learning-summary {
     width: min(100% - 32px, 1200px);
   }
@@ -1852,6 +1976,10 @@ h1 {
     padding: 64px 0;
   }
 
+  .learning-loop {
+    padding-bottom: 56px;
+  }
+
   .learning-card {
     padding: 26px;
   }
@@ -1873,6 +2001,10 @@ h1 {
     min-height: auto;
   }
 
+  .algo-card h2 {
+    min-height: 0;
+  }
+
   .lab-panel {
     margin-bottom: 82px;
     padding-top: 56px;
@@ -1888,6 +2020,10 @@ h1 {
 
   .classifier-caption {
     padding-top: 24px;
+  }
+
+  .watch-panel ul {
+    grid-template-columns: 1fr;
   }
 
   .trace-panel div {
