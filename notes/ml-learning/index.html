@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A practical explainer of supervised, unsupervised, semi-supervised, and reinforcement learning."
+    />
+    <title>Machine Learning Types | Kaizen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../styles.css" />
+    <script src="../../script.js" defer></script>
+  </head>
+  <body class="note-page">
+    <header class="site-header">
+      <a class="brand" href="../../" aria-label="Kaizen home">KAIZEN<span>.</span></a>
+      <button
+        class="menu-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="site-nav"
+      >
+        <span class="sr-only">Toggle navigation</span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav id="site-nav" class="site-nav" aria-label="Main navigation">
+        <a href="../../#about">About</a>
+        <a href="../../#notes">Notes</a>
+        <a href="../../#work">Work</a>
+        <a href="../../#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="note-hero" aria-labelledby="note-title">
+        <div class="case-kicker">
+          <a href="../../#notes">← Field notes</a>
+          <span>Machine Learning</span>
+        </div>
+        <div class="note-title">
+          <h1 id="note-title">Four Ways Machines Learn</h1>
+          <p>
+            Before choosing an algorithm, it helps to know what kind of
+            feedback the system is allowed to learn from.
+          </p>
+        </div>
+        <div class="learning-orbit" aria-hidden="true">
+          <span class="orbit-dot dot-supervised">Labels</span>
+          <span class="orbit-dot dot-unsupervised">Structure</span>
+          <span class="orbit-dot dot-semi">Sparse labels</span>
+          <span class="orbit-dot dot-rl">Reward</span>
+          <span class="orbit-core">Data → behavior</span>
+        </div>
+      </section>
+
+      <section class="learning-intro">
+        <p>
+          Machine learning is not one technique. It is a family of training
+          setups. The question is not only what model you use, but what signal
+          the model receives while it learns.
+        </p>
+      </section>
+
+      <section class="learning-basics">
+        <div>
+          <p class="case-section-label">What “learning” means</p>
+          <h2>Machines do not learn the way people do.</h2>
+        </div>
+        <div class="basics-copy">
+          <p>
+            In machine learning, “learning” is an analogy. The computer is not
+            understanding the world, forming beliefs, or gaining common sense.
+            It is adjusting a recipe until its outputs get better by some
+            measurable standard.
+          </p>
+          <p>
+            Imagine practicing with a stack of flashcards that already have
+            answers on the back. During training, the computer reads the front,
+            makes a guess, checks the known answer, and adjusts its internal
+            settings when it is wrong. The goal is not to memorize one card; it
+            is to get good enough at the pattern that a new card without an
+            answer can still get a useful response.
+          </p>
+          <p>
+            The finished system is a tuned pattern-matcher. It has learned in
+            the same loose way a thermostat “learns” a schedule: useful behavior
+            changed because feedback pushed its settings around.
+          </p>
+        </div>
+      </section>
+
+      <section class="learning-basics learning-timeline">
+        <div>
+          <p class="case-section-label">Training vs. using</p>
+          <h2>There are three pieces people often blur together.</h2>
+        </div>
+        <div class="timeline-list">
+          <article>
+            <span>01</span>
+            <h3>Learning algorithm</h3>
+            <p>
+              The procedure for turning the knobs. It says how to compare a
+              guess against feedback and how to change the settings afterward.
+            </p>
+          </article>
+          <article>
+            <span>02</span>
+            <h3>Training</h3>
+            <p>
+              The practice phase. The computer reads examples, makes guesses,
+              measures how wrong or useful those guesses are, and keeps tuning.
+            </p>
+          </article>
+          <article>
+            <span>03</span>
+            <h3>Inference</h3>
+            <p>
+              The use phase. Training is over; the tuned system reads a new
+              example and produces an answer, score, grouping, or next action.
+            </p>
+          </article>
+        </div>
+      </section>
+
+      <section class="learning-grid" aria-label="Types of machine learning">
+        <article class="learning-card supervised">
+          <span>01</span>
+          <h2>Supervised Learning</h2>
+          <p>
+            This is learning with an answer key. The computer sees examples
+            paired with the right answer, then practices matching new examples
+            to the same kind of answer.
+          </p>
+          <dl>
+            <div>
+              <dt>What it reads</dt>
+              <dd>Examples that already have labels, like “this email is spam” or “this house sold for $350,000.”</dd>
+            </div>
+            <div>
+              <dt>What it learns</dt>
+              <dd>How clues in the example point toward a known answer.</dd>
+            </div>
+            <div>
+              <dt>Everyday example</dt>
+              <dd>Showing many photos labeled “dog” or “not dog,” then asking it to label a new photo.</dd>
+            </div>
+          </dl>
+          <a class="card-link" href="supervised/">Explore supervised algorithms</a>
+        </article>
+
+        <article class="learning-card unsupervised">
+          <span>02</span>
+          <h2>Unsupervised Learning</h2>
+          <p>
+            This is learning without an answer key. The computer reads a pile
+            of examples and looks for groups, patterns, outliers, or simpler
+            ways to describe what is there.
+          </p>
+          <dl>
+            <div>
+              <dt>What it reads</dt>
+              <dd>Examples with no labels, like a playlist, a folder of photos, or a list of shopping trips.</dd>
+            </div>
+            <div>
+              <dt>What it learns</dt>
+              <dd>Which things seem similar, which things are unusual, and what shape the data has.</dd>
+            </div>
+            <div>
+              <dt>Everyday example</dt>
+              <dd>Sorting songs into “chill,” “workout,” and “road trip” groups without being told those names first.</dd>
+            </div>
+          </dl>
+        </article>
+
+        <article class="learning-card semi">
+          <span>03</span>
+          <h2>Semi-Supervised Learning</h2>
+          <p>
+            This is learning with a small answer key and a much bigger pile of
+            mystery examples. The labeled examples give it a foothold, then the
+            unlabeled examples help fill in the map.
+          </p>
+          <dl>
+            <div>
+              <dt>What it reads</dt>
+              <dd>A few examples with answers, plus many more examples without answers.</dd>
+            </div>
+            <div>
+              <dt>What it learns</dt>
+              <dd>How to stretch a small set of labels across a larger set of similar examples.</dd>
+            </div>
+            <div>
+              <dt>Everyday example</dt>
+              <dd>Labeling a few family photos by person, then using the rest of the album to improve the groupings.</dd>
+            </div>
+          </dl>
+        </article>
+
+        <article class="learning-card reinforcement">
+          <span>04</span>
+          <h2>Reinforcement Learning</h2>
+          <p>
+            This is learning by trying things. A computer-controlled agent takes
+            an action, sees what happens, and gets a reward or penalty that
+            nudges future choices.
+          </p>
+          <dl>
+            <div>
+              <dt>What it reads</dt>
+              <dd>The current situation, the action it took, what changed, and whether that was good or bad.</dd>
+            </div>
+            <div>
+              <dt>What it learns</dt>
+              <dd>Which choices tend to lead to better outcomes over time.</dd>
+            </div>
+            <div>
+              <dt>Everyday example</dt>
+              <dd>Learning to play a game by getting points for good moves and losing points for bad ones.</dd>
+            </div>
+          </dl>
+        </article>
+      </section>
+
+      <section class="learning-summary">
+        <div>
+          <p class="case-section-label">The practical split</p>
+          <h2>Ask what feedback exists.</h2>
+        </div>
+        <div class="summary-list">
+          <p>
+            If every example has an answer, start supervised. If there are no
+            answers, look for unsupervised structure.
+          </p>
+          <p>
+            If only some answers exist, semi-supervised methods can stretch the
+            labeled set. If decisions change what happens next, reinforcement
+            learning is the frame.
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer id="contact" class="site-footer">
+      <p>Built with care and a little curiosity.</p>
+      <a href="https://github.com/jefflovell" rel="me">@jefflovell</a>
+      <a class="back-to-top" href="#" aria-label="Back to top">↑</a>
+    </footer>
+  </body>
+</html>

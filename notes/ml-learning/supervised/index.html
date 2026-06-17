@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A practical supervised learning hub with an interactive 2D classification sketch."
+    />
+    <title>Supervised Learning | Kaizen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../../styles.css" />
+    <script src="../../../script.js" defer></script>
+    <script src="supervised.js" defer></script>
+  </head>
+  <body class="note-page">
+    <header class="site-header">
+      <a class="brand" href="../../../" aria-label="Kaizen home">KAIZEN<span>.</span></a>
+      <button
+        class="menu-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="site-nav"
+      >
+        <span class="sr-only">Toggle navigation</span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav id="site-nav" class="site-nav" aria-label="Main navigation">
+        <a href="../../../#about">About</a>
+        <a href="../../../#notes">Notes</a>
+        <a href="../../../#work">Work</a>
+        <a href="../../../#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="note-hero" aria-labelledby="note-title">
+        <div class="case-kicker">
+          <a href="../">← Learning types</a>
+          <span>Supervised learning</span>
+        </div>
+        <div class="note-title">
+          <h1 id="note-title">Learning With an Answer Key</h1>
+          <p>
+            Supervised learning starts with known examples, tunes a rule from
+            them, then uses that tuned rule on new examples.
+          </p>
+        </div>
+      </section>
+
+      <section class="learning-intro supervised-intro">
+        <p>
+          The practical question is: what answer are we trying to learn? A
+          category, a number, a nearby neighbor, a margin, or a layered pattern?
+        </p>
+      </section>
+
+      <section class="algo-grid" aria-label="Supervised learning topics">
+        <article class="algo-card is-active">
+          <span>01</span>
+          <h2>Classification</h2>
+          <p>Pick a category, like spam or not spam, based on labeled examples.</p>
+        </article>
+        <article class="algo-card">
+          <span>02</span>
+          <h2>Linear Regression</h2>
+          <p>Fit a line that predicts a number, like price, score, or demand.</p>
+        </article>
+        <article class="algo-card">
+          <span>03</span>
+          <h2>k-Nearest Neighbors</h2>
+          <p>Look at nearby examples and vote from the local neighborhood.</p>
+        </article>
+        <article class="algo-card">
+          <span>04</span>
+          <h2>SVM</h2>
+          <p>Find a separating boundary with as much margin as possible.</p>
+        </article>
+        <article class="algo-card">
+          <span>05</span>
+          <h2>MLP / DNN</h2>
+          <p>Stack simple transformations to learn curved decision surfaces.</p>
+        </article>
+      </section>
+
+      <section class="lab-panel" aria-labelledby="classification-lab-title">
+        <div class="lab-copy">
+          <p class="case-section-label">Interactive sketch</p>
+          <h2 id="classification-lab-title">A tiny classifier learns a boundary.</h2>
+          <p>
+            Each training example on the graph has two properties: a horizontal
+            position and a vertical position. All of the examples are labeled
+            “coral” or “cyan” based on which cluster they are near.
+          </p>
+          <p>
+            This classifier attempts to draw a line that lets it correctly
+            guess the color of each dot based on which side of the line the dot
+            sits. Step through training and watch the decision line move as the
+            algorithm adjusts after incorrect guesses. Add additional points of
+            either color yourself to bend the lesson.
+          </p>
+          <div class="step-explainer">
+            <p class="case-section-label">One step</p>
+            <ol>
+              <li>Read one labeled point.</li>
+              <li>Guess which side of the line it belongs on.</li>
+              <li>Compare the guess with the known label.</li>
+              <li>If wrong, nudge the line toward the right answer.</li>
+            </ol>
+            <code>w ← w + η(y - ŷ)x</code>
+            <p>
+              An epoch is one full pass through every training point.
+            </p>
+          </div>
+          <div class="lab-readout" aria-label="Classifier status">
+            <article>
+              <span>Epoch</span>
+              <strong id="epoch-count">0</strong>
+            </article>
+            <article>
+              <span>Mistakes</span>
+              <strong id="mistake-count">0</strong>
+            </article>
+            <article>
+              <span>Accuracy</span>
+              <strong id="accuracy-count">0%</strong>
+            </article>
+          </div>
+          <div class="trace-panel" aria-live="polite">
+            <p class="case-section-label">Current evaluation</p>
+            <dl>
+              <div>
+                <dt>Point</dt>
+                <dd id="trace-point">Waiting</dd>
+              </div>
+              <div>
+                <dt>Score</dt>
+                <dd id="trace-score">0.00</dd>
+              </div>
+              <div>
+                <dt>Guess → label</dt>
+                <dd id="trace-guess">Waiting</dd>
+              </div>
+              <div>
+                <dt>Adjustment</dt>
+                <dd id="trace-update">Step to evaluate</dd>
+              </div>
+            </dl>
+          </div>
+        </div>
+
+        <div class="classifier-column">
+          <div class="classifier-tool">
+            <canvas
+              id="classifier-canvas"
+              width="720"
+              height="520"
+              aria-label="Interactive 2D classification canvas"
+            ></canvas>
+            <div class="classifier-controls" aria-label="Classifier controls">
+              <div class="segmented" role="group" aria-label="Class to draw">
+                <button class="class-toggle is-selected" type="button" data-class="1">Cyan</button>
+                <button class="class-toggle" type="button" data-class="-1">Coral</button>
+              </div>
+              <button id="step-training" class="button" type="button">Step</button>
+              <button id="train-epoch" type="button">Train epoch</button>
+              <button id="reset-data" type="button">Reset</button>
+            </div>
+          </div>
+
+          <div class="classifier-caption">
+            <p>
+              This sketch uses a simple linear classifier inspired by the
+              <a href="https://en.wikipedia.org/wiki/Perceptron" rel="noreferrer"
+                >perceptron</a
+              >. “Linear” means it tries to separate the two groups cleanly
+              with a single straight line. The line is the current decision
+              boundary: points on one side are guessed as cyan, and points on
+              the other side are guessed as coral. If the machine guesses the
+              wrong color, the angle of the line changes to include that new
+              information. This happens by updating <em>weights</em> on the
+              <em>features</em> of the training examples. These weights are
+              internal to the machine.
+            </p>
+            <p>
+              A feature is a piece of information that describes the examples
+              the machine can read. Every example has the same set of features,
+              but each example may have different values. Here each point has
+              two features: its horizontal position and its vertical position,
+              plus a label for its color. In a real dataset, features might be
+              a house's square footage, an email's word count, or a customer's
+              number of visits.
+            </p>
+            <p>
+              The equation <code>w ← w + η(y - ŷ)x</code> says: if the guess is
+              wrong, adjust the weights to redraw the boundary line.
+              <code>w</code> is the current set of knobs, <code>η</code>
+              (eta) is the learning rate, or how big of an adjustment to make
+              after each wrong guess, <code>y</code> is the label on the
+              example, <code>ŷ</code> (y-hat) is the machine's guess, and
+              <code>x</code> is a list of the point's features, called a
+              <em>feature vector</em>.
+            </p>
+            <p>
+              In simple terms: “guessed wrong? move the line a little toward
+              dividing cyan from coral based on the examples seen so far.” We
+              repeat this process over and over, guessing and adjusting until
+              the machine performs well enough. One full pass through all of the
+              training examples is called a training <em>epoch</em>. With large
+              datasets, it may take many epochs to get a useful model.
+            </p>
+            <p>
+              Try placing a cyan dot or three in the cluster of coral dots, or
+              coral dots inside the cyan cluster, and watch how the mistakes and
+              accuracy respond.
+            </p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer id="contact" class="site-footer">
+      <p>Built with care and a little curiosity.</p>
+      <a href="https://github.com/jefflovell" rel="me">@jefflovell</a>
+      <a class="back-to-top" href="#" aria-label="Back to top">↑</a>
+    </footer>
+  </body>
+</html>
