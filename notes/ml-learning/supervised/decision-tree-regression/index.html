@@ -155,7 +155,7 @@
 
         <div class="tree-control-panel">
           <fieldset class="depth-selector">
-            <legend>Maximum depth</legend>
+            <legend>Maximum depth (questions per path)</legend>
             <div class="segmented depth-buttons">
               <button type="button" data-depth="1" class="is-selected">1</button>
               <button type="button" data-depth="2">2</button>
@@ -172,7 +172,7 @@
 
         <div class="lab-readout tree-readout" aria-label="Decision tree status">
           <article>
-            <span>Depth</span>
+            <span>Tree depth</span>
             <strong id="tree-depth">0</strong>
           </article>
           <article>
@@ -190,8 +190,8 @@
           <ul>
             <li>Cyan vertical lines mark threshold questions.</li>
             <li>White steps show each leaf's price prediction.</li>
-            <li>More depth lowers training error.</li>
-            <li>Very specific leaves can overfit unusual listings.</li>
+            <li>More questions per path lower training error.</li>
+            <li>Too many specific rules can memorize unusual listings.</li>
           </ul>
         </aside>
 
@@ -201,7 +201,9 @@
             <p>
               A split asks a yes-or-no question such as
               <code>performance &lt; 121?</code>. The tree chooses the threshold
-              that reduces squared prediction error the most.
+              that reduces squared prediction error the most. Each question is
+              one split: it divides the examples into a “yes” branch and a “no”
+              branch.
             </p>
           </section>
           <section>
@@ -215,17 +217,24 @@
           <section>
             <h3>Depth</h3>
             <p>
-              Depth limits how many questions the tree may ask on the way to a
-              prediction. Shallow trees are simpler; deeper trees can represent
-              finer price bands.
+              Depth is the number of questions one example can encounter from
+              the top of the tree to its final leaf. A depth-two tree may ask
+              one question and then one follow-up question. It can contain
+              several splits overall, but no single prediction follows more
+              than two of them. Shallow trees are simpler; deeper trees can
+              create finer price bands.
             </p>
           </section>
           <section>
             <h3>Overfitting</h3>
             <p>
-              If a tree grows too deep, it can isolate individual sales and
-              achieve tiny training error while making brittle predictions for
-              new listings.
+              A very deep tree can memorize the training examples instead of
+              learning the broader market pattern. It is like memorizing the
+              answers to one practice test: the score looks perfect until the
+              real test asks different questions. A tree might create one leaf
+              just for an unusually expensive GPU and then overprice every new
+              GPU that lands in that tiny region. Low training error is only
+              useful when the model also predicts new examples well.
             </p>
           </section>
         </div>
