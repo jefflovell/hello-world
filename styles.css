@@ -1544,6 +1544,8 @@ h1 {
 }
 
 .coefficient-mixer {
+  display: flex;
+  flex-direction: column;
   background: #07101f;
   color: #fff;
   box-shadow: 10px 10px 0 var(--coral);
@@ -1717,6 +1719,11 @@ h1 {
   margin-top: 18px;
   color: rgba(247, 246, 241, 0.58);
   font-size: 0.76rem;
+}
+
+.coefficient-mixer .lab-use-panel {
+  margin-top: auto;
+  color: var(--ink);
 }
 
 .zero-key span {
@@ -1895,8 +1902,6 @@ h1 {
 }
 
 .norm-explainer {
-  display: grid;
-  gap: 10px;
   margin-top: 16px;
   padding: 15px;
   border: 1px solid var(--ink);
@@ -1977,24 +1982,14 @@ h1 {
   font-weight: 800;
 }
 
-.lambda-glyph {
-  width: 16px;
-  height: 21px;
-  overflow: visible;
-}
-
-.lambda-glyph path {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2.3;
-  stroke-linecap: square;
-  stroke-linejoin: miter;
-}
-
-.lambda-glyph-small {
-  width: 11px;
-  height: 15px;
-  vertical-align: -3px;
+.lambda-value > code {
+  padding: 0;
+  background: transparent;
+  color: var(--ink);
+  font-family: monospace;
+  font-size: 1.15rem;
+  font-weight: 400;
+  line-height: 1;
 }
 
 .lambda-slider {
@@ -2017,10 +2012,10 @@ h1 {
 }
 
 .lab-use-panel {
-  margin-top: 18px;
+  margin-top: 28px;
   padding: 18px;
   border: 1px solid var(--ink);
-  background: linear-gradient(110deg, rgba(157, 238, 255, 0.2), #fff 48%, rgba(255, 117, 95, 0.12));
+  background: linear-gradient(110deg, #ddf8ff, #fff 48%, #ffe5df);
   box-shadow: 6px 6px 0 rgba(255, 117, 95, 0.65);
 }
 
@@ -2042,6 +2037,15 @@ h1 {
   padding-right: 0;
   padding-left: 16px;
   border-left: 1px solid rgba(18, 24, 43, 0.28);
+}
+
+.lab-use-grid code {
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  font-family: monospace;
+  font-size: 0.95rem;
+  font-weight: 400;
 }
 
 .regularization-watch {

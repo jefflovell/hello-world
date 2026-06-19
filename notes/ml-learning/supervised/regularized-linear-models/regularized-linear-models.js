@@ -20,6 +20,8 @@ const ui = {
   errorCurves: document.querySelector("#error-curves"),
   balance: document.querySelector("#balance-callout"),
   activeCount: document.querySelector("#active-feature-count"),
+  normExplainer: document.querySelector("#norm-explainer"),
+  modelExplainer: document.querySelector("#model-explainer"),
   modelButtons: [...document.querySelectorAll("[data-model]")],
   lambdaButtons: [...document.querySelectorAll("[data-lambda]")],
   lambdaSlider: document.querySelector("#lambda-slider"),
@@ -156,6 +158,21 @@ function render() {
   renderBoard(values);
   ui.modelName.textContent = state.model === "ridge" ? "Ridge Regression" : "Lasso Regression";
   ui.modelBehavior.textContent = state.model === "ridge" ? "All signals stay in the mix." : active < features.length ? `${features.length - active} weak signal${features.length - active === 1 ? "" : "s"} muted.` : "Weak signals are approaching zero.";
+  if (state.model === "ridge") {
+    ui.normExplainer.innerHTML = `<p><strong>L2</strong> measures coefficient size by adding their squares: <code>b₁² + b₂² + …</code></p>`;
+    ui.modelExplainer.innerHTML = `<article data-model-explainer="ridge">
+      <span>Ridge · L2</span>
+      <h3>Turn every voice down.</h3>
+      <p>Ridge shrinks all coefficients toward zero. Strong signals remain strongest, but no single feature gets to dominate unchecked.</p>
+    </article>`;
+  } else {
+    ui.normExplainer.innerHTML = `<p><strong>L1</strong> measures coefficient size by adding their absolute values: <code>|b₁| + |b₂| + …</code></p>`;
+    ui.modelExplainer.innerHTML = `<article data-model-explainer="lasso">
+      <span>Lasso · L1</span>
+      <h3>Remove the weakest voices.</h3>
+      <p>Lasso can push small coefficients exactly to zero, performing a kind of automatic feature selection.</p>
+    </article>`;
+  }
   ui.prediction.textContent = `${completion}%`;
   ui.trainingError.textContent = training.toFixed(1);
   ui.unseenError.textContent = unseen.toFixed(1);
