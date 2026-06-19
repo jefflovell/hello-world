@@ -1150,9 +1150,10 @@ h1 {
 }
 
 .tree-node {
+  box-sizing: border-box;
   display: grid;
   gap: 3px;
-  min-width: 96px;
+  width: 112px;
   padding: 10px 8px;
   border: 2px solid var(--ink);
   background: #fff;
@@ -1187,8 +1188,6 @@ h1 {
 .tree-children {
   position: relative;
   display: grid;
-  grid-template-columns: repeat(2, minmax(96px, 1fr));
-  gap: 10px;
   width: 100%;
   padding-top: 34px;
 }
@@ -1197,19 +1196,21 @@ h1 {
   content: "";
   position: absolute;
   top: 16px;
-  left: 25%;
-  width: 50%;
+  left: var(--connector-left);
+  width: calc(var(--connector-right) - var(--connector-left));
   border-top: 2px solid var(--ink);
 }
 
-.tree-children > div {
+.tree-child {
   position: relative;
   display: grid;
   justify-items: center;
+  align-content: start;
   gap: 8px;
+  min-width: 0;
 }
 
-.tree-children > div::before {
+.tree-child::before {
   content: "";
   position: absolute;
   top: -18px;
@@ -2478,10 +2479,6 @@ h1 {
 
   .tree-actions {
     grid-template-columns: 1fr;
-  }
-
-  .tree-children {
-    min-width: 220px;
   }
 
   .supervised-task-grid {

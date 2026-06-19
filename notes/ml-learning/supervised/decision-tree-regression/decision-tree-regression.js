@@ -279,20 +279,32 @@ function nodeMarkup(node) {
     )}</strong><small>${node.rows.length} GPU${node.rows.length === 1 ? "" : "s"}</small></div>`;
   }
 
-  const leafCount = collectLeaves(node).length;
-  return `<div class="tree-branch" style="width:${Math.max(104, leafCount * 112)}px">
+  const leftLeaves = collectLeaves(node.left).length;
+  const rightLeaves = collectLeaves(node.right).length;
+  const leafCount = leftLeaves + rightLeaves;
+  const slotWidth = 136;
+  const leftWidth = leftLeaves * slotWidth;
+  const rightWidth = rightLeaves * slotWidth;
+  const totalWidth = leafCount * slotWidth;
+  const connectorLeft = (leftWidth / 2 / totalWidth) * 100;
+  const connectorRight = ((leftWidth + rightWidth / 2) / totalWidth) * 100;
+
+  return `<div class="tree-branch" style="width:${totalWidth}px">
     <div class="tree-node split-node"><span>question</span><strong>performance &lt; ${Math.round(
       node.threshold,
     )}?</strong></div>
-    <div class="tree-children">
-      <div><span class="branch-label">yes</span>${nodeMarkup(node.left)}</div>
-      <div><span class="branch-label">no</span>${nodeMarkup(node.right)}</div>
+    <div
+      class="tree-children"
+      style="grid-template-columns:${leftWidth}px ${rightWidth}px;--connector-left:${connectorLeft}%;--connector-right:${connectorRight}%"
+    >
+      <div class="tree-child"><span class="branch-label">yes</span>${nodeMarkup(node.left)}</div>
+      <div class="tree-child"><span class="branch-label">no</span>${nodeMarkup(node.right)}</div>
     </div>
   </div>`;
 }
 
 function renderDiagram() {
-  ui.diagram.style.minWidth = `${Math.max(360, collectLeaves(state.tree).length * 112)}px`;
+  ui.diagram.style.minWidth = `${Math.max(360, collectLeaves(state.tree).length * 136)}px`;
   ui.diagram.innerHTML = nodeMarkup(state.tree);
 }
 
