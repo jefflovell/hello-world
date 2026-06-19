@@ -16,7 +16,7 @@
     />
     <link rel="stylesheet" href="../../../../styles.css?v=2" />
     <script src="../../../../script.js" defer></script>
-    <script src="linear-regression.js?v=1" defer></script>
+    <script src="linear-regression.js?v=2" defer></script>
   </head>
   <body class="note-page">
     <header class="site-header">
@@ -66,6 +66,37 @@
           it because price also reflects age, VRAM, condition, efficiency,
           scarcity, and the occasional wildly optimistic seller.
         </p>
+      </section>
+
+      <section class="learning-basics regression-feature">
+        <div>
+          <p class="case-section-label">From benchmarks to a feature</p>
+          <h2>Many frame rates become one comparable number.</h2>
+        </div>
+        <div class="basics-copy">
+          <p>
+            Raw evidence might start as average frames per second across several
+            games tested at the same resolution and graphics settings. Because
+            one game may favor a particular GPU, a benchmark suite combines
+            results from many games instead of trusting a single frame-rate
+            result.
+          </p>
+          <p>
+            We normalize those results against a reference GPU. In this
+            simplified example, the reference card receives a relative
+            performance score of <strong>100</strong>. A card that is roughly
+            50% faster across the benchmark suite would score near
+            <strong>150</strong>.
+          </p>
+          <p>
+            That single score becomes the model's input <em>feature</em>, while
+            used price is the target it tries to predict. This index is a
+            teaching abstraction, not an industry standard. A real pricing
+            model might retain game-specific results alongside VRAM, age,
+            condition, efficiency, and warranty instead of compressing
+            performance into one number.
+          </p>
+        </div>
       </section>
 
       <section class="learning-loop" aria-label="Linear regression learning loop">
@@ -126,8 +157,8 @@
             <p class="case-section-label">Price estimator</p>
             <dl>
               <div>
-                <dt>Performance</dt>
-                <dd><span id="performance-value">120</span> FPS index</dd>
+                <dt>Relative performance</dt>
+                <dd><span id="performance-value">120</span> index points</dd>
               </div>
               <div>
                 <dt>Estimated price</dt>
@@ -140,8 +171,16 @@
             </dl>
             <label class="prediction-slider">
               <span class="sr-only">GPU performance</span>
-              <input id="performance-input" type="range" min="40" max="220" value="120" />
+              <input
+                id="performance-input"
+                type="range"
+                min="40"
+                max="220"
+                value="120"
+                aria-describedby="performance-scale-note"
+              />
             </label>
+            <p id="performance-scale-note" class="scale-note">Reference GPU = 100</p>
           </div>
         </div>
 
@@ -163,7 +202,8 @@
           <div class="classifier-lede">
             <p>
               Each dot is a fictionalized used GPU sale. The horizontal axis is
-              relative gaming performance; the vertical axis is resale price.
+              relative gaming performance, where the reference GPU equals 100;
+              the vertical axis is resale price.
               The cyan line is the model's current estimate. Click anywhere on
               the graph to add a market listing and see how an outlier pulls the
               model.

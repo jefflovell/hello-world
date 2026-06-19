@@ -158,7 +158,11 @@ function drawGrid() {
 
   ctx.fillStyle = "#f7f6f1";
   ctx.textAlign = "center";
-  ctx.fillText("Gaming performance index", chart.left + plotWidth() / 2, canvas.height - 18);
+  ctx.fillText(
+    "Relative gaming performance (reference = 100)",
+    chart.left + plotWidth() / 2,
+    canvas.height - 18,
+  );
   ctx.save();
   ctx.translate(18, chart.top + plotHeight() / 2);
   ctx.rotate(-Math.PI / 2);

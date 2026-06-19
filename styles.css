@@ -1143,6 +1143,12 @@ h1 {
   cursor: ew-resize;
 }
 
+.scale-note {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
 .classifier-controls {
   display: grid;
   grid-template-columns: 1.3fr repeat(3, minmax(0, 1fr));
