@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="An interactive introduction to linear regression using GPU performance and used-market prices."
+    />
+    <title>Linear Regression | Kaizen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../../../styles.css?v=2" />
+    <script src="../../../../script.js" defer></script>
+    <script src="linear-regression.js?v=1" defer></script>
+  </head>
+  <body class="note-page">
+    <header class="site-header">
+      <a class="brand" href="../../../../" aria-label="Kaizen home">KAIZEN<span>.</span></a>
+      <button
+        class="menu-toggle"
+        type="button"
+        aria-expanded="false"
+        aria-controls="site-nav"
+      >
+        <span class="sr-only">Toggle navigation</span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav id="site-nav" class="site-nav" aria-label="Main navigation">
+        <a href="../../../../#about">About</a>
+        <a href="../../../../#notes">Notes</a>
+        <a href="../../../../#work">Work</a>
+        <a href="../../../../#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="note-hero" aria-labelledby="note-title">
+        <div class="case-kicker">
+          <a href="../../">← Learning types</a>
+          <span>Supervised learning</span>
+        </div>
+        <div class="note-title">
+          <h1 id="note-title">Linear Regression</h1>
+          <p class="key-idea">
+            Linear regression learns a straight-line relationship between a
+            numeric input and a numeric outcome.
+          </p>
+        </div>
+      </section>
+
+      <section class="supervised-overview">
+        <p>
+          Regression is the branch of supervised learning that predicts a
+          number rather than a category. Here, the input is a GPU's gaming
+          performance and the outcome is its used-market price.
+        </p>
+        <p>
+          A fitted line gives us a useful baseline: what would a GPU normally
+          cost at this performance level? Real listings wander above and below
+          it because price also reflects age, VRAM, condition, efficiency,
+          scarcity, and the occasional wildly optimistic seller.
+        </p>
+      </section>
+
+      <section class="learning-loop" aria-label="Linear regression learning loop">
+        <article>
+          <span>01</span>
+          <h2>Read examples</h2>
+          <p>Start with GPUs whose performance and resale price are known.</p>
+        </article>
+        <article>
+          <span>02</span>
+          <h2>Measure error</h2>
+          <p>Compare each predicted price with the actual sold price.</p>
+        </article>
+        <article>
+          <span>03</span>
+          <h2>Fit the line</h2>
+          <p>Adjust slope and intercept to reduce error across the market.</p>
+        </article>
+      </section>
+
+      <section class="learning-intro supervised-intro">
+        <p>
+          <strong>The question:</strong> Given a GPU's benchmark performance,
+          what is a reasonable used price?
+        </p>
+      </section>
+
+      <section class="lab-panel regression-lab" aria-labelledby="regression-lab-title">
+        <div class="lab-copy">
+          <p class="case-section-label">Supervised learning | Regression</p>
+          <h2 id="regression-lab-title">A price model finds the trend.</h2>
+          <div class="step-explainer">
+            <p class="case-section-label">One training epoch</p>
+            <ol>
+              <li>Predict the price of every GPU.</li>
+              <li>Measure each residual: actual minus predicted.</li>
+              <li>Adjust the line to reduce the combined error.</li>
+              <li>Repeat until the line settles near the best fit.</li>
+            </ol>
+            <code>price ≈ slope × performance + intercept</code>
+            <p>The model sees numbers, not brands, hype, or condition.</p>
+          </div>
+          <div class="lab-readout" aria-label="Regression status">
+            <article>
+              <span>Epoch</span>
+              <strong id="epoch-count">0</strong>
+            </article>
+            <article>
+              <span>Avg. error</span>
+              <strong id="error-count">$0</strong>
+            </article>
+            <article>
+              <span>100 FPS value</span>
+              <strong id="baseline-count">$0</strong>
+            </article>
+          </div>
+          <div class="trace-panel" aria-live="polite">
+            <p class="case-section-label">Price estimator</p>
+            <dl>
+              <div>
+                <dt>Performance</dt>
+                <dd><span id="performance-value">120</span> FPS index</dd>
+              </div>
+              <div>
+                <dt>Estimated price</dt>
+                <dd id="price-estimate">$0</dd>
+              </div>
+              <div>
+                <dt>Model</dt>
+                <dd id="model-equation">Waiting to train</dd>
+              </div>
+            </dl>
+            <label class="prediction-slider">
+              <span class="sr-only">GPU performance</span>
+              <input id="performance-input" type="range" min="40" max="220" value="120" />
+            </label>
+          </div>
+        </div>
+
+        <div class="classifier-column">
+          <div class="classifier-tool">
+            <canvas
+              id="regression-canvas"
+              width="720"
+              height="520"
+              aria-label="GPU performance and resale price regression graph"
+            ></canvas>
+            <div class="classifier-controls regression-controls" aria-label="Regression controls">
+              <button id="step-training" class="button" type="button">Train one epoch</button>
+              <button id="fit-model" type="button">Fit model</button>
+              <button id="reset-data" type="button">Reset</button>
+            </div>
+          </div>
+
+          <div class="classifier-lede">
+            <p>
+              Each dot is a fictionalized used GPU sale. The horizontal axis is
+              relative gaming performance; the vertical axis is resale price.
+              The cyan line is the model's current estimate. Click anywhere on
+              the graph to add a market listing and see how an outlier pulls the
+              model.
+            </p>
+          </div>
+
+          <aside class="watch-panel" aria-label="What to watch in linear regression">
+            <p class="case-section-label">What to watch</p>
+            <ul>
+              <li>Dots are known sales used for training.</li>
+              <li>The line predicts price from performance.</li>
+              <li>Residuals are the gaps between dots and line.</li>
+              <li>Outliers can tilt the model away from the trend.</li>
+            </ul>
+          </aside>
+        </div>
+
+        <div class="classifier-caption">
+          <section>
+            <h3>Slope</h3>
+            <p>
+              The slope describes how much price tends to rise when performance
+              increases. A steeper line means the market pays a larger premium
+              for each additional unit of gaming performance.
+            </p>
+          </section>
+          <section>
+            <h3>Intercept</h3>
+            <p>
+              The intercept anchors the line. It is the model's predicted price
+              when the normalized performance input is zero—not necessarily a
+              useful real-world GPU, but a number the equation needs.
+            </p>
+          </section>
+          <section>
+            <h3>Residuals</h3>
+            <p>
+              A residual is the difference between an actual sale and the
+              model's estimate. A card above the line sold for more than
+              expected; one below it sold for less.
+            </p>
+          </section>
+          <section>
+            <h3>Missing features</h3>
+            <p>
+              Performance alone cannot explain every price. Adding age, VRAM,
+              condition, power use, and warranty would turn this into multiple
+              linear regression and usually improve the estimate.
+            </p>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <footer id="contact" class="site-footer">
+      <p>Built with care and a little curiosity.</p>
+      <a href="https://github.com/jefflovell" rel="me">@jefflovell</a>
+      <a class="back-to-top" href="#" aria-label="Back to top">↑</a>
+    </footer>
+  </body>
+</html>
