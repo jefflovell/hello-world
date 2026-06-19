@@ -1631,6 +1631,54 @@ h1 {
   background: rgba(247, 246, 241, 0.82);
 }
 
+.coefficient-slider {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  background: transparent;
+  cursor: ns-resize;
+  writing-mode: vertical-lr;
+  direction: rtl;
+}
+
+.coefficient-slider::-webkit-slider-runnable-track {
+  width: 100%;
+  background: transparent;
+}
+
+.coefficient-slider::-webkit-slider-thumb {
+  width: 34px;
+  height: 16px;
+  border: 2px solid #9deeff;
+  border-radius: 0;
+  appearance: none;
+  -webkit-appearance: none;
+  background: #162033;
+  box-shadow: inset 0 0 0 3px #303b4e;
+}
+
+.coefficient-slider::-moz-range-track {
+  background: transparent;
+}
+
+.coefficient-slider::-moz-range-thumb {
+  width: 30px;
+  height: 14px;
+  border: 2px solid #9deeff;
+  border-radius: 0;
+  background: #162033;
+}
+
+.coefficient-slider:focus-visible {
+  outline: 2px solid #ffd45c;
+  outline-offset: 2px;
+}
+
 .coefficient-channel strong {
   font-size: 0.76rem;
   line-height: 1.25;

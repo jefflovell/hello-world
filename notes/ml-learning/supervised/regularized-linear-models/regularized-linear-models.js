@@ -8,6 +8,8 @@ const features = [
 ];
 
 const state = { model: "ridge", lambda: 0.3 };
+const baselineComplexity = features.reduce((sum, feature) => sum + Math.abs(feature.base), 0);
+const fittedBases = features.map((feature) => feature.base);
 const ui = {
   board: document.querySelector("#coefficient-board"),
   modelName: document.querySelector("#model-name"),
@@ -48,8 +50,15 @@ function errorsFor(lambda, model = state.model) {
   const position = lambdaPosition(lambda);
   const optimum = model === "ridge" ? lambdaPosition(0.35) : lambdaPosition(0.55);
   const distance = position - optimum;
-  const training = 7.4 + position * 7.2 + (model === "lasso" ? 0.35 : 0);
-  const unseen = 9.15 + Math.pow(distance, 2) * (distance < 0 ? 80 : 13) + (model === "lasso" ? 0.15 : 0);
+  const complexity = features.reduce((sum, feature) => sum + Math.abs(feature.base), 0) / baselineComplexity;
+  const weightShift = features.reduce((sum, feature, index) => sum + Math.abs(feature.base - fittedBases[index]), 0);
+  const training = 7.4 + position * 7.2 + (1 - complexity) * 1.4 + weightShift * 1.2 + (model === "lasso" ? 0.35 : 0);
+  const unseen = 9.15
+    + Math.pow(distance, 2) * (distance < 0 ? 80 : 13)
+    + Math.max(0, complexity - 1) * 2
+    + Math.max(0, 0.7 - complexity) * 3
+    + weightShift * 2
+    + (model === "lasso" ? 0.15 : 0);
   return { training, unseen };
 }
 
@@ -61,15 +70,27 @@ function modelState(unseen) {
 }
 
 function renderBoard(values) {
-  ui.board.innerHTML = values.map(({ feature, value }) => {
+  if (!ui.board.children.length) {
+    ui.board.innerHTML = values.map(({ feature }, index) => `<article class="coefficient-channel" data-channel="${index}">
+      <div class="coefficient-value"></div>
+      <div class="coefficient-rail">
+        <i></i><span class="coefficient-zero"></span>
+        <input class="coefficient-slider" type="range" min="-0.4" max="0.4" step="0.01" value="${feature.base}" data-feature="${index}" aria-label="${feature.name} starting coefficient">
+      </div>
+      <strong>${feature.name}</strong>
+    </article>`).join("");
+  }
+  values.forEach(({ feature, value }, index) => {
+    const channel = ui.board.querySelector(`[data-channel="${index}"]`);
     const height = Math.max(2, (Math.abs(value) / 0.36) * 150);
     const inactive = Math.abs(value) < 0.001;
-    return `<article class="coefficient-channel ${inactive ? "is-muted" : ""}">
-      <div class="coefficient-value">${value >= 0 ? "+" : ""}${value.toFixed(2)}</div>
-      <div class="coefficient-rail"><i class="${value >= 0 ? "positive" : "negative"}" style="height:${height}px"></i><span class="coefficient-zero"></span></div>
-      <strong>${feature.name}</strong>
-    </article>`;
-  }).join("");
+    const bar = channel.querySelector(".coefficient-rail i");
+    channel.classList.toggle("is-muted", inactive);
+    channel.querySelector(".coefficient-value").textContent = `${value >= 0 ? "+" : ""}${value.toFixed(2)}`;
+    channel.querySelector(".coefficient-slider").value = feature.base;
+    bar.className = value >= 0 ? "positive" : "negative";
+    bar.style.height = `${height}px`;
+  });
 }
 
 function chartPath(points, width, top, height) {
@@ -146,6 +167,12 @@ ui.lambdaButtons.forEach((button) => button.addEventListener("click", () => {
 }));
 ui.lambdaSlider.addEventListener("input", () => {
   state.lambda = Number(lambdaFromPosition(Number(ui.lambdaSlider.value)).toFixed(2));
+  render();
+});
+ui.board.addEventListener("input", (event) => {
+  const slider = event.target.closest("[data-feature]");
+  if (!slider) return;
+  features[Number(slider.dataset.feature)].base = Number(slider.value);
   render();
 });
 render();
