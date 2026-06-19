@@ -1272,6 +1272,209 @@ h1 {
   margin-top: 28px;
 }
 
+.knn-lab-panel {
+  width: min(1200px, calc(100% - 48px));
+  margin: 0 auto 110px;
+  padding-top: 80px;
+  border-top: 1px solid var(--line);
+}
+
+.knn-lab-heading {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 48px;
+  align-items: end;
+  margin-bottom: 38px;
+}
+
+.knn-lab-heading .case-section-label {
+  grid-column: 1 / -1;
+  margin-bottom: -24px;
+}
+
+.knn-lab-heading h2 {
+  margin: 0;
+  font-size: clamp(2.5rem, 5vw, 5rem);
+  letter-spacing: -0.055em;
+  line-height: 0.96;
+}
+
+.knn-lab-heading > p:last-child {
+  margin: 0;
+  color: var(--muted);
+  font-size: 1.08rem;
+}
+
+.knn-lab-grid {
+  display: grid;
+  grid-template-columns: 1.18fr 0.82fr;
+  gap: 24px;
+}
+
+.knn-map-tool,
+.knn-neighbor-panel {
+  min-width: 0;
+  padding: 20px;
+  border: 2px solid var(--ink);
+  background: #fff;
+}
+
+.knn-map-tool {
+  box-shadow: 10px 10px 0 var(--coral);
+}
+
+.knn-neighbor-panel {
+  box-shadow: 10px 10px 0 #9deeff;
+}
+
+#knn-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 2px solid var(--ink);
+  background: #07101f;
+  cursor: grab;
+  touch-action: none;
+}
+
+#knn-canvas:active {
+  cursor: grabbing;
+}
+
+.knn-drag-note {
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.neighbor-list {
+  display: grid;
+  gap: 0;
+  padding: 0;
+  margin: 20px 0 26px;
+  list-style: none;
+}
+
+.neighbor-list li {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) auto auto;
+  gap: 10px;
+  align-items: center;
+  padding: 13px 0;
+  border-top: 1px solid var(--line);
+}
+
+.neighbor-rank {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  background: var(--blue);
+  color: #fff;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.neighbor-title {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.neighbor-distance {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.neighbor-list strong {
+  color: var(--coral);
+  font-family: var(--display);
+  font-size: 0.88rem;
+}
+
+.knn-prediction {
+  padding: 20px;
+  border: 2px solid var(--ink);
+  background: rgba(75, 243, 255, 0.1);
+  box-shadow: 6px 6px 0 #9deeff;
+}
+
+.knn-prediction span {
+  display: block;
+  color: var(--blue);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.knn-prediction strong {
+  display: block;
+  margin-top: 8px;
+  font-family: var(--display);
+  font-size: clamp(1.8rem, 3vw, 2.7rem);
+  letter-spacing: -0.04em;
+}
+
+.knn-prediction p {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.knn-control-panel {
+  display: grid;
+  grid-template-columns: 1.25fr 0.75fr;
+  gap: 22px;
+  margin-top: 28px;
+}
+
+.knn-selector {
+  padding: 16px;
+  border: 1px solid rgba(18, 24, 43, 0.22);
+}
+
+.knn-selector legend {
+  padding: 0 7px;
+  color: var(--ink);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.knn-buttons {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.knn-actions {
+  display: grid;
+  grid-template-columns: 1.35fr 1fr;
+  gap: 12px;
+  align-items: end;
+}
+
+.knn-actions button {
+  min-height: 48px;
+  border: 2px solid var(--ink);
+  background: #fff;
+  color: var(--ink);
+  font: 700 0.86rem var(--body);
+  cursor: pointer;
+}
+
+.knn-actions .button {
+  background: var(--ink);
+  color: #fff;
+}
+
+.knn-readout {
+  max-width: 620px;
+}
+
+.knn-watch {
+  margin-top: 28px;
+}
+
 .lab-panel {
   display: grid;
   grid-template-columns: 0.46fr 0.54fr;
@@ -2144,7 +2347,9 @@ h1 {
   }
 
   .tree-lab-heading,
-  .tree-lab-grid {
+  .tree-lab-grid,
+  .knn-lab-heading,
+  .knn-lab-grid {
     grid-template-columns: 1fr;
   }
 
@@ -2153,6 +2358,14 @@ h1 {
   }
 
   .tree-control-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .knn-lab-heading .case-section-label {
+    margin-bottom: -20px;
+  }
+
+  .knn-control-panel {
     grid-template-columns: 1fr;
   }
 
@@ -2194,6 +2407,7 @@ h1 {
   .algo-grid,
   .lab-panel,
   .tree-lab-panel,
+  .knn-lab-panel,
   .supervised-task-grid,
   .supervised-summary {
     width: min(100% - 32px, 1200px);
@@ -2458,6 +2672,36 @@ h1 {
   .tree-lab-panel {
     margin-bottom: 82px;
     padding-top: 56px;
+  }
+
+  .knn-lab-panel {
+    margin-bottom: 82px;
+    padding-top: 56px;
+  }
+
+  .knn-lab-heading {
+    gap: 26px;
+  }
+
+  .knn-lab-heading .case-section-label {
+    margin-bottom: -14px;
+  }
+
+  .knn-map-tool,
+  .knn-neighbor-panel {
+    padding: 12px;
+  }
+
+  .knn-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .neighbor-list li {
+    grid-template-columns: 28px 1fr auto;
+  }
+
+  .neighbor-distance {
+    display: none;
   }
 
   .tree-lab-heading {

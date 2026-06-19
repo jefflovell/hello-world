@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="An interactive introduction to k-nearest neighbors regression through recommendation-system cold start."
+    />
+    <title>k-Nearest Neighbors Regression | Kaizen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../../../../styles.css?v=5" />
+    <script src="../../../../script.js" defer></script>
+    <script src="knn-regression.js?v=1" defer></script>
+  </head>
+  <body class="note-page">
+    <header class="site-header">
+      <a class="brand" href="../../../../" aria-label="Kaizen home">KAIZEN<span>.</span></a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+        <span class="sr-only">Toggle navigation</span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav id="site-nav" class="site-nav" aria-label="Main navigation">
+        <a href="../../../../#about">About</a>
+        <a href="../../../../#notes">Notes</a>
+        <a href="../../../../#work">Work</a>
+        <a href="../../../../#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="note-hero" aria-labelledby="note-title">
+        <div class="case-kicker">
+          <a href="../">← Supervised learning</a>
+          <span>Regression</span>
+        </div>
+        <div class="note-title">
+          <h1 id="note-title">k-Nearest Neighbors Regression</h1>
+          <p class="key-idea">
+            k-NN predicts a number by finding the most similar known examples
+            and averaging their outcomes.
+          </p>
+        </div>
+      </section>
+
+      <section class="supervised-overview">
+        <p>
+          Imagine a new streaming title entering the catalog with no viewing
+          history. A global model could apply one rule to every title, and a
+          tree could place it into a predefined segment. k-NN takes a more local
+          approach: find titles that resemble this one and borrow their signal.
+        </p>
+        <p>
+          This is useful during <em>cold start</em>, when behavioral data does
+          not exist yet. Content features—tone, pace, genre, runtime, audience,
+          cast, or learned embeddings—provide an initial basis for similarity
+          until real viewing behavior arrives.
+        </p>
+      </section>
+
+      <section class="learning-loop" aria-label="k-nearest neighbors regression loop">
+        <article>
+          <span>01</span>
+          <h2>Describe the new title</h2>
+          <p>Represent its content as a consistent set of numeric features.</p>
+        </article>
+        <article>
+          <span>02</span>
+          <h2>Find nearby titles</h2>
+          <p>Measure distance and select the closest k known examples.</p>
+        </article>
+        <article>
+          <span>03</span>
+          <h2>Average their outcomes</h2>
+          <p>Use neighbor engagement as the new title's initial estimate.</p>
+        </article>
+      </section>
+
+      <section class="learning-intro supervised-intro">
+        <p>
+          <strong>The question:</strong> With no viewing history, what can
+          similar titles tell us about a new release?
+        </p>
+      </section>
+
+      <p class="algorithm-path-label">Suggested regression learning path</p>
+      <section class="algo-grid regression-menu" aria-label="Suggested regression learning path">
+        <article class="algo-card">
+          <span>01</span>
+          <h2>Linear Regression</h2>
+          <p>Fit a straight-line relationship between features and a number.</p>
+          <a class="algo-card-link" href="../linear-regression/">Explore linear regression</a>
+        </article>
+        <article class="algo-card">
+          <span>02</span>
+          <h2>Decision Trees</h2>
+          <p>Split the feature space into regions with different numeric estimates.</p>
+          <a class="algo-card-link" href="../decision-tree-regression/">Explore decision tree regression</a>
+        </article>
+        <article class="algo-card is-active">
+          <span>03</span>
+          <h2>k-Nearest Neighbors</h2>
+          <p>Average the outcomes of nearby examples instead of fitting one global rule.</p>
+        </article>
+        <article class="algo-card">
+          <span>04</span>
+          <h2>Regularized Linear Models</h2>
+          <p>Use ridge or lasso penalties to control complexity and overfitting.</p>
+        </article>
+        <article class="algo-card">
+          <span>05</span>
+          <h2>Support Vector Regression</h2>
+          <p>Fit a function that keeps most errors inside a tolerated margin.</p>
+        </article>
+        <article class="algo-card">
+          <span>06</span>
+          <h2>Ensembles</h2>
+          <p>Combine trees through random forests or gradient boosting.</p>
+        </article>
+        <article class="algo-card">
+          <span>07</span>
+          <h2>Neural Networks</h2>
+          <p>Learn complex nonlinear relationships through stacked transformations.</p>
+        </article>
+      </section>
+
+      <section class="knn-lab-panel" aria-labelledby="knn-lab-title">
+        <div class="knn-lab-heading">
+          <p class="case-section-label">Recommendation systems | Cold start</p>
+          <h2 id="knn-lab-title">Every new title chooses its own neighborhood.</h2>
+          <p>
+            Drag the new title through the catalog map. Its nearest neighbors
+            change, and their average minutes watched becomes the prediction.
+          </p>
+        </div>
+
+        <div class="knn-lab-grid">
+          <div class="knn-map-tool">
+            <canvas
+              id="knn-canvas"
+              width="760"
+              height="560"
+              aria-label="Interactive catalog similarity map"
+            ></canvas>
+            <p class="knn-drag-note">Drag the cyan new-title point to change its neighbors.</p>
+          </div>
+
+          <div class="knn-neighbor-panel">
+            <p class="case-section-label">Nearest known titles</p>
+            <ol id="neighbor-list" class="neighbor-list" aria-live="polite"></ol>
+            <div class="knn-prediction">
+              <span>Predicted early engagement</span>
+              <strong id="knn-prediction">0 min/viewer</strong>
+              <p>Average minutes watched among the selected neighbors.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="knn-control-panel">
+          <fieldset class="knn-selector">
+            <legend>Neighbors (k)</legend>
+            <div class="segmented knn-buttons">
+              <button type="button" data-k="1">1</button>
+              <button type="button" data-k="3">3</button>
+              <button type="button" data-k="5" class="is-selected">5</button>
+              <button type="button" data-k="7">7</button>
+              <button type="button" data-k="9">9</button>
+            </div>
+          </fieldset>
+          <div class="knn-actions">
+            <button id="move-title" class="button" type="button">Move new title</button>
+            <button id="reset-knn" type="button">Reset</button>
+          </div>
+        </div>
+
+        <div class="lab-readout knn-readout" aria-label="k-nearest neighbors status">
+          <article>
+            <span>Neighbors</span>
+            <strong id="knn-count">5</strong>
+          </article>
+          <article>
+            <span>Prediction</span>
+            <strong id="knn-readout-prediction">0 min</strong>
+          </article>
+          <article>
+            <span>Neighborhood</span>
+            <strong>Local</strong>
+          </article>
+        </div>
+
+        <aside class="watch-panel knn-watch" aria-label="What to watch in k-nearest neighbors">
+          <p class="case-section-label">What to watch</p>
+          <ul>
+            <li>Small k reacts strongly to individual titles.</li>
+            <li>Large k produces smoother, more generic estimates.</li>
+            <li>The neighborhood changes for every query.</li>
+            <li>Distance only works when features share a sensible scale.</li>
+          </ul>
+        </aside>
+
+        <div class="classifier-caption">
+          <section>
+            <h3>Cold start</h3>
+            <p>
+              New titles have no clicks, plays, completions, or watch time.
+              Content-based neighbors provide a temporary prediction until
+              enough behavioral evidence exists to personalize more directly.
+            </p>
+          </section>
+          <section>
+            <h3>Choosing k</h3>
+            <p>
+              With <code>k = 1</code>, one unusual neighbor can dominate. As k
+              grows, the estimate becomes more stable but less specific. The
+              best value is a model choice validated against held-out examples.
+            </p>
+          </section>
+          <section>
+            <h3>Feature scaling</h3>
+            <p>
+              Distance treats every numeric dimension literally. A runtime
+              measured from 20–200 could overpower a tone score measured from
+              0–1, so production features must be normalized or otherwise
+              weighted deliberately.
+            </p>
+          </section>
+          <section>
+            <h3>From maps to embeddings</h3>
+            <p>
+              Real recommendation systems often retrieve neighbors from
+              high-dimensional embeddings learned from content and behavior.
+              This two-axis map is a readable projection of the same core idea:
+              nearby vectors represent similar items.
+            </p>
+          </section>
+        </div>
+      </section>
+    </main>
+
+    <footer id="contact" class="site-footer">
+      <p>Built with care and a little curiosity.</p>
+      <a href="https://github.com/jefflovell" rel="me">@jefflovell</a>
+      <a class="back-to-top" href="#" aria-label="Back to top">↑</a>
+    </footer>
+  </body>
+</html>
