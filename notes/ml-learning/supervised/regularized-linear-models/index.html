@@ -70,7 +70,10 @@
           <div class="coefficient-mixer">
             <div class="mixer-header">
               <div><p class="case-section-label">Coefficient mixing board</p><h3 id="model-name">Ridge Regression</h3></div>
-              <p id="model-behavior">All signals stay in the mix.</p>
+              <div class="mixer-status">
+                <span>Active features <strong id="active-feature-count">6 / 6</strong></span>
+                <p id="model-behavior">All signals stay in the mix.</p>
+              </div>
             </div>
             <div id="coefficient-board" class="coefficient-board" aria-live="polite"></div>
             <div class="zero-key"><span></span> Drag the handles to perturb fitted coefficients; the colored bars show the regularized weights.</div>
@@ -95,12 +98,32 @@
               <button type="button" data-model="ridge" class="is-selected">Ridge (L2)</button>
               <button type="button" data-model="lasso">Lasso (L1)</button>
             </div>
+            <div class="norm-explainer">
+              <p><strong>L2</strong> measures coefficient size by adding their squares: <code>b₁² + b₂² + …</code></p>
+              <p><strong>L1</strong> measures coefficient size by adding their absolute values: <code>|b₁| + |b₂| + …</code></p>
+            </div>
+            <div class="model-explainer-grid">
+              <article>
+                <span>Ridge · L2</span>
+                <h3>Turn every voice down.</h3>
+                <p>Ridge shrinks all coefficients toward zero. Strong signals remain strongest, but no single feature gets to dominate unchecked.</p>
+              </article>
+              <article>
+                <span>Lasso · L1</span>
+                <h3>Remove the weakest voices.</h3>
+                <p>Lasso can push small coefficients exactly to zero, performing a kind of automatic feature selection.</p>
+              </article>
+            </div>
           </fieldset>
           <fieldset>
-            <legend>Regularization strength λ (lambda)</legend>
+            <legend>Regularization strength</legend>
             <label class="lambda-slider-label" for="lambda-slider">
               <span>Drag to tune the penalty</span>
-              <output id="lambda-slider-output" for="lambda-slider">0.30</output>
+              <span class="lambda-value">
+                <output id="lambda-slider-output" for="lambda-slider">0.30</output>
+                <svg class="lambda-glyph" viewBox="0 0 18 24" role="img" aria-label="lambda"><path d="M2 3h7l7 18M8 3 2.5 21"></path></svg>
+                <span>(lambda)</span>
+              </span>
             </label>
             <input id="lambda-slider" class="lambda-slider" type="range" min="0" max="100" step="1" value="11" aria-label="Regularization strength lambda">
             <div class="lambda-scale" aria-hidden="true"><span>0</span><span>0.1</span><span>0.3</span><span>1</span><span>3</span><span>10</span></div>
@@ -109,37 +132,26 @@
               <button type="button" data-lambda="0.3" class="is-selected">0.3</button><button type="button" data-lambda="1">1</button>
               <button type="button" data-lambda="3">3</button><button type="button" data-lambda="10">10</button>
             </div>
+            <div class="lab-use-panel">
+              <p class="case-section-label">How to use the lab</p>
+              <div class="lab-use-grid">
+                <article>
+                  <span>b · Feature mix</span>
+                  <h3>Disturb it, then constrain it.</h3>
+                  <p>Drag a feature fader to change the starting mix. Watch the regularized bars, prediction, and errors respond.</p>
+                </article>
+                <article>
+                  <span>
+                    <svg class="lambda-glyph lambda-glyph-small" viewBox="0 0 18 24" aria-hidden="true"><path d="M2 3h7l7 18M8 3 2.5 21"></path></svg>
+                    · Lambda
+                  </span>
+                  <h3>Set the cost of complexity.</h3>
+                  <p>Move right to penalize large weights more aggressively. The goal is balance—not the smallest training error.</p>
+                </article>
+              </div>
+            </div>
           </fieldset>
         </div>
-
-        <div class="lab-readout regularization-readout" aria-label="Regularization model status">
-          <article><span>Model</span><strong id="regularized-model-readout">Ridge</strong></article>
-          <article><span>λ (lambda)</span><strong id="lambda-readout">0.3</strong></article>
-          <article><span>Active features</span><strong id="active-feature-count">6 / 6</strong></article>
-        </div>
-
-        <section class="regularization-callouts" aria-label="How to read the regularization lab">
-          <article>
-            <span>Ridge · L2</span>
-            <h3>Turn every voice down.</h3>
-            <p>Ridge shrinks all coefficients toward zero. Strong signals remain strongest, but no single feature gets to dominate unchecked.</p>
-          </article>
-          <article>
-            <span>Lasso · L1</span>
-            <h3>Remove the weakest voices.</h3>
-            <p>Lasso can push small coefficients exactly to zero, performing a kind of automatic feature selection.</p>
-          </article>
-          <article>
-            <span>λ · Lambda</span>
-            <h3>Set the cost of complexity.</h3>
-            <p>Move right to penalize large weights more aggressively. The goal is balance—not the smallest training error.</p>
-          </article>
-          <article>
-            <span>How to use the lab</span>
-            <h3>Disturb it, then constrain it.</h3>
-            <p>Drag a feature fader, switch penalties, and tune λ. Watch the regularized bars, prediction, and error curves respond together.</p>
-          </article>
-        </section>
 
         <aside class="watch-panel regularization-watch" aria-label="What to watch in regularization">
           <p class="case-section-label">What to watch</p>

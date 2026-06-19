@@ -1566,11 +1566,32 @@ h1 {
   font-size: clamp(1.6rem, 3vw, 2.5rem);
 }
 
-.mixer-header > p {
+.mixer-status {
   max-width: 200px;
+  text-align: right;
+}
+
+.mixer-status > span {
+  display: block;
+  margin-bottom: 8px;
+  color: #9deeff;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+.mixer-status > span strong {
+  display: block;
+  margin-top: 2px;
+  color: #fff;
+  font-size: 1.28rem;
+  letter-spacing: -0.03em;
+}
+
+.mixer-status > p {
   margin: 0;
   color: rgba(247, 246, 241, 0.68);
-  text-align: right;
 }
 
 .coefficient-board {
@@ -1857,6 +1878,7 @@ h1 {
 .regularization-controls fieldset {
   padding: 16px;
   border: 1px solid rgba(18, 24, 43, 0.22);
+  min-width: 0;
 }
 
 .regularization-controls legend {
@@ -1872,6 +1894,65 @@ h1 {
   grid-template-columns: repeat(2, 1fr);
 }
 
+.norm-explainer {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+  padding: 15px;
+  border: 1px solid var(--ink);
+  background: rgba(157, 238, 255, 0.18);
+  box-shadow: 5px 5px 0 rgba(49, 85, 245, 0.18);
+}
+
+.norm-explainer p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.norm-explainer strong {
+  color: var(--ink);
+}
+
+.norm-explainer code {
+  color: var(--ink);
+  font-size: 0.76rem;
+}
+
+.model-explainer-grid {
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.model-explainer-grid article {
+  padding: 16px;
+  border: 1px solid rgba(18, 24, 43, 0.22);
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.model-explainer-grid span,
+.lab-use-grid > article > span {
+  color: var(--blue);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.model-explainer-grid h3,
+.lab-use-grid h3 {
+  margin: 8px 0 6px;
+  font-size: 1.04rem;
+}
+
+.model-explainer-grid p,
+.lab-use-grid p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
 .lambda-slider-label {
   display: flex;
   justify-content: space-between;
@@ -1882,10 +1963,38 @@ h1 {
   font-size: 0.8rem;
 }
 
+.lambda-value {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
 .lambda-slider-label output {
   color: var(--ink);
   font-size: 1.15rem;
   font-weight: 800;
+}
+
+.lambda-glyph {
+  width: 16px;
+  height: 21px;
+  overflow: visible;
+}
+
+.lambda-glyph path {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.3;
+  stroke-linecap: square;
+  stroke-linejoin: miter;
+}
+
+.lambda-glyph-small {
+  width: 11px;
+  height: 15px;
+  vertical-align: -3px;
 }
 
 .lambda-slider {
@@ -1907,44 +2016,32 @@ h1 {
   grid-template-columns: repeat(6, 1fr);
 }
 
-.regularization-readout {
-  max-width: 720px;
-}
-
-.regularization-callouts {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  margin-top: 28px;
+.lab-use-panel {
+  margin-top: 18px;
+  padding: 18px;
   border: 1px solid var(--ink);
   background: linear-gradient(110deg, rgba(157, 238, 255, 0.2), #fff 48%, rgba(255, 117, 95, 0.12));
-  box-shadow: 7px 7px 0 rgba(255, 117, 95, 0.7);
+  box-shadow: 6px 6px 0 rgba(255, 117, 95, 0.65);
 }
 
-.regularization-callouts article {
-  padding: 20px;
+.lab-use-panel > .case-section-label {
+  margin-bottom: 14px;
 }
 
-.regularization-callouts article + article {
+.lab-use-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.lab-use-grid article {
+  min-width: 0;
+  padding-right: 16px;
+}
+
+.lab-use-grid article + article {
+  padding-right: 0;
+  padding-left: 16px;
   border-left: 1px solid rgba(18, 24, 43, 0.28);
-}
-
-.regularization-callouts span {
-  color: var(--blue);
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.regularization-callouts h3 {
-  margin: 9px 0 7px;
-  font-size: 1.1rem;
-}
-
-.regularization-callouts p {
-  margin: 0;
-  color: var(--muted);
-  font-size: 0.84rem;
 }
 
 .regularization-watch {
@@ -3034,18 +3131,6 @@ h1 {
     grid-template-columns: 1fr;
   }
 
-  .regularization-callouts {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .regularization-callouts article:nth-child(3) {
-    border-left: 0;
-  }
-
-  .regularization-callouts article:nth-child(n + 3) {
-    border-top: 1px solid rgba(18, 24, 43, 0.28);
-  }
-
   .supervised-task-card {
     grid-template-columns: 42px 1fr;
   }
@@ -3406,12 +3491,14 @@ h1 {
     grid-template-columns: repeat(3, 1fr);
   }
 
-  .regularization-callouts {
+  .lab-use-grid {
     grid-template-columns: 1fr;
   }
 
-  .regularization-callouts article + article,
-  .regularization-callouts article:nth-child(3) {
+  .lab-use-grid article + article {
+    margin-top: 16px;
+    padding-top: 16px;
+    padding-left: 0;
     border-top: 1px solid rgba(18, 24, 43, 0.28);
     border-left: 0;
   }

@@ -19,8 +19,6 @@ const ui = {
   unseenError: document.querySelector("#unseen-error"),
   errorCurves: document.querySelector("#error-curves"),
   balance: document.querySelector("#balance-callout"),
-  modelReadout: document.querySelector("#regularized-model-readout"),
-  lambdaReadout: document.querySelector("#lambda-readout"),
   activeCount: document.querySelector("#active-feature-count"),
   modelButtons: [...document.querySelectorAll("[data-model]")],
   lambdaButtons: [...document.querySelectorAll("[data-lambda]")],
@@ -163,8 +161,6 @@ function render() {
   ui.unseenError.textContent = unseen.toFixed(1);
   renderCurves(training, unseen);
   ui.balance.innerHTML = `<span>Model state</span><strong>${balance.title}</strong><p>${balance.copy}</p>`;
-  ui.modelReadout.textContent = state.model === "ridge" ? "Ridge" : "Lasso";
-  ui.lambdaReadout.textContent = state.lambda;
   ui.activeCount.textContent = `${active} / ${features.length}`;
   ui.lambdaSlider.value = sliderPosition(state.lambda);
   ui.lambdaSliderOutput.value = state.lambda < 1 ? state.lambda.toFixed(2) : state.lambda.toFixed(1);
