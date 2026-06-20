@@ -2027,6 +2027,68 @@ h1 {
 .boost-watch,.boost-contrast { margin-top:28px; }
 .equation.equation-boost { font-size:clamp(1rem,1.65vw,1.32rem); white-space:nowrap; }
 
+.mlp-lab-panel { width:min(1200px,calc(100% - 48px)); margin:0 auto 110px; padding-top:80px; border-top:1px solid var(--line); }
+.mlp-lab-grid { display:grid; grid-template-columns:1.45fr .55fr; gap:24px; }
+.mlp-stage,.mlp-readout { min-width:0; padding:24px; border:2px solid var(--ink); }
+.mlp-stage { background:#07101f; color:#fff; box-shadow:10px 10px 0 #a670ff; }
+.mlp-readout { background:#fff; box-shadow:10px 10px 0 #9deeff; }
+.mlp-stage-header { display:flex; justify-content:space-between; align-items:end; gap:20px; }
+.mlp-stage-header .case-section-label { color:#9deeff; }
+.mlp-stage-header h3 { margin:5px 0 0; }
+.mlp-stage-header button,.mlp-training-actions button { padding:10px 13px; border:2px solid var(--ink); background:var(--blue); color:#fff; font-weight:800; cursor:pointer; }
+#mlp-network { display:block; width:100%; margin-top:16px; overflow:visible; }
+.mlp-edge { opacity:.55; transition:stroke-width .25s,opacity .25s; }
+.mlp-edge.positive { stroke:#4bf3ff; }
+.mlp-edge.negative { stroke:#ff755f; }
+.mlp-edge.is-pulsing { animation:mlp-pulse .8s var(--edge-delay) ease-in-out; }
+@keyframes mlp-pulse { 50% { opacity:1; filter:drop-shadow(0 0 6px currentColor); } }
+.mlp-node circle { fill:#0e1c2d; stroke:rgba(255,255,255,.45); stroke-width:2; }
+.mlp-node text { fill:#fff; font:700 12px var(--body); text-anchor:middle; pointer-events:none; }
+.mlp-node .node-label { fill:rgba(255,255,255,.62); font-size:10px; }
+.mlp-node.input .node-label { text-anchor:start; }
+.mlp-node.hidden { cursor:pointer; }
+.mlp-node.hidden.is-selected circle { stroke:#ffd45c; stroke-width:4; }
+.mlp-node.input circle { fill:#13344a; stroke:#4bf3ff; }
+.mlp-node.output circle { fill:#3155f5; stroke:#fff; }
+.layer-label { fill:rgba(255,255,255,.55); font:800 9px var(--body); letter-spacing:1px; text-anchor:middle; }
+.mlp-legend { display:flex; flex-wrap:wrap; gap:18px; color:rgba(255,255,255,.62); font-size:.72rem; }
+.mlp-legend i { display:inline-block; width:26px; height:3px; margin-right:6px; vertical-align:middle; }
+.mlp-legend i.positive { background:#4bf3ff; }.mlp-legend i.negative { background:#ff755f; }
+.mlp-stat-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px; }
+.mlp-stat-grid article { padding:13px; border:1px solid rgba(18,24,43,.18); }
+.mlp-stat-grid span,.mlp-inspector > span { display:block; color:var(--blue); font-size:.64rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+.mlp-stat-grid strong { display:block; margin-top:6px; font-size:1rem; }
+.mlp-inspector { margin-top:14px; padding:16px; background:#07101f; color:#fff; }
+.mlp-inspector > span { color:#ffd45c; }.mlp-inspector > strong { display:block; margin:6px 0 12px; font-size:1.25rem; }
+.mlp-inspector dl { margin:0; }.mlp-inspector dl div { display:flex; justify-content:space-between; gap:10px; padding:7px 0; border-top:1px solid rgba(255,255,255,.12); }
+.mlp-inspector dt { color:rgba(255,255,255,.62); font-size:.7rem; }.mlp-inspector dd { margin:0; font-size:.72rem; font-weight:800; }
+#mlp-loss-chart { display:block; width:100%; height:auto; margin-top:14px; border:1px solid rgba(18,24,43,.18); }
+.mlp-feature-controls { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:30px; }
+.mlp-feature-controls label { padding:16px; border:1px solid rgba(18,24,43,.25); background:#fff; }
+.mlp-feature-controls label > span { font-weight:700; }.mlp-feature-controls label > strong { float:right; color:var(--blue); }
+.mlp-feature-controls input { width:100%; margin-top:13px; accent-color:var(--blue); }
+.mlp-model-controls { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:22px; }
+.mlp-model-controls fieldset { padding:20px; border:1px solid rgba(18,24,43,.28); }
+.mlp-model-controls legend { padding:0 8px; font-size:.7rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase; }
+.mlp-model-controls input { width:100%; accent-color:#a670ff; }
+.mlp-model-controls label { display:flex; justify-content:space-between; gap:16px; margin-top:10px; color:var(--muted); }
+.mlp-model-controls fieldset > p { margin:12px 0 0; color:var(--muted); font-size:.84rem; }
+.segmented.mlp-activation { grid-template-columns:1fr 1fr; }
+.mlp-training-actions { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+.mlp-training-actions legend { grid-column:1/-1; }
+.mlp-training-actions button:last-child { background:#fff; color:var(--ink); }
+.mlp-watch { margin-top:28px; }
+.neural-roadmap { display:grid; grid-template-columns:.75fr 1.25fr; gap:7%; margin-top:80px; padding-top:70px; border-top:1px solid var(--line); }
+.neural-roadmap h2 { margin:8px 0 16px; font-size:clamp(2.2rem,4vw,4.2rem); line-height:.98; }
+.neural-roadmap > div:first-child > p:last-child { color:var(--muted); }
+.neural-roadmap-list { border-top:2px solid var(--ink); }
+.neural-roadmap-list article { display:grid; grid-template-columns:70px 1fr 1.2fr; gap:18px; align-items:start; padding:20px 0; border-bottom:1px solid rgba(18,24,43,.25); }
+.neural-roadmap-list span { color:var(--blue); font-size:.66rem; font-weight:800; letter-spacing:.08em; text-transform:uppercase; }
+.neural-roadmap-list h3,.neural-roadmap-list p { margin:0; }
+.neural-roadmap-list p { color:var(--muted); font-size:.86rem; }
+@media (max-width:900px) { .mlp-lab-grid,.mlp-model-controls { grid-template-columns:1fr; }.mlp-feature-controls { grid-template-columns:1fr 1fr; } }
+@media (max-width:620px) { .mlp-lab-panel { width:min(100% - 32px,1200px); }.mlp-stage,.mlp-readout { padding:16px; }.mlp-stage-header { align-items:start; flex-direction:column; }.mlp-feature-controls { grid-template-columns:1fr; }.mlp-training-actions { grid-template-columns:1fr; } #mlp-network { min-height:390px; }.neural-roadmap { grid-template-columns:1fr; }.neural-roadmap-list article { grid-template-columns:1fr; gap:6px; } }
+
 @media (max-width: 620px) {
   .forest-actions { grid-template-columns:1fr; }
   .segmented.boost-depth { grid-template-columns:repeat(3,minmax(0,1fr)); }

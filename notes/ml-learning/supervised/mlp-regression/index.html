@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="An interactive introduction to multilayer perceptron regression through streaming-title completion prediction." />
+    <title>Multilayer Perceptron Regression | Kaizen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../../styles.css?v=11" />
+    <script src="../../../../script.js" defer></script>
+    <script src="mlp-regression.js?v=1" defer></script>
+  </head>
+  <body class="note-page">
+    <header class="site-header">
+      <a class="brand" href="../../../../" aria-label="Kaizen home">KAIZEN<span>.</span></a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="sr-only">Toggle navigation</span><span></span><span></span></button>
+      <nav id="site-nav" class="site-nav" aria-label="Main navigation"><a href="../../../../#about">About</a><a href="../../../">Notes</a><a href="../../../../#work">Work</a><a href="../../../../#contact">Contact</a></nav>
+    </header>
+
+    <main>
+      <section class="note-hero">
+        <div class="note-kicker"><a href="../">← Supervised learning</a><span>/</span><span>Regression</span></div>
+        <div class="note-title"><h1>Multilayer Perceptron Regression</h1><p class="key-idea">A network of simple weighted units learns nonlinear interactions that one straight line cannot express.</p></div>
+      </section>
+
+      <section class="supervised-overview">
+        <p>How much of a newly released streaming title will viewers finish during its first week? Audience affinity matters—but its effect may change with awareness, release timing, runtime, tone, and social momentum.</p>
+        <p>A <strong>multilayer perceptron (MLP)</strong> passes those features through hidden neurons. Each neuron learns a small transformation; together they can represent interactions that a single linear equation misses.</p>
+      </section>
+
+      <section class="learning-loop" aria-label="Neural network learning loop">
+        <article><span>01</span><h2>Pass signals forward</h2><p>Every neuron combines incoming values, weights, and a bias.</p></article>
+        <article><span>02</span><h2>Measure the loss</h2><p>Compare predicted completion with the known target.</p></article>
+        <article><span>03</span><h2>Send responsibility backward</h2><p>Backpropagation finds how each parameter contributed to the error.</p></article>
+      </section>
+
+      <section class="learning-intro supervised-intro"><p><strong>The question:</strong> Can hidden neurons learn when several promising signals become powerful only in combination?</p></section>
+
+      <section class="mlp-lab-panel" aria-labelledby="mlp-lab-title">
+        <div class="regularization-lab-heading">
+          <p class="case-section-label">Streaming | First-week completion</p>
+          <h2 id="mlp-lab-title">A prediction travels through the network.</h2>
+          <p>Change the title’s features, inspect a hidden neuron, then train the model. Connection color shows direction; thickness shows weight magnitude.</p>
+        </div>
+
+        <div class="mlp-lab-grid">
+          <div class="mlp-stage">
+            <div class="mlp-stage-header"><div><p class="case-section-label">Signal flow</p><h3>Inputs → hidden layer → prediction</h3></div><button id="mlp-forward" type="button">Run forward pass</button></div>
+            <svg id="mlp-network" viewBox="0 0 760 520" role="img" aria-label="Six inputs connected to hidden neurons and one completion prediction"></svg>
+            <div class="mlp-legend"><span><i class="positive"></i>Positive weight</span><span><i class="negative"></i>Negative weight</span><span>Thicker = stronger</span></div>
+          </div>
+
+          <aside class="mlp-readout">
+            <p class="case-section-label">Live prediction</p>
+            <div class="prediction-card"><span>Predicted completion ŷ (y-hat)</span><strong id="mlp-prediction">0%</strong></div>
+            <div class="mlp-stat-grid">
+              <article><span>Actual target y</span><strong id="mlp-target">0%</strong></article>
+              <article><span>Residual</span><strong id="mlp-residual">0</strong></article>
+              <article><span>MSE</span><strong id="mlp-loss">0</strong></article>
+              <article><span>Epoch</span><strong id="mlp-epoch">0</strong></article>
+            </div>
+            <div class="mlp-inspector">
+              <span>Selected hidden neuron</span><strong id="mlp-neuron-title">H1</strong>
+              <dl><div><dt>Weighted sum + bias, z</dt><dd id="mlp-z">0</dd></div><div><dt>Activation, a</dt><dd id="mlp-a">0</dd></div><div><dt>Strongest input</dt><dd id="mlp-strongest">—</dd></div></dl>
+            </div>
+            <canvas id="mlp-loss-chart" width="430" height="170" aria-label="Training and held-out loss"></canvas>
+          </aside>
+        </div>
+
+        <div class="mlp-feature-controls" id="mlp-features"></div>
+
+        <div class="mlp-model-controls">
+          <fieldset><legend>Activation function</legend><div class="segmented mlp-activation"><button data-activation="linear">Linear</button><button class="is-selected" data-activation="relu">ReLU</button></div><p>Without a nonlinear activation, stacked layers still collapse into one linear rule.</p></fieldset>
+          <fieldset><legend>Hidden neurons</legend><input id="mlp-hidden-count" type="range" min="1" max="6" value="4" /><label for="mlp-hidden-count"><strong><span id="mlp-hidden-output">4</span> neurons</strong><span>More capacity can learn more detail.</span></label></fieldset>
+          <fieldset><legend>Learning rate</legend><input id="mlp-rate" type="range" min="1" max="10" value="3" /><label for="mlp-rate"><strong><span id="mlp-rate-output">0.03</span> η (eta)</strong><span>Step size for each weight update.</span></label></fieldset>
+          <fieldset class="mlp-training-actions"><legend>Training controls</legend><button id="mlp-step" type="button">Train one example</button><button id="mlp-epoch-button" type="button">Train one epoch</button><button id="mlp-reset" type="button">Reset</button></fieldset>
+        </div>
+
+        <aside class="watch-panel mlp-watch"><p class="case-section-label">What to watch</p><ul><li>Toggle Linear and ReLU. Nonlinearity lets hidden neurons create conditional interactions.</li><li>Click a hidden neuron to inspect its weighted sum before and after activation.</li><li>Train one example to see a single correction; train an epoch to update across the full dataset.</li><li>More capacity lowers training loss, but held-out loss may stop improving first.</li></ul></aside>
+
+        <section class="mechanics-section" aria-labelledby="mlp-mechanics-title">
+          <div class="mechanics-heading"><p class="case-section-label">How it is built</p><h2 id="mlp-mechanics-title">Combine. Activate. Learn backward.</h2><p>The lab uses one hidden layer and squared-error loss. Every visible prediction comes from these operations.</p></div>
+          <div class="equation-grid">
+            <article class="equation-card"><span>01 · Combine the inputs</span><div class="equation equation-compact">z = Σ(w<sub>i</sub>x<sub>i</sub>) + b</div><p><code>Σ</code> (“capital sigma”) means add the terms. <code>w<sub>i</sub></code> (“w sub i”) is a weight, <code>x<sub>i</sub></code> is input <code>i</code>, and <code>b</code> is the bias.</p></article>
+            <article class="equation-card"><span>02 · Apply an activation</span><div class="equation equation-compact">a = ReLU(z) = max(0, z)</div><p><code>a</code> is the neuron’s activation. ReLU (Rectified Linear Unit) keeps positive values and turns negative values into zero.</p></article>
+            <article class="equation-card"><span>03 · Update a parameter</span><div class="equation equation-compact">w ← w − η(∂L/∂w)</div><p><code>η</code> (“eta”) is the learning rate. <code>∂L/∂w</code> (“partial L over partial w”) measures how changing this weight changes the loss.</p></article>
+          </div>
+        </section>
+
+        <section class="terms-section" aria-labelledby="mlp-terms-title">
+          <div class="terms-heading"><p class="case-section-label">Key terms</p><h2 id="mlp-terms-title">The vocabulary of learned representations.</h2><p>A network is built from simple operations; the depth comes from composing and training them together.</p></div>
+          <dl class="term-grid">
+            <div><dt>Hidden layer</dt><dd>Neurons between the raw inputs and final output that learn intermediate features.</dd></div>
+            <div><dt>Weight</dt><dd>A learned multiplier controlling the strength and direction of a connection.</dd></div>
+            <div><dt>Bias</dt><dd>A learned offset that lets a neuron shift when it becomes active.</dd></div>
+            <div><dt>Forward pass</dt><dd>Calculating activations from the inputs through to the prediction.</dd></div>
+            <div><dt>Backpropagation</dt><dd>Efficiently assigning loss responsibility backward through the network.</dd></div>
+            <div><dt>Gradient</dt><dd>The direction and sensitivity of change in the loss.</dd></div>
+            <div><dt>Epoch</dt><dd>One training pass through every example in the training set.</dd></div>
+            <div><dt>Hyperparameter</dt><dd>A setting chosen outside training, such as learning rate or hidden-neuron count.</dd></div>
+          </dl>
+        </section>
+
+        <section class="neural-roadmap" aria-labelledby="neural-roadmap-title">
+          <div><p class="case-section-label">Where neural networks go next</p><h2 id="neural-roadmap-title">One foundation, many architectures.</h2><p>This MLP supplies the shared mechanics. Future lessons will change the structure to match different kinds of information.</p></div>
+          <div class="neural-roadmap-list">
+            <article><span>Next</span><h3>Embeddings & neural recommenders</h3><p>Learn representations of users and items, then use them for retrieval, ranking, and cold start.</p></article>
+            <article><span>Future</span><h3>Convolutional networks</h3><p>Preserve spatial neighborhoods in images, video frames, and spectrograms.</p></article>
+            <article><span>Future</span><h3>Sequence models</h3><p>Introduce recurrent state, GRUs, and LSTMs as a bridge to modern sequence learning.</p></article>
+            <article><span>Future</span><h3>Attention & transformers</h3><p>Let each element dynamically decide which other elements matter.</p></article>
+          </div>
+        </section>
+      </section>
+    </main>
+    <footer class="site-footer"><p>Built with care and a little curiosity.</p><a href="https://github.com/jefflovell">@jefflovell</a></footer>
+  </body>
+</html>
