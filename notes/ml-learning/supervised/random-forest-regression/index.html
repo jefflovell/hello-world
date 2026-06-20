@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="An interactive introduction to Random Forest Regression through household energy-demand forecasting." />
+    <title>Random Forest Regression | Kaizen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../../styles.css?v=9" />
+    <script src="../../../../script.js" defer></script>
+    <script src="random-forest-regression.js?v=1" defer></script>
+  </head>
+  <body class="note-page">
+    <header class="site-header">
+      <a class="brand" href="../../../../" aria-label="Kaizen home">KAIZEN<span>.</span></a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="sr-only">Toggle navigation</span><span></span><span></span></button>
+      <nav id="site-nav" class="site-nav" aria-label="Main navigation"><a href="../../../../#about">About</a><a href="../../../">Notes</a><a href="../../../../#work">Work</a><a href="../../../../#contact">Contact</a></nav>
+    </header>
+    <main>
+      <section class="note-hero">
+        <div class="note-kicker"><a href="../">← Supervised learning</a><span>/</span><span>Regression</span></div>
+        <div class="note-title">
+          <h1>Random Forest Regression</h1>
+          <p class="key-idea">One tree can overreact. A forest averages many different trees into a steadier prediction.</p>
+        </div>
+      </section>
+
+      <section class="supervised-overview">
+        <p>How much electricity will a home use during tomorrow’s heat wave? One decision tree might focus heavily on temperature. Another might split first on occupancy, time of day, insulation, or solar generation.</p>
+        <p>A <strong>random forest</strong> trains many trees on different samples and feature choices, then averages their numeric predictions. Individual trees keep their useful nonlinear reasoning; averaging reduces the influence of any one tree’s peculiar opinion.</p>
+      </section>
+
+      <section class="learning-loop" aria-label="Random forest learning loop">
+        <article><span>01</span><h2>Resample the homes</h2><p>Give each tree a different bootstrap sample of the training examples.</p></article>
+        <article><span>02</span><h2>Vary the questions</h2><p>Let each split consider only a random subset of available features.</p></article>
+        <article><span>03</span><h2>Average the forest</h2><p>Combine the tree predictions into one more stable energy forecast.</p></article>
+      </section>
+
+      <section class="learning-intro supervised-intro"><p><strong>The question:</strong> Can a crowd of imperfect trees forecast tomorrow better than one highly confident tree?</p></section>
+
+      <p class="algorithm-path-label">Suggested regression learning path</p>
+      <section class="algo-grid regression-menu" aria-label="Suggested regression learning path">
+        <article class="algo-card"><span>01</span><h2>Linear Regression</h2><p>Fit a straight-line relationship between features and a number.</p><a class="algo-card-link" href="../linear-regression/">Explore linear regression</a></article>
+        <article class="algo-card"><span>02</span><h2>Decision Trees</h2><p>Split the feature space into regions with different numeric estimates.</p><a class="algo-card-link" href="../decision-tree-regression/">Explore decision trees</a></article>
+        <article class="algo-card"><span>03</span><h2>k-Nearest Neighbors</h2><p>Average the outcomes of nearby examples.</p><a class="algo-card-link" href="../knn-regression/">Explore k-NN</a></article>
+        <article class="algo-card"><span>04</span><h2>Regularized Linear Models</h2><p>Control complexity with Ridge or Lasso.</p><a class="algo-card-link" href="../regularized-linear-models/">Explore regularization</a></article>
+        <article class="algo-card"><span>05</span><h2>Support Vector Regression</h2><p>Ignore small errors inside a tolerance tube.</p><a class="algo-card-link" href="../support-vector-regression/">Explore SVR</a></article>
+        <article class="algo-card is-active"><span>06</span><h2>Ensembles</h2><p>Combine many models. We begin with Random Forest Regression.</p></article>
+        <article class="algo-card"><span>07</span><h2>Neural Networks</h2><p>Learn complex nonlinear relationships through stacked transformations.</p></article>
+      </section>
+
+      <section class="forest-lab-panel" aria-labelledby="forest-lab-title">
+        <div class="regularization-lab-heading">
+          <p class="case-section-label">Home energy | Wisdom of the forest</p>
+          <h2 id="forest-lab-title">One forecast becomes a chorus.</h2>
+          <p>Change the number of trees and the weather scenario. Watch individual predictions disagree while their average settles into the forest forecast.</p>
+        </div>
+
+        <div class="forest-lab-grid">
+          <div class="forest-stage">
+            <div class="forest-stage-header"><div><p class="case-section-label">Tomorrow at 5 PM</p><h3 id="forest-scenario-title">Hot weekday</h3></div><div><span>Forest prediction</span><strong id="forest-prediction">0 kWh</strong></div></div>
+            <div id="tree-votes" class="tree-votes" aria-live="polite"></div>
+            <div class="forest-average"><span>Individual tree predictions</span><div><i id="forest-range"></i><b id="forest-marker"></b></div><small>Lower demand</small><small>Higher demand</small></div>
+          </div>
+          <aside class="forest-readout">
+            <p class="case-section-label">What changes</p>
+            <div class="prediction-card"><span>Held-out actual demand</span><strong id="forest-truth">0 kWh</strong></div>
+            <div class="forest-stat-grid">
+              <article><span>Forecast spread</span><strong id="forest-spread">0 kWh</strong></article>
+              <article><span>Avg. tree error</span><strong id="single-error">0</strong></article>
+              <article><span>Forest error</span><strong id="forest-error">0</strong></article>
+            </div>
+            <div class="balance-callout"><span>Model state</span><strong id="forest-state-title">Small committee</strong><p id="forest-state-copy">A few trees can still swing the result.</p></div>
+          </aside>
+        </div>
+
+        <div class="forest-controls">
+          <fieldset><legend>Number of trees</legend><input id="tree-count" type="range" min="1" max="25" step="2" value="7" /><label for="tree-count"><strong id="tree-count-output">7 trees</strong><span>More trees usually stabilize the average.</span></label></fieldset>
+          <fieldset><legend>Energy scenario</legend><div class="segmented forest-scenarios"><button class="is-selected" data-scenario="hot">Hot weekday</button><button data-scenario="mild">Mild weekend</button><button data-scenario="storm">Storm evening</button></div></fieldset>
+        </div>
+
+        <aside class="watch-panel forest-watch"><p class="case-section-label">What to watch</p><ul><li>Every tree makes a complete numeric prediction.</li><li>Trees disagree because they see different examples and features.</li><li>The forest prediction is the mean of the visible tree votes.</li><li>More trees reduce variance, but do not automatically remove shared bias.</li></ul></aside>
+
+        <aside class="step-explainer forest-bootstrap-note" aria-labelledby="bootstrap-note-title">
+          <p class="case-section-label">Why the trees disagree</p>
+          <h3 id="bootstrap-note-title">Each tree gets a remixed training set and a limited menu of questions.</h3>
+          <p><strong>Bootstrap sampling</strong> means drawing training homes at random <em>with replacement</em>. A home can appear more than once in one tree’s sample, while another home may be left out. Then, at each split, the tree considers only a random subset of features. These two sources of randomness keep the trees from becoming identical copies.</p>
+          <p>Diversity is the point: averaging helps most when the trees make different mistakes. If every tree learned the same bias, twenty-five matching opinions would still be one opinion repeated.</p>
+        </aside>
+
+        <section class="mechanics-section" aria-labelledby="forest-mechanics-title">
+          <div class="mechanics-heading">
+            <p class="case-section-label">How it is built</p>
+            <h2 id="forest-mechanics-title">Remix the data. Grow the trees. Average the answers.</h2>
+            <p>A random forest does not blend tree structures together. Each tree remains a complete model; the ensemble combines only their final numeric predictions.</p>
+          </div>
+          <div class="equation-grid">
+            <article class="equation-card">
+              <span>01 · Bootstrap a training set</span>
+              <div class="equation equation-compact">D<sub>t</sub> ∼ sample(D, n, replace)</div>
+              <p><code>D<sub>t</sub></code> (“D sub t”) is the training set for tree <code>t</code>. It draws <code>n</code> examples from the original dataset <code>D</code>, allowing repeats.</p>
+            </article>
+            <article class="equation-card">
+              <span>02 · Let one tree predict</span>
+              <div class="equation equation-compact">ŷ<sub>t</sub>(x) = h<sub>t</sub>(x)</div>
+              <p><code>ŷ<sub>t</sub></code> (“y-hat sub t”) is tree <code>t</code>’s energy prediction for home conditions <code>x</code>. <code>h<sub>t</sub></code> is that tree’s learned set of splits.</p>
+            </article>
+            <article class="equation-card">
+              <span>03 · Average all T trees</span>
+              <div class="equation equation-compact">ŷ<sub>forest</sub> = <span class="fraction"><span>1</span><span>T</span></span> Σ<sub>t=1</sub><sup>T</sup> ŷ<sub>t</sub>(x)</div>
+              <p><code>T</code> is the number of trees. <code>Σ</code> (“capital sigma”) adds their visible predictions; dividing by <code>T</code> produces the forest mean shown in the lab.</p>
+            </article>
+          </div>
+        </section>
+
+        <section class="terms-section" aria-labelledby="forest-terms-title">
+          <div class="terms-heading">
+            <p class="case-section-label">Key terms</p><h2 id="forest-terms-title">The vocabulary of collective judgment.</h2>
+            <p>The forest becomes more stable by creating variation among its members, then averaging away part of that variation.</p>
+          </div>
+          <dl class="term-grid">
+            <div><dt>Ensemble</dt><dd>A model made by combining the outputs of multiple component models.</dd></div>
+            <div><dt>Random forest</dt><dd>An ensemble of decision trees trained with random examples and random feature choices.</dd></div>
+            <div><dt>Bootstrap sample</dt><dd>A same-sized random sample drawn with replacement, so examples may repeat or be omitted.</dd></div>
+            <div><dt>With replacement</dt><dd>After an example is drawn, it remains eligible to be drawn again.</dd></div>
+            <div><dt>Feature subsampling</dt><dd>Offering each split only a random subset of the available input features.</dd></div>
+            <div><dt>Variance</dt><dd>How much a model’s prediction changes when its training data changes slightly. Averaging varied trees usually reduces it.</dd></div>
+            <div><dt>Bias</dt><dd>A consistent error caused by assumptions shared across the model or forest.</dd></div>
+            <div><dt>Forest prediction</dt><dd>For regression, the arithmetic mean of the individual tree predictions.</dd></div>
+          </dl>
+        </section>
+      </section>
+    </main>
+    <footer class="site-footer"><p>Built with care and a little curiosity.</p><a href="https://github.com/jefflovell">@jefflovell</a></footer>
+  </body>
+</html>
