@@ -10,8 +10,10 @@ const features = [
 const state = { model: "ridge", lambda: 0.3 };
 const baselineComplexity = features.reduce((sum, feature) => sum + Math.abs(feature.base), 0);
 const fittedBases = features.map((feature) => feature.base);
+const featureColors = ["#ffd45c", "#ff755f", "#9deeff", "#a670ff", "#4bf3ff", "#86f29a"];
 const ui = {
   board: document.querySelector("#coefficient-board"),
+  pathChart: document.querySelector("#coefficient-path-chart"),
   modelName: document.querySelector("#model-name"),
   modelBehavior: document.querySelector("#model-behavior"),
   prediction: document.querySelector("#regularized-prediction"),
@@ -28,10 +30,14 @@ const ui = {
   lambdaSliderOutput: document.querySelector("#lambda-slider-output"),
 };
 
-function coefficient(feature) {
-  if (state.model === "ridge") return feature.base / (1 + state.lambda * feature.penalty);
-  const threshold = state.lambda * 0.055 * feature.penalty;
+function coefficientAt(feature, lambda) {
+  if (state.model === "ridge") return feature.base / (1 + lambda * feature.penalty);
+  const threshold = lambda * 0.055 * feature.penalty;
   return Math.sign(feature.base) * Math.max(Math.abs(feature.base) - threshold, 0);
+}
+
+function coefficient(feature) {
+  return coefficientAt(feature, state.lambda);
 }
 
 function lambdaPosition(lambda) {
@@ -91,6 +97,43 @@ function renderBoard(values) {
     bar.className = value >= 0 ? "positive" : "negative";
     bar.style.height = `${height}px`;
   });
+}
+
+function coefficientPath(feature, width, height) {
+  const samples = [0, 0.04, 0.1, 0.2, 0.3, 0.5, 0.8, 1.2, 2, 3, 5, 7.5, 10];
+  return samples.map((lambda) => {
+    const x = 42 + lambdaPosition(lambda) * (width - 58);
+    const y = 12 + ((0.4 - coefficientAt(feature, lambda)) / 0.8) * (height - 34);
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(" ");
+}
+
+function renderCoefficientPaths(values) {
+  const width = 620;
+  const height = 184;
+  const markerX = 42 + lambdaPosition(state.lambda) * (width - 58);
+  const paths = features.map((feature, index) =>
+    `<polyline class="feature-path" style="stroke:${featureColors[index]}" points="${coefficientPath(feature, width, height)}"></polyline>`
+  ).join("");
+  const markers = values.map(({ value }, index) => {
+    const y = 12 + ((0.4 - value) / 0.8) * (height - 34);
+    return `<circle cx="${markerX}" cy="${y}" r="4" style="fill:${featureColors[index]}"></circle>`;
+  }).join("");
+  const legend = features.map((feature, index) =>
+    `<span><i style="background:${featureColors[index]}"></i>${feature.name}</span>`
+  ).join("");
+  ui.pathChart.innerHTML = `<svg viewBox="0 0 ${width} ${height}" role="img" aria-labelledby="coefficient-path-title coefficient-path-desc">
+    <title id="coefficient-path-title">${state.model === "ridge" ? "Ridge" : "Lasso"} coefficient paths</title>
+    <desc id="coefficient-path-desc">Each line shows one feature coefficient as regularization strength lambda increases. The vertical line marks the current lambda.</desc>
+    <g class="path-grid">
+      <path d="M42 12V162M42 12H562M42 87H562M42 162H562"></path>
+      <text x="8" y="17">+0.4</text><text x="22" y="91">0</text><text x="8" y="166">−0.4</text>
+      <text x="42" y="180">0</text><text x="548" y="180">10 λ</text>
+    </g>
+    ${paths}
+    <line class="coefficient-current-line" x1="${markerX}" y1="12" x2="${markerX}" y2="162"></line>
+    <g class="coefficient-path-markers">${markers}</g>
+  </svg><div class="coefficient-path-legend">${legend}</div>`;
 }
 
 function chartPath(points, width, top, height) {
@@ -156,6 +199,7 @@ function render() {
   const completion = Math.round(42 + values.reduce((sum, { feature, value }) => sum + value * feature.contribution, 0));
   const balance = modelState(unseen);
   renderBoard(values);
+  renderCoefficientPaths(values);
   ui.modelName.textContent = state.model === "ridge" ? "Ridge Regression" : "Lasso Regression";
   ui.modelBehavior.textContent = state.model === "ridge" ? "All signals stay in the mix." : active < features.length ? `${features.length - active} weak signal${features.length - active === 1 ? "" : "s"} muted.` : "Weak signals are approaching zero.";
   if (state.model === "ridge") {

@@ -1724,24 +1724,99 @@ h1 {
   opacity: 0.42;
 }
 
-.zero-key {
-  display: flex;
-  gap: 9px;
-  align-items: center;
-  margin-top: 18px;
-  color: rgba(247, 246, 241, 0.58);
-  font-size: 0.76rem;
-}
-
 .coefficient-mixer .lab-use-panel {
   margin-top: auto;
   color: var(--ink);
 }
 
-.zero-key span {
-  width: 26px;
-  height: 2px;
-  background: #fff;
+.coefficient-path-panel {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(157, 238, 255, 0.22);
+}
+
+.coefficient-path-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: end;
+  margin-bottom: 8px;
+}
+
+.coefficient-path-heading div > span,
+.coefficient-path-heading > span {
+  display: block;
+  color: #9deeff;
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.coefficient-path-heading strong {
+  display: block;
+  margin-top: 3px;
+  font-size: 0.84rem;
+}
+
+.coefficient-path-chart {
+  border: 1px solid rgba(157, 238, 255, 0.18);
+  background: rgba(157, 238, 255, 0.035);
+}
+
+.coefficient-path-chart svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.path-grid path {
+  fill: none;
+  stroke: rgba(247, 246, 241, 0.16);
+  stroke-width: 1;
+}
+
+.path-grid text {
+  fill: rgba(247, 246, 241, 0.52);
+  font: 700 9px var(--body);
+}
+
+.feature-path {
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.coefficient-current-line {
+  stroke: #fff;
+  stroke-width: 1.4;
+  stroke-dasharray: 4 4;
+}
+
+.coefficient-path-markers circle {
+  stroke: #07101f;
+  stroke-width: 2;
+}
+
+.coefficient-path-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px 14px;
+  padding: 8px 10px 10px;
+  color: rgba(247, 246, 241, 0.68);
+  font-size: 0.64rem;
+}
+
+.coefficient-path-legend span {
+  display: inline-flex;
+  gap: 5px;
+  align-items: center;
+}
+
+.coefficient-path-legend i {
+  width: 8px;
+  height: 8px;
 }
 
 .regularization-performance {

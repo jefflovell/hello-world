@@ -76,7 +76,13 @@
               </div>
             </div>
             <div id="coefficient-board" class="coefficient-board" aria-live="polite"></div>
-            <div class="zero-key"><span></span> Drag the handles to perturb fitted coefficients; the colored bars show the regularized weights.</div>
+            <div class="coefficient-path-panel">
+              <div class="coefficient-path-heading">
+                <div><span>Coefficient paths</span><strong>How each feature changes as λ increases</strong></div>
+                <span>Current λ</span>
+              </div>
+              <div id="coefficient-path-chart" class="coefficient-path-chart" aria-live="polite"></div>
+            </div>
             <div class="lab-use-panel">
               <p class="case-section-label">How to use the lab</p>
               <div class="lab-use-grid">
