@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="An interactive introduction to Gradient Boosting Regression through sequential energy-demand corrections." />
+    <title>Gradient Boosting Regression | Kaizen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../../styles.css?v=10" />
+    <script src="../../../../script.js" defer></script>
+    <script src="gradient-boosting-regression.js?v=1" defer></script>
+  </head>
+  <body class="note-page">
+    <header class="site-header">
+      <a class="brand" href="../../../../" aria-label="Kaizen home">KAIZEN<span>.</span></a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="sr-only">Toggle navigation</span><span></span><span></span></button>
+      <nav id="site-nav" class="site-nav" aria-label="Main navigation"><a href="../../../../#about">About</a><a href="../../../">Notes</a><a href="../../../../#work">Work</a><a href="../../../../#contact">Contact</a></nav>
+    </header>
+    <main>
+      <section class="note-hero">
+        <div class="note-kicker"><a href="../">← Supervised learning</a><span>/</span><span>Regression</span></div>
+        <div class="note-title"><h1>Gradient Boosting Regression</h1><p class="key-idea">Instead of averaging independent trees, boosting builds a sequence: each small tree corrects mistakes left by the current model.</p></div>
+      </section>
+
+      <section class="supervised-overview">
+        <p>Suppose the first energy forecast predicts the same average demand for every home. It will underestimate hot, occupied homes and overestimate efficient homes with rooftop solar. Those remaining gaps are <strong>residuals</strong>.</p>
+        <p>Gradient boosting trains a small decision tree to predict those residuals, adds a fraction of its correction to the model, then repeats. The ensemble improves step by step—more like an editor revising a draft than a committee voting all at once.</p>
+      </section>
+
+      <section class="learning-loop" aria-label="Gradient boosting learning loop">
+        <article><span>01</span><h2>Start with a baseline</h2><p>Give every example the same simple prediction, usually the training-set mean.</p></article>
+        <article><span>02</span><h2>Find what remains wrong</h2><p>Calculate each residual: actual demand minus the current prediction.</p></article>
+        <article><span>03</span><h2>Add a correction tree</h2><p>Fit a small tree to those residuals, scale its correction, and repeat.</p></article>
+      </section>
+
+      <section class="learning-intro supervised-intro"><p><strong>The question:</strong> Can a sequence of modest corrections turn a crude average into a precise energy forecast?</p></section>
+
+      <p class="algorithm-path-label">Suggested regression learning path</p>
+      <section class="algo-grid regression-menu" aria-label="Suggested regression learning path">
+        <article class="algo-card"><span>01</span><h2>Linear Regression</h2><p>Fit a straight-line relationship between features and a number.</p><a class="algo-card-link" href="../linear-regression/">Explore linear regression</a></article>
+        <article class="algo-card"><span>02</span><h2>Decision Trees</h2><p>Split the feature space into regions with numeric estimates.</p><a class="algo-card-link" href="../decision-tree-regression/">Explore decision trees</a></article>
+        <article class="algo-card"><span>03</span><h2>k-Nearest Neighbors</h2><p>Average nearby examples.</p><a class="algo-card-link" href="../knn-regression/">Explore k-NN</a></article>
+        <article class="algo-card"><span>04</span><h2>Regularized Linear Models</h2><p>Control complexity with Ridge or Lasso.</p><a class="algo-card-link" href="../regularized-linear-models/">Explore regularization</a></article>
+        <article class="algo-card"><span>05</span><h2>Support Vector Regression</h2><p>Ignore small errors inside a tolerance tube.</p><a class="algo-card-link" href="../support-vector-regression/">Explore SVR</a></article>
+        <article class="algo-card is-active"><span>06</span><h2>Ensembles</h2><p>Combine trees through random forests or gradient boosting.</p><a class="algo-card-link" href="../random-forest-regression/">Compare random forests</a></article>
+        <article class="algo-card"><span>07</span><h2>Neural Networks</h2><p>Learn complex nonlinear relationships through stacked transformations.</p></article>
+      </section>
+
+      <section class="boost-lab-panel" aria-labelledby="boost-lab-title">
+        <div class="regularization-lab-heading">
+          <p class="case-section-label">Home energy | Sequential correction</p>
+          <h2 id="boost-lab-title">Every tree inherits the unfinished work.</h2>
+          <p>Advance the boosting rounds, then adjust <code>η</code> (“eta”), the learning rate. Watch residuals shrink as each new tree contributes a deliberately small correction.</p>
+        </div>
+
+        <div class="boost-lab-grid">
+          <div class="boost-stage">
+            <div class="boost-stage-header"><div><p class="case-section-label">Selected home</p><h3 id="boost-home-name">Hot apartment · occupied</h3></div><div><span>Current forecast</span><strong id="boost-prediction">0 kWh</strong></div></div>
+            <div id="boost-steps" class="boost-steps" aria-live="polite"></div>
+            <div class="boost-total"><span>Baseline</span><i>+</i><span>Tree corrections</span><i>=</i><strong id="boost-total">0 kWh</strong></div>
+          </div>
+          <aside class="boost-readout">
+            <p class="case-section-label">Training progress</p>
+            <div class="prediction-card"><span>Mean absolute error (MAE)</span><strong id="boost-mae">0 kWh</strong></div>
+            <div class="forest-stat-grid"><article><span>Actual demand</span><strong id="boost-actual">0 kWh</strong></article><article><span>Selected residual</span><strong id="boost-residual">0 kWh</strong></article><article><span>Correction trees</span><strong id="boost-tree-count">0</strong></article></div>
+            <div class="balance-callout"><span>Model state</span><strong id="boost-state-title">Baseline only</strong><p id="boost-state-copy">The model has not learned which homes differ from the average.</p></div>
+          </aside>
+        </div>
+
+        <div class="boost-controls">
+          <fieldset><legend>Boosting rounds</legend><input id="boost-rounds" type="range" min="0" max="8" step="1" value="0" aria-label="Number of boosting rounds" /><label for="boost-rounds"><strong id="boost-rounds-output">0 trees</strong><span>Each round adds one correction tree.</span></label></fieldset>
+          <fieldset><legend>Learning rate</legend><input id="boost-rate" type="range" min="1" max="10" step="1" value="4" aria-label="Learning rate eta" /><label for="boost-rate"><strong><span id="boost-rate-output">0.4</span> η (eta)</strong><span>Smaller steps learn more cautiously.</span></label></fieldset>
+        </div>
+
+        <div class="boost-residual-panel">
+          <div class="boost-residual-heading"><div><p class="case-section-label">Residual board</p><h3>What the next tree still needs to fix</h3></div><span>Click a home to inspect it</span></div>
+          <div id="boost-residuals" class="boost-residuals" aria-live="polite"></div>
+        </div>
+
+        <aside class="watch-panel boost-watch"><p class="case-section-label">What to watch</p><ul><li>Round zero predicts the same baseline for every home.</li><li>Positive residuals need a higher forecast; negative residuals need a lower one.</li><li>Each tree targets the residuals left by all previous trees.</li><li>A smaller learning rate takes safer steps but usually needs more trees.</li></ul></aside>
+
+        <aside class="step-explainer boost-contrast" aria-labelledby="boost-contrast-title">
+          <p class="case-section-label">Random forest versus gradient boosting</p><h3 id="boost-contrast-title">Parallel opinions versus sequential revisions.</h3>
+          <p>A random forest grows varied trees independently and averages their predictions. Gradient boosting grows trees in order: Tree 2 depends on the mistakes left by Tree 1, Tree 3 depends on the ensemble before it, and so on.</p>
+          <p>Random forests primarily reduce variance through averaging. Boosting primarily reduces bias by repeatedly correcting systematic errors—but can overfit if the sequence grows too aggressive or too long.</p>
+        </aside>
+
+        <section class="mechanics-section" aria-labelledby="boost-mechanics-title">
+          <div class="mechanics-heading"><p class="case-section-label">How it is built</p><h2 id="boost-mechanics-title">Measure the miss. Learn the miss. Add a careful correction.</h2><p>The demonstration begins at the mean, trains each weak tree on the current residuals, and scales every correction by the learning rate.</p></div>
+          <div class="equation-grid">
+            <article class="equation-card"><span>01 · Begin with the mean</span><div class="equation equation-compact">F<sub>0</sub>(x) = ȳ</div><p><code>F<sub>0</sub></code> (“F sub zero”) is the initial model. <code>ȳ</code> (“y-bar”) is the mean actual demand across the training homes.</p></article>
+            <article class="equation-card"><span>02 · Calculate residuals</span><div class="equation equation-compact">r<sub>i,m</sub> = y<sub>i</sub> − F<sub>m−1</sub>(x<sub>i</sub>)</div><p><code>r<sub>i,m</sub></code> (“r sub i, m”) is example <code>i</code>’s residual at round <code>m</code>: actual demand minus the previous ensemble prediction.</p></article>
+            <article class="equation-card"><span>03 · Add the next tree</span><div class="equation equation-boost">F<sub>m</sub>(x) = F<sub>m−1</sub>(x) + ηh<sub>m</sub>(x)</div><p><code>h<sub>m</sub></code> (“h sub m”) is the new tree’s residual correction. <code>η</code> (“eta”) scales how much of that correction joins the ensemble.</p></article>
+          </div>
+        </section>
+
+        <section class="terms-section" aria-labelledby="boost-terms-title">
+          <div class="terms-heading"><p class="case-section-label">Key terms</p><h2 id="boost-terms-title">The vocabulary of iterative improvement.</h2><p>Boosting turns error into the target for the next learner, creating a sequence whose members are deliberately dependent.</p></div>
+          <dl class="term-grid">
+            <div><dt>Boosting</dt><dd>Building models sequentially so each new learner improves the current ensemble.</dd></div>
+            <div><dt>Residual</dt><dd>For squared-error regression, actual value minus the current prediction.</dd></div>
+            <div><dt>Weak learner</dt><dd>A deliberately simple model, often a shallow tree, that performs one modest correction.</dd></div>
+            <div><dt>Learning rate η (eta)</dt><dd>A hyperparameter controlling how much each new tree changes the ensemble.</dd></div>
+            <div><dt>Boosting round</dt><dd>One cycle of calculating residuals, fitting a tree, and adding its scaled correction.</dd></div>
+            <div><dt>Sequential ensemble</dt><dd>An ensemble whose later models depend on the outputs and errors of earlier models.</dd></div>
+            <div><dt>MAE</dt><dd>Mean Absolute Error: the average absolute distance between actual and predicted values.</dd></div>
+            <div><dt>Overfitting</dt><dd>Learning training-specific noise so aggressively that performance on new examples worsens.</dd></div>
+          </dl>
+        </section>
+      </section>
+    </main>
+    <footer class="site-footer"><p>Built with care and a little curiosity.</p><a href="https://github.com/jefflovell">@jefflovell</a></footer>
+  </body>
+</html>
