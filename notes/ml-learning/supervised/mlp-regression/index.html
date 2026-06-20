@@ -8,9 +8,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../../../../styles.css?v=11" />
+    <link rel="stylesheet" href="../../../../styles.css?v=12" />
     <script src="../../../../script.js" defer></script>
-    <script src="mlp-regression.js?v=1" defer></script>
+    <script src="mlp-regression.js?v=2" defer></script>
   </head>
   <body class="note-page">
     <header class="site-header">
@@ -45,6 +45,17 @@
           <p>Change the title’s features, inspect a hidden neuron, then train the model. Connection color shows direction; thickness shows weight magnitude.</p>
         </div>
 
+        <section class="mlp-mission" aria-labelledby="mlp-mission-title">
+          <div><p class="case-section-label">Guided experiment</p><h3 id="mlp-mission-title">Can two weak signals become strong together?</h3><p>Audience affinity alone is not enough. Awareness alone is not enough. Predict what happens when both are high, then compare a linear network with ReLU.</p></div>
+          <ol>
+            <li><button type="button" data-mission="neither">Both low</button></li>
+            <li><button type="button" data-mission="affinity">High affinity only</button></li>
+            <li><button type="button" data-mission="awareness">High awareness only</button></li>
+            <li><button type="button" data-mission="together">Both high</button></li>
+          </ol>
+          <div class="mlp-mission-result"><span>Current experiment</span><strong id="mlp-mission-state">Start with a prediction.</strong><p id="mlp-mission-copy">Try all four examples in Linear mode, then repeat with ReLU.</p></div>
+        </section>
+
         <div class="mlp-lab-grid">
           <div class="mlp-stage">
             <div class="mlp-stage-header"><div><p class="case-section-label">Signal flow</p><h3>Inputs → hidden layer → prediction</h3></div><button id="mlp-forward" type="button">Run forward pass</button></div>
@@ -60,14 +71,30 @@
               <article><span>Residual</span><strong id="mlp-residual">0</strong></article>
               <article><span>MSE</span><strong id="mlp-loss">0</strong></article>
               <article><span>Epoch</span><strong id="mlp-epoch">0</strong></article>
+              <article><span>Parameters</span><strong id="mlp-parameters">33</strong></article>
+              <article><span>Held-out MSE</span><strong id="mlp-heldout">0</strong></article>
             </div>
             <div class="mlp-inspector">
               <span>Selected hidden neuron</span><strong id="mlp-neuron-title">H1</strong>
-              <dl><div><dt>Weighted sum + bias, z</dt><dd id="mlp-z">0</dd></div><div><dt>Activation, a</dt><dd id="mlp-a">0</dd></div><div><dt>Strongest input</dt><dd id="mlp-strongest">—</dd></div></dl>
+              <div id="mlp-contributions" class="mlp-contributions"></div>
+              <dl><div><dt>Bias, b</dt><dd id="mlp-bias">0</dd></div><div><dt>Pre-activation, z</dt><dd id="mlp-z">0</dd></div><div><dt>Activation, a</dt><dd id="mlp-a">0</dd></div><div><dt>Output weight, v</dt><dd id="mlp-output-weight">0</dd></div><div><dt>Output contribution, a × v</dt><dd id="mlp-output-contribution">0</dd></div></dl>
             </div>
             <canvas id="mlp-loss-chart" width="430" height="170" aria-label="Training and held-out loss"></canvas>
           </aside>
         </div>
+
+        <section class="mlp-challenges" aria-labelledby="mlp-challenges-title">
+          <div><p class="case-section-label">Challenge the network</p><h3 id="mlp-challenges-title">A precise number is not the same as a trustworthy answer.</h3><p>Load a recognizable title profile—or an extreme combination unlike the training examples. Predict first, then inspect the result.</p></div>
+          <div class="mlp-challenge-buttons">
+            <button type="button" data-preset="broad">Broad appeal</button>
+            <button type="button" data-preset="niche">Devoted niche</button>
+            <button type="button" data-preset="campaign">Big campaign, poor fit</button>
+            <button type="button" data-preset="sleeper">Quiet sleeper</button>
+            <button type="button" data-preset="contradictory">Contradictory signals</button>
+            <button type="button" data-preset="extreme">Out-of-distribution extreme</button>
+          </div>
+          <aside><span id="mlp-challenge-label">No preset selected</span><strong id="mlp-trust-state">Inside the familiar range</strong><p id="mlp-trust-copy">The current feature mix resembles the examples used to train this teaching model.</p></aside>
+        </section>
 
         <div class="mlp-feature-controls" id="mlp-features"></div>
 
@@ -75,8 +102,19 @@
           <fieldset><legend>Activation function</legend><div class="segmented mlp-activation"><button data-activation="linear">Linear</button><button class="is-selected" data-activation="relu">ReLU</button></div><p>Without a nonlinear activation, stacked layers still collapse into one linear rule.</p></fieldset>
           <fieldset><legend>Hidden neurons</legend><input id="mlp-hidden-count" type="range" min="1" max="6" value="4" /><label for="mlp-hidden-count"><strong><span id="mlp-hidden-output">4</span> neurons</strong><span>More capacity can learn more detail.</span></label></fieldset>
           <fieldset><legend>Learning rate</legend><input id="mlp-rate" type="range" min="1" max="10" value="3" /><label for="mlp-rate"><strong><span id="mlp-rate-output">0.03</span> η (eta)</strong><span>Step size for each weight update.</span></label></fieldset>
-          <fieldset class="mlp-training-actions"><legend>Training controls</legend><button id="mlp-step" type="button">Train one example</button><button id="mlp-epoch-button" type="button">Train one epoch</button><button id="mlp-reset" type="button">Reset</button></fieldset>
+          <fieldset class="mlp-training-actions"><legend>Training controls</legend><button id="mlp-step" type="button">Start one-example training</button><button id="mlp-epoch-button" type="button">Train one epoch</button><button id="mlp-reset" type="button">Reset</button></fieldset>
         </div>
+
+        <section class="mlp-training-trace" aria-labelledby="mlp-trace-title">
+          <div><p class="case-section-label">One training example, slowed down</p><h3 id="mlp-trace-title">Backpropagation moves responsibility backward—not the network itself.</h3></div>
+          <ol>
+            <li id="mlp-trace-forward"><span>01</span><strong>Forward pass</strong><p>Calculate the current prediction.</p></li>
+            <li id="mlp-trace-loss"><span>02</span><strong>Measure loss</strong><p>Compare prediction with target.</p></li>
+            <li id="mlp-trace-backward"><span>03</span><strong>Backpropagate</strong><p>Calculate each parameter’s responsibility.</p></li>
+            <li id="mlp-trace-apply"><span>04</span><strong>Apply update</strong><p>Replace old parameters with adjusted values.</p></li>
+          </ol>
+          <div class="mlp-update-equation"><span>Selected connection update</span><strong id="mlp-update-math">Choose “Start one-example training.”</strong><p id="mlp-update-copy">The selected equation will show old weight − η (eta) × gradient = new weight.</p></div>
+        </section>
 
         <aside class="watch-panel mlp-watch"><p class="case-section-label">What to watch</p><ul><li>Toggle Linear and ReLU. Nonlinearity lets hidden neurons create conditional interactions.</li><li>Click a hidden neuron to inspect its weighted sum before and after activation.</li><li>Train one example to see a single correction; train an epoch to update across the full dataset.</li><li>More capacity lowers training loss, but held-out loss may stop improving first.</li></ul></aside>
 
@@ -87,6 +125,7 @@
             <article class="equation-card"><span>02 · Apply an activation</span><div class="equation equation-compact">a = ReLU(z) = max(0, z)</div><p><code>a</code> is the neuron’s activation. ReLU (Rectified Linear Unit) keeps positive values and turns negative values into zero.</p></article>
             <article class="equation-card"><span>03 · Update a parameter</span><div class="equation equation-compact">w ← w − η(∂L/∂w)</div><p><code>η</code> (“eta”) is the learning rate. <code>∂L/∂w</code> (“partial L over partial w”) measures how changing this weight changes the loss.</p></article>
           </div>
+          <aside class="mlp-matrix-note"><span>Compact layer notation</span><code>a = f(Wx + b)</code><p>This performs the same weighted-sum-and-activation calculation for every hidden neuron at once. Matrix notation compresses the scalar process—it does not replace it.</p></aside>
         </section>
 
         <section class="terms-section" aria-labelledby="mlp-terms-title">
