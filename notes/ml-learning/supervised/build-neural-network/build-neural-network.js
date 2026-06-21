@@ -25,6 +25,9 @@ const ui = {
   bias:document.querySelector("#builder-bias"), biasValue:document.querySelector("#builder-bias-value"),
   activationCopy:document.querySelector("#builder-activation-copy"), width:document.querySelector("#builder-width"),
   widthValue:document.querySelector("#builder-width-value"),
+  explainerQuestion:document.querySelector("#builder-explainer-question"),
+  eli5:document.querySelector("#builder-eli5"), eli16:document.querySelector("#builder-eli16"),
+  termCheck:document.querySelector("#builder-term-check"),
 };
 const stageContent = {
   1:["Features become a vector.","A model cannot read concepts directly. Each title property becomes a consistently ordered number."],
@@ -33,6 +36,44 @@ const stageContent = {
   4:["Activation shapes the signal.","The activation function transforms the weighted sum into the neuron’s outgoing signal."],
   5:["One calculation becomes a layer.","A hidden layer repeats the neuron operation with different weights and biases, creating several intermediate signals."],
   6:["The network feeds forward.","The output neuron combines hidden activations into one prediction. The entire diagram is now one nested function."],
+};
+const explainers = {
+  1:{
+    question:"Where do features come from?",
+    eli5:"Features are facts we choose to tell the model about one example. Here, one streaming title is described by audience affinity, awareness, and tone match.",
+    eli16:"Features begin as observations: viewing history, surveys, campaign exposure, metadata, or measurements. We define a repeatable rule that cleans each observation and converts it into a number. Every title must use the same feature order and scale.",
+    check:"A feature is input data. The model receives it; this small network does not learn the feature itself. Later, embeddings will show how networks can learn representations."
+  },
+  2:{
+    question:"What is a neuron—and where do parameters fit?",
+    eli5:"A neuron is a tiny scorekeeper. It receives several numbers, decides how much each should count, and adds them into one new number.",
+    eli16:"Incoming feature values are multiplied by weights. Those weights are parameters: adjustable numbers learned from training data. A large positive weight supports the neuron; a negative weight pushes against it.",
+    check:"Feature values describe this title. Weights are model parameters reused for every title. Moving a feature changes the example; moving a weight changes the model."
+  },
+  3:{
+    question:"What is bias?",
+    eli5:"Bias is the neuron’s starting nudge. It can make the neuron easier or harder to wake up before the current evidence is considered.",
+    eli16:"After adding the weighted feature contributions, the neuron adds one learned offset called b (bias). Bias lets the response shift instead of being forced through zero. It is a parameter, just like a weight.",
+    check:"Model bias b is not social bias, dataset bias, or the bias in the bias–variance tradeoff. The same word is used for different concepts."
+  },
+  4:{
+    question:"What does activation mean?",
+    eli5:"Activation is what the neuron decides to send onward after tallying the evidence.",
+    eli16:"The weighted sum plus bias is z, the pre-activation value. An activation function transforms z into a. Linear passes it through; ReLU blocks negative values; sigmoid squeezes any value between 0 and 1.",
+    check:"The activation function is usually a hyperparameter chosen by the designer. The activation a is a temporary signal calculated for this example."
+  },
+  5:{
+    question:"Hidden layer—hidden from whom?",
+    eli5:"It is simply the middle of the network: not the original facts and not the final answer.",
+    eli16:"Each hidden neuron receives the same input vector but has different weights and bias, so each can respond to a different numeric pattern. Their activations form a new vector used by the output layer.",
+    check:"“Hidden” does not mean secret or unknowable. We can inspect every value here. It means the layer is neither directly supplied as input nor directly observed as the target."
+  },
+  6:{
+    question:"What does feedforward mean?",
+    eli5:"Use the numbers you already have, move them from left to right, and calculate an answer.",
+    eli16:"A feedforward pass evaluates the nested function using the network’s current parameters: input vector to hidden activations to output. There are no loops, and no parameters change during the pass.",
+    check:"Feedforward makes a prediction. Training is separate: loss measures the miss, backpropagation computes gradients, and gradient descent updates parameters."
+  },
 };
 function format(n){ return `${n<0?"−":""}${Math.abs(n).toFixed(2)}`; }
 function activate(z){
@@ -120,7 +161,12 @@ function renderVisibility(){
 }
 function render(){
   const content=stageContent[state.stage];
+  const explainer=explainers[state.stage];
   ui.title.textContent=content[0];ui.copy.textContent=content[1];ui.number.textContent=`0${state.stage} / 06`;
+  ui.explainerQuestion.textContent=explainer.question;
+  ui.eli5.textContent=explainer.eli5;
+  ui.eli16.textContent=explainer.eli16;
+  ui.termCheck.textContent=explainer.check;
   ui.biasValue.textContent=format(state.bias);ui.widthValue.textContent=state.width;
   ui.activationCopy.textContent=state.activation==="relu"?"ReLU keeps positive signals and suppresses negative ones.":state.activation==="sigmoid"?"Sigmoid squeezes any value into the range from 0 to 1.":"Linear passes the weighted sum through unchanged.";
   ui.features.querySelectorAll("[data-builder-feature]").forEach((input,i)=>document.querySelector(`#builder-feature-value-${i}`).textContent=state.features[i].toFixed(2));
