@@ -8,9 +8,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../../../../styles.css?v=14" />
+    <link rel="stylesheet" href="../../../../styles.css?v=15" />
     <script src="../../../../script.js" defer></script>
-    <script src="build-neural-network.js?v=2" defer></script>
+    <script src="build-neural-network.js?v=3" defer></script>
   </head>
   <body class="note-page">
     <header class="site-header">
@@ -27,6 +27,22 @@
       <section class="supervised-overview">
         <p>A neural network diagram can look like a mysterious web of circles and lines. It becomes much simpler when we build it one operation at a time.</p>
         <p>The same object will grow throughout this lesson: features become a vector, the vector enters a neuron, bias and activation shape its response, and several neurons become a feedforward network.</p>
+      </section>
+
+      <section class="builder-model-brief" aria-labelledby="builder-model-title">
+        <div>
+          <p class="case-section-label">What are we actually modeling?</p>
+          <h2 id="builder-model-title">One title. One audience cohort. One predicted completion rate.</h2>
+        </div>
+        <div>
+          <p>This is a stripped-down <strong>regression model</strong>. Its example is a title paired with an audience cohort—such as “families who often finish animated adventures.” Its target is the percentage of exposed viewers expected to complete the title during its first week.</p>
+          <p>It is <strong>not</strong> an end-to-end recommender. A real system might retrieve thousands of candidate titles, then use a score like this as one input to ranking. We abstract that surrounding system away so we can inspect the neural-network math.</p>
+        </div>
+        <dl>
+          <div><dt>Input unit</dt><dd>Title × audience cohort</dd></div>
+          <div><dt>Prediction</dt><dd>First-week completion rate</dd></div>
+          <div><dt>Possible use</dt><dd>One ranking signal after retrieval</dd></div>
+        </dl>
       </section>
 
       <nav class="neural-lesson-switch" aria-label="Neural network learning path">
@@ -75,6 +91,30 @@
           <article><span>Why is it useful?</span><p id="builder-why">Features turn real-world evidence into numbers a model can compare consistently.</p></article>
           <div class="builder-term-check"><span>Keep these separate</span><p id="builder-term-check">A feature is input data. It is not something this small network learns during training.</p></div>
         </aside>
+
+        <section class="builder-feature-provenance" aria-labelledby="feature-provenance-title">
+          <div class="builder-feature-heading">
+            <p class="case-section-label">The behavior layer, compressed</p>
+            <h3 id="feature-provenance-title">These numbers came from somewhere.</h3>
+            <p>A production model would consume many raw events and learned embeddings. For this lesson, we compress that upstream behavior into three inspectable teaching features.</p>
+          </div>
+          <article>
+            <span>01 · Audience–title affinity</span>
+            <h4>How likely is this cohort to care?</h4>
+            <dl><div><dt>Could come from</dt><dd>Past watches, searches, clicks, completions, skips, likes, and similarity to related titles.</dd></div><div><dt>Why useful</dt><dd>Behavior often reveals preference more reliably than a survey or broad demographic label.</dd></div><div><dt>Why imperfect</dt><dd>New users and titles have little history; popularity and prior recommendations can reinforce themselves.</dd></div></dl>
+          </article>
+          <article>
+            <span>02 · Title awareness</span>
+            <h4>Does the cohort know the title exists?</h4>
+            <dl><div><dt>Could come from</dt><dd>Campaign reach, trailer views, impressions, searches, franchise familiarity, and talent recognition.</dd></div><div><dt>Why useful</dt><dd>People rarely start a title they never notice. Awareness can strongly affect early viewing.</dd></div><div><dt>Why imperfect</dt><dd>Awareness does not equal interest, and recommendations can themselves create awareness—making cause and effect messy.</dd></div></dl>
+          </article>
+          <article>
+            <span>03 · Tone preference match</span>
+            <h4>Does the title feel like what this cohort enjoys?</h4>
+            <dl><div><dt>Could come from</dt><dd>Content metadata or embeddings matched against prior behavior: lighthearted, serious, tense, comforting, fast, or slow.</dd></div><div><dt>Why useful</dt><dd>Two titles in the same genre can produce very different reactions because their emotional experience differs.</dd></div><div><dt>Why imperfect</dt><dd>Tone labels are subjective, tastes change by context, and one cohort score hides differences among individuals.</dd></div></dl>
+          </article>
+          <aside><strong>What was abstracted away?</strong><p>Individual user sequences, item embeddings, device and session context, availability, novelty, household composition, candidate retrieval, exploration, business rules, and feedback loops.</p></aside>
+        </section>
 
         <section class="builder-controls" aria-label="Interactive network controls">
           <fieldset class="builder-features"><legend>A · Input features</legend><div id="builder-features"></div></fieldset>

@@ -1,4 +1,4 @@
-const featureNames = ["Audience affinity", "Awareness", "Tone match"];
+const featureNames = ["Audience–title affinity", "Title awareness", "Tone preference match"];
 const state = {
   stage: 1,
   features: [.78, .64, .56],
@@ -31,7 +31,7 @@ const ui = {
   termCheck:document.querySelector("#builder-term-check"),
 };
 const stageContent = {
-  1:["Features become a vector.","A model cannot read concepts directly. Each title property becomes a consistently ordered number."],
+  1:["Features become a vector.","A model cannot read a title–audience relationship directly. Each piece of evidence becomes a consistently ordered number."],
   2:["One neuron weighs the evidence.","Every edge multiplies an input by a weight. The neuron adds those contributions."],
   3:["Bias shifts the starting point.","Bias is a learned offset added after the weighted inputs. It changes how readily the neuron responds."],
   4:["Activation shapes the signal.","The activation function transforms the weighted sum into the neuron’s outgoing signal."],
@@ -41,8 +41,8 @@ const stageContent = {
 const explainers = {
   1:{
     question:"Where do features come from?",
-    what:"Features are measurable facts used to describe one example. Here, one streaming title is represented by audience affinity, awareness, and tone match.",
-    how:"They begin as observations—viewing history, surveys, campaign exposure, or metadata. A repeatable rule cleans each observation and converts it into a number. Every title uses the same order and scale.",
+    what:"Features are measurable facts used to describe one example. Here, the example is one title paired with one audience cohort.",
+    how:"Raw user behavior, campaign exposure, and title information are processed upstream into audience–title affinity, title awareness, and tone preference match. Every title–cohort pair uses the same order and scale.",
     why:"Features translate messy real-world evidence into a consistent language the model can compare. Better features give the model more useful evidence from which to learn.",
     check:"A feature is input data. The model receives it; this small network does not learn the feature itself. Later, embeddings will show how networks can learn representations."
   },
@@ -108,9 +108,9 @@ function renderMath(){
   const products=state.features.map((x,i)=>`${x.toFixed(2)} × (${state.weights[i].toFixed(2)})`);
   if(state.stage===1){
     ui.scalar.textContent=`x₁ = ${state.features[0].toFixed(2)}`;
-    ui.scalarCopy.textContent=`“Audience affinity” has become the numeric feature x₁ (“x sub one”).`;
+    ui.scalarCopy.textContent=`“Audience–title affinity” has become the numeric feature x₁ (“x sub one”).`;
     ui.matrix.textContent=`x = [${state.features.map(v=>v.toFixed(2)).join(", ")}]`;
-    ui.matrixCopy.textContent="x is the feature vector: an ordered list describing one title.";
+    ui.matrixCopy.textContent="x is the feature vector: an ordered list describing one title–audience pair.";
     ui.output.textContent="—"; ui.outputCopy.textContent="No neuron exists yet.";
   } else if(state.stage<=4){
     const biasTerm=state.stage>=3?` + (${state.bias.toFixed(2)})`:"";
