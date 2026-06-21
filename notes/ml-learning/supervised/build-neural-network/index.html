@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Build a neural network interactively, from feature vectors and one neuron to a feedforward hidden layer." />
+    <title>Build a Neural Network | Kaizen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../../styles.css?v=17" />
+    <script src="../../../../script.js" defer></script>
+    <script src="build-neural-network.js?v=5" defer></script>
+  </head>
+  <body class="note-page">
+    <header class="site-header">
+      <a class="brand" href="../../../../" aria-label="Kaizen home">KAIZEN<span>.</span></a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="sr-only">Toggle navigation</span><span></span><span></span></button>
+      <nav id="site-nav" class="site-nav" aria-label="Main navigation"><a href="../../../../#about">About</a><a href="../../../">Notes</a><a href="../../../../#work">Work</a><a href="../../../../#contact">Contact</a></nav>
+    </header>
+    <main>
+      <section class="note-hero">
+        <div class="note-kicker"><a href="../">← Supervised learning</a><span>/</span><span>Neural-network foundations</span></div>
+        <div class="note-title"><h1>Build a Neural Network</h1><p class="key-idea">Start with real-world features, turn them into numbers, and assemble one complete prediction from the inside out.</p></div>
+      </section>
+
+      <section class="supervised-overview">
+        <p>A neural network diagram can look like a mysterious web of circles and lines. It becomes much simpler when we build it one operation at a time.</p>
+        <p>The same object will grow throughout this lesson: features become a vector, the vector enters a neuron, bias and activation shape its response, and several neurons become a feedforward network.</p>
+      </section>
+
+      <section class="builder-model-brief" aria-labelledby="builder-model-title">
+        <div>
+          <p class="case-section-label">What are we actually modeling?</p>
+          <h2 id="builder-model-title">One title. One audience. One prediction.</h2>
+        </div>
+        <div>
+          <p>This is a stripped-down <strong>regression model</strong>. Its example is a title paired with an audience cohort—such as “families who often finish animated adventures.” Its target is the percentage of exposed viewers expected to complete the title during its first week.</p>
+          <p>It is <strong>not</strong> an end-to-end recommender. A real system might retrieve thousands of candidate titles, then use a score like this as one input to ranking. We abstract that surrounding system away so we can inspect the neural-network math.</p>
+          <dl>
+            <div><dt>Input unit</dt><dd>Title × audience cohort</dd></div>
+            <div><dt>Prediction</dt><dd>First-week completion rate</dd></div>
+            <div><dt>Possible use</dt><dd>One ranking signal after retrieval</dd></div>
+          </dl>
+        </div>
+      </section>
+
+      <nav class="neural-lesson-switch" aria-label="Neural network learning path">
+        <span>Neural-network path</span>
+        <div><a href="../build-neural-network/" aria-current="page">1 · Build</a><a href="../train-neural-network/">2 · Train</a><a href="../mlp-regression/">3 · Apply</a></div>
+      </nav>
+
+      <section class="builder-lab-panel" aria-labelledby="builder-title">
+        <div class="builder-language builder-language-intro">
+          <div><p class="case-section-label">The same system, three languages</p><h2 id="builder-title">Object. Arithmetic. Algebra.</h2><p>We will build one network three ways at once: as a diagram, as individual calculations, and as compact linear algebra.</p></div>
+          <div class="builder-language-grid">
+            <article><span>Object</span><h3>Nodes and edges</h3><p>See where values travel.</p></article>
+            <article><span>Arithmetic</span><h3>One operation at a time</h3><p>See what every line calculates.</p></article>
+            <article><span>Algebra</span><h3>Many operations together</h3><p>See how vectors and matrices compress the work.</p></article>
+          </div>
+        </div>
+
+        <div class="builder-step-rail" role="tablist" aria-label="Network construction stages">
+          <button class="is-selected" data-build-stage="1"><span>01</span>Features → vector</button>
+          <button data-build-stage="2"><span>02</span>One neuron</button>
+          <button data-build-stage="3"><span>03</span>Bias</button>
+          <button data-build-stage="4"><span>04</span>Activation</button>
+          <button data-build-stage="5"><span>05</span>Hidden layer</button>
+          <button data-build-stage="6"><span>06</span>Feedforward</button>
+        </div>
+
+        <div class="builder-grid">
+          <div class="builder-stage">
+            <div class="builder-stage-heading"><div><p class="case-section-label">Object view</p><h3 id="builder-stage-title">Features become a vector.</h3></div><strong id="builder-stage-number">01 / 06</strong></div>
+            <svg id="builder-network" viewBox="0 0 820 530" role="img" aria-label="A progressively constructed neural network"></svg>
+            <p id="builder-stage-copy" class="builder-stage-copy">A model cannot read concepts directly. Each title property becomes a consistently ordered number.</p>
+            <section class="builder-controls builder-controls-inline" aria-label="Interactive network controls">
+              <div class="builder-control-instruction"><span>Try it</span><p id="builder-control-instruction">Move a feature and watch its number change in the object, arithmetic, and algebra views.</p></div>
+              <fieldset class="builder-features"><legend>A · Input features</legend><div id="builder-features"></div></fieldset>
+              <fieldset class="builder-weights" id="builder-weights-panel"><legend>B · Connection weights</legend><div id="builder-weights"></div></fieldset>
+              <fieldset class="builder-bias" id="builder-bias-panel"><legend>C · Bias</legend><input id="builder-bias" type="range" min="-100" max="100" value="-55" /><label for="builder-bias"><strong><span id="builder-bias-value">−0.55</span> bias</strong><span>Shift how much evidence the neuron needs.</span></label></fieldset>
+              <fieldset class="builder-activation" id="builder-activation-panel"><legend>D · Activation</legend><div class="segmented builder-activation-buttons"><button data-builder-activation="linear">Linear</button><button class="is-selected" data-builder-activation="relu">ReLU</button><button data-builder-activation="sigmoid">Sigmoid</button></div><p id="builder-activation-copy">ReLU keeps positive signals and suppresses negative ones.</p></fieldset>
+              <fieldset class="builder-width" id="builder-width-panel"><legend>E · Hidden neurons</legend><input id="builder-width" type="range" min="1" max="4" value="3" /><label for="builder-width"><strong><span id="builder-width-value">3</span> neurons</strong><span>Each neuron can learn a different numeric pattern.</span></label></fieldset>
+              <fieldset class="builder-forward" id="builder-forward-panel"><legend>F · Output layer</legend><button id="builder-forward" type="button">Run feedforward pass</button><p>Signals travel left to right using the network’s current parameters. Nothing learns during this pass.</p></fieldset>
+            </section>
+          </div>
+
+          <aside class="builder-math">
+            <p class="case-section-label">Numbers underneath</p>
+            <div class="builder-equation"><span>Scalar view</span><strong id="builder-scalar">x₁ = 0.78</strong><p id="builder-scalar-copy">One feature is one number.</p></div>
+            <div class="builder-equation matrix"><span>Linear-algebra view</span><strong id="builder-matrix">x = [0.78, 0.64, 0.56]</strong><p id="builder-matrix-copy">The ordered feature values form a vector.</p></div>
+            <div class="builder-readout"><span>Current output</span><strong id="builder-output">—</strong><p id="builder-output-copy">No neuron exists yet.</p></div>
+          </aside>
+        </div>
+
+        <aside class="builder-explainer" aria-live="polite">
+          <div class="builder-explainer-heading">
+            <p class="case-section-label">Say that again, but human</p>
+            <h3 id="builder-explainer-question">Where do features come from?</h3>
+          </div>
+          <article><span>What is it?</span><p id="builder-what">Features are facts we choose to tell the model about one example.</p></article>
+          <article><span>How does it work?</span><p id="builder-how">Raw observations are measured, cleaned, and converted into consistently ordered numeric inputs.</p></article>
+          <article><span>Why is it useful?</span><p id="builder-why">Features turn real-world evidence into numbers a model can compare consistently.</p></article>
+          <div class="builder-term-check"><span>Keep these separate</span><p id="builder-term-check">A feature is input data. It is not something this small network learns during training.</p></div>
+        </aside>
+
+        <section class="builder-feature-provenance" aria-labelledby="feature-provenance-title">
+          <div class="builder-feature-heading">
+            <p class="case-section-label">The behavior layer, compressed</p>
+            <h3 id="feature-provenance-title">These numbers came from somewhere.</h3>
+            <p>A production model would consume many raw events and learned embeddings. For this lesson, we compress that upstream behavior into three inspectable teaching features.</p>
+          </div>
+          <article>
+            <span>01 · Audience–title affinity</span>
+            <h4>How likely is this cohort to care?</h4>
+            <dl><div><dt>Could come from</dt><dd>Past watches, searches, clicks, completions, skips, likes, and similarity to related titles.</dd></div><div><dt>Why useful</dt><dd>Behavior often reveals preference more reliably than a survey or broad demographic label.</dd></div><div><dt>Why imperfect</dt><dd>New users and titles have little history; popularity and prior recommendations can reinforce themselves.</dd></div></dl>
+          </article>
+          <article>
+            <span>02 · Title awareness</span>
+            <h4>Does the cohort know the title exists?</h4>
+            <dl><div><dt>Could come from</dt><dd>Campaign reach, trailer views, impressions, searches, franchise familiarity, and talent recognition.</dd></div><div><dt>Why useful</dt><dd>People rarely start a title they never notice. Awareness can strongly affect early viewing.</dd></div><div><dt>Why imperfect</dt><dd>Awareness does not equal interest, and recommendations can themselves create awareness—making cause and effect messy.</dd></div></dl>
+          </article>
+          <article>
+            <span>03 · Tone preference match</span>
+            <h4>Does the title feel like what this cohort enjoys?</h4>
+            <dl><div><dt>Could come from</dt><dd>Content metadata or embeddings matched against prior behavior: lighthearted, serious, tense, comforting, fast, or slow.</dd></div><div><dt>Why useful</dt><dd>Two titles in the same genre can produce very different reactions because their emotional experience differs.</dd></div><div><dt>Why imperfect</dt><dd>Tone labels are subjective, tastes change by context, and one cohort score hides differences among individuals.</dd></div></dl>
+          </article>
+          <aside><strong>What was abstracted away?</strong><p>Individual user sequences, item embeddings, device and session context, availability, novelty, household composition, candidate retrieval, exploration, business rules, and feedback loops.</p></aside>
+        </section>
+
+      </section>
+    </main>
+    <footer class="site-footer"><p>Built with care and a little curiosity.</p><a href="https://github.com/jefflovell">@jefflovell</a></footer>
+  </body>
+</html>

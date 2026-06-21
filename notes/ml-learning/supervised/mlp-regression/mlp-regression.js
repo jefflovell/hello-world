@@ -1,4 +1,4 @@
-const featureNames = ["Audience affinity", "Awareness", "Tone match", "Release timing", "Runtime fit", "Social buzz"];
+const featureNames = ["Audience–title affinity", "Title awareness", "Tone preference match", "Release timing", "Runtime fit", "Social buzz"];
 const initialFeatures = [0.76, 0.62, 0.7, 0.58, 0.66, 0.54];
 const interactionTarget = (x) => Math.max(.08, Math.min(.94,
   .12 + .46 * x[0] * x[1] + .14 * x[2] + .08 * x[3] + .1 * x[4] + .12 * x[5]));
