@@ -8,9 +8,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../../../../styles.css?v=15" />
+    <link rel="stylesheet" href="../../../../styles.css?v=16" />
     <script src="../../../../script.js" defer></script>
-    <script src="build-neural-network.js?v=3" defer></script>
+    <script src="build-neural-network.js?v=4" defer></script>
   </head>
   <body class="note-page">
     <header class="site-header">
@@ -32,17 +32,17 @@
       <section class="builder-model-brief" aria-labelledby="builder-model-title">
         <div>
           <p class="case-section-label">What are we actually modeling?</p>
-          <h2 id="builder-model-title">One title. One audience cohort. One predicted completion rate.</h2>
+          <h2 id="builder-model-title">One title. One audience. One prediction.</h2>
         </div>
         <div>
           <p>This is a stripped-down <strong>regression model</strong>. Its example is a title paired with an audience cohort—such as “families who often finish animated adventures.” Its target is the percentage of exposed viewers expected to complete the title during its first week.</p>
           <p>It is <strong>not</strong> an end-to-end recommender. A real system might retrieve thousands of candidate titles, then use a score like this as one input to ranking. We abstract that surrounding system away so we can inspect the neural-network math.</p>
+          <dl>
+            <div><dt>Input unit</dt><dd>Title × audience cohort</dd></div>
+            <div><dt>Prediction</dt><dd>First-week completion rate</dd></div>
+            <div><dt>Possible use</dt><dd>One ranking signal after retrieval</dd></div>
+          </dl>
         </div>
-        <dl>
-          <div><dt>Input unit</dt><dd>Title × audience cohort</dd></div>
-          <div><dt>Prediction</dt><dd>First-week completion rate</dd></div>
-          <div><dt>Possible use</dt><dd>One ranking signal after retrieval</dd></div>
-        </dl>
       </section>
 
       <nav class="neural-lesson-switch" aria-label="Neural network learning path">
@@ -51,10 +51,13 @@
       </nav>
 
       <section class="builder-lab-panel" aria-labelledby="builder-title">
-        <div class="regularization-lab-heading">
-          <p class="case-section-label">Persistent mini-lab | Neuron → network</p>
-          <h2 id="builder-title">Every line in the diagram is arithmetic.</h2>
-          <p>Move a feature or weight and watch the object diagram, scalar equation, and linear-algebra view update together.</p>
+        <div class="builder-language builder-language-intro">
+          <div><p class="case-section-label">The same system, three languages</p><h2 id="builder-title">Object. Arithmetic. Algebra.</h2><p>We will build one network three ways at once: as a diagram, as individual calculations, and as compact linear algebra.</p></div>
+          <div class="builder-language-grid">
+            <article><span>Object</span><h3>Nodes and edges</h3><p>See where values travel.</p></article>
+            <article><span>Arithmetic</span><h3>One operation at a time</h3><p>See what every line calculates.</p></article>
+            <article><span>Algebra</span><h3>Many operations together</h3><p>See how vectors and matrices compress the work.</p></article>
+          </div>
         </div>
 
         <div class="builder-step-rail" role="tablist" aria-label="Network construction stages">
@@ -71,6 +74,15 @@
             <div class="builder-stage-heading"><div><p class="case-section-label">Object view</p><h3 id="builder-stage-title">Features become a vector.</h3></div><strong id="builder-stage-number">01 / 06</strong></div>
             <svg id="builder-network" viewBox="0 0 820 530" role="img" aria-label="A progressively constructed neural network"></svg>
             <p id="builder-stage-copy" class="builder-stage-copy">A model cannot read concepts directly. Each title property becomes a consistently ordered number.</p>
+            <section class="builder-controls builder-controls-inline" aria-label="Interactive network controls">
+              <div class="builder-control-instruction"><span>Try it</span><p id="builder-control-instruction">Move a feature and watch its number change in the object, arithmetic, and algebra views.</p></div>
+              <fieldset class="builder-features"><legend>A · Input features</legend><div id="builder-features"></div></fieldset>
+              <fieldset class="builder-weights" id="builder-weights-panel"><legend>B · Connection weights</legend><div id="builder-weights"></div></fieldset>
+              <fieldset class="builder-bias" id="builder-bias-panel"><legend>C · Bias</legend><input id="builder-bias" type="range" min="-100" max="100" value="-55" /><label for="builder-bias"><strong><span id="builder-bias-value">−0.55</span> bias</strong><span>Shift how much evidence the neuron needs.</span></label></fieldset>
+              <fieldset class="builder-activation" id="builder-activation-panel"><legend>D · Activation</legend><div class="segmented builder-activation-buttons"><button data-builder-activation="linear">Linear</button><button class="is-selected" data-builder-activation="relu">ReLU</button><button data-builder-activation="sigmoid">Sigmoid</button></div><p id="builder-activation-copy">ReLU keeps positive signals and suppresses negative ones.</p></fieldset>
+              <fieldset class="builder-width" id="builder-width-panel"><legend>E · Hidden neurons</legend><input id="builder-width" type="range" min="1" max="4" value="3" /><label for="builder-width"><strong><span id="builder-width-value">3</span> neurons</strong><span>Each neuron can learn a different numeric pattern.</span></label></fieldset>
+              <fieldset class="builder-forward" id="builder-forward-panel"><legend>F · Output layer</legend><button id="builder-forward" type="button">Run feedforward pass</button><p>Signals travel left to right using the network’s current parameters. Nothing learns during this pass.</p></fieldset>
+            </section>
           </div>
 
           <aside class="builder-math">
@@ -116,25 +128,6 @@
           <aside><strong>What was abstracted away?</strong><p>Individual user sequences, item embeddings, device and session context, availability, novelty, household composition, candidate retrieval, exploration, business rules, and feedback loops.</p></aside>
         </section>
 
-        <section class="builder-controls" aria-label="Interactive network controls">
-          <fieldset class="builder-features"><legend>A · Input features</legend><div id="builder-features"></div></fieldset>
-          <fieldset class="builder-weights" id="builder-weights-panel"><legend>B · Connection weights</legend><div id="builder-weights"></div></fieldset>
-          <fieldset class="builder-bias" id="builder-bias-panel"><legend>C · Bias</legend><input id="builder-bias" type="range" min="-100" max="100" value="-55" /><label for="builder-bias"><strong><span id="builder-bias-value">−0.55</span> bias</strong><span>Shift how much evidence the neuron needs.</span></label></fieldset>
-          <fieldset class="builder-activation" id="builder-activation-panel"><legend>D · Activation</legend><div class="segmented builder-activation-buttons"><button data-builder-activation="linear">Linear</button><button class="is-selected" data-builder-activation="relu">ReLU</button><button data-builder-activation="sigmoid">Sigmoid</button></div><p id="builder-activation-copy">ReLU keeps positive signals and suppresses negative ones.</p></fieldset>
-          <fieldset class="builder-width" id="builder-width-panel"><legend>E · Hidden neurons</legend><input id="builder-width" type="range" min="1" max="4" value="3" /><label for="builder-width"><strong><span id="builder-width-value">3</span> neurons</strong><span>Each neuron can learn a different numeric pattern.</span></label></fieldset>
-          <fieldset class="builder-forward" id="builder-forward-panel"><legend>F · Output layer</legend><button id="builder-forward" type="button">Run feedforward pass</button><p>Signals travel left to right using the network’s current parameters. Nothing learns during this pass.</p></fieldset>
-        </section>
-
-        <aside class="watch-panel builder-watch"><p class="case-section-label">What to discover</p><ul><li>Changing a feature changes the vector before it changes the network.</li><li>A weight controls both direction and strength: positive supports, negative opposes.</li><li>Bias is a learned offset, not another input feature.</li><li>Activation functions transform the weighted sum after bias is added.</li><li>A hidden layer repeats the same neuron calculation with different parameters.</li><li>Feedforward means using current parameters to calculate a prediction—not training them.</li></ul></aside>
-
-        <section class="builder-language" aria-labelledby="builder-language-title">
-          <div><p class="case-section-label">The same system, three languages</p><h2 id="builder-language-title">Object. Arithmetic. Algebra.</h2></div>
-          <div class="builder-language-grid">
-            <article><span>Object diagram</span><h3>Nodes and edges</h3><p>Nodes hold values. Edges carry values multiplied by weights.</p></article>
-            <article><span>Scalar arithmetic</span><h3>One operation at a time</h3><p><code>0.78 × 0.60</code> shows exactly what one connection contributes.</p></article>
-            <article><span>Linear algebra</span><h3>Many operations together</h3><p><code>z = w · x + b</code> compresses the repeated multiplications and additions.</p></article>
-          </div>
-        </section>
       </section>
     </main>
     <footer class="site-footer"><p>Built with care and a little curiosity.</p><a href="https://github.com/jefflovell">@jefflovell</a></footer>

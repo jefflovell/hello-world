@@ -29,6 +29,8 @@ const ui = {
   what:document.querySelector("#builder-what"), how:document.querySelector("#builder-how"),
   why:document.querySelector("#builder-why"),
   termCheck:document.querySelector("#builder-term-check"),
+  controls:document.querySelector(".builder-controls"),
+  controlInstruction:document.querySelector("#builder-control-instruction"),
 };
 const stageContent = {
   1:["Features become a vector.","A model cannot read a title–audience relationship directly. Each piece of evidence becomes a consistently ordered number."],
@@ -37,6 +39,14 @@ const stageContent = {
   4:["Activation shapes the signal.","The activation function transforms the weighted sum into the neuron’s outgoing signal."],
   5:["One calculation becomes a layer.","A hidden layer repeats the neuron operation with different weights and biases, creating several intermediate signals."],
   6:["The network feeds forward.","The output neuron combines hidden activations into one prediction. The entire diagram is now one nested function."],
+};
+const controlInstructions = {
+  1:"Move a feature and watch its number change in the object, arithmetic, and algebra views.",
+  2:"Move a feature or weight. The edge changes strength and the neuron recalculates its weighted evidence.",
+  3:"Adjust bias and watch the neuron’s starting offset move the total without changing any feature.",
+  4:"Switch Linear, ReLU, and Sigmoid. The same pre-activation value becomes three different outgoing signals.",
+  5:"Add or remove hidden neurons. Each new node repeats the same operation with a different set of parameters.",
+  6:"Run the feedforward pass and watch the current signals travel left to right. No learning happens yet."
 };
 const explainers = {
   1:{
@@ -175,6 +185,8 @@ function render(){
   ui.how.textContent=explainer.how;
   ui.why.textContent=explainer.why;
   ui.termCheck.textContent=explainer.check;
+  ui.controlInstruction.textContent=controlInstructions[state.stage];
+  ui.controls.classList.toggle("is-feature-only",state.stage===1);
   ui.biasValue.textContent=format(state.bias);ui.widthValue.textContent=state.width;
   ui.activationCopy.textContent=state.activation==="relu"?"ReLU keeps positive signals and suppresses negative ones.":state.activation==="sigmoid"?"Sigmoid squeezes any value into the range from 0 to 1.":"Linear passes the weighted sum through unchanged.";
   ui.features.querySelectorAll("[data-builder-feature]").forEach((input,i)=>document.querySelector(`#builder-feature-value-${i}`).textContent=state.features[i].toFixed(2));
