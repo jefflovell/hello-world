@@ -1,4 +1,5 @@
 const featureNames = ["Audience–title affinity", "Title awareness", "Tone preference match"];
+const featureLabelLines = [["Audience–title", "affinity"], ["Title awareness"], ["Tone preference", "match"]];
 const state = {
   stage: 1,
   features: [.78, .64, .56],
@@ -146,7 +147,8 @@ function renderNetwork(){
   const showNeuron=state.stage>=2, showLayer=state.stage>=5, showOutput=state.stage>=6;
   let edges="", nodes="";
   ys.forEach((y,i)=>{
-    nodes+=`<g class="builder-node input"><circle cx="${inputX}" cy="${y}" r="35"/><text x="${inputX}" y="${y+5}">${state.features[i].toFixed(2)}</text><text class="builder-node-label" x="18" y="${y+5}">${featureNames[i]}</text></g>`;
+    const label=featureLabelLines[i].map((line,j)=>`<tspan x="18" dy="${j===0?(featureLabelLines[i].length===1?0:-6):12}">${line}</tspan>`).join("");
+    nodes+=`<g class="builder-node input"><circle cx="${inputX}" cy="${y}" r="35"/><text x="${inputX}" y="${y+5}">${state.features[i].toFixed(2)}</text><text class="builder-node-label" x="18" y="${y+5}">${label}</text></g>`;
   });
   if(showNeuron){
     const count=showLayer?state.width:1;
