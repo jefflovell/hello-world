@@ -1,19 +1,171 @@
 <!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="The planned second neural-network foundations lesson: loss, gradient descent, backpropagation, batches, epochs, and validation." />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Train a neural network interactively: residuals, loss, gradients, gradient descent, learning rate, epochs, backpropagation, and held-out behavior." />
     <title>Train a Neural Network | Kaizen</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../../../../styles.css?v=13" /><script src="../../../../script.js" defer></script>
+    <link rel="stylesheet" href="../../../../styles.css?v=18" />
+    <script src="../../../../script.js" defer></script>
+    <script src="train-neural-network.js?v=1" defer></script>
   </head>
   <body class="note-page">
-    <header class="site-header"><a class="brand" href="../../../../">KAIZEN<span>.</span></a><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="sr-only">Toggle navigation</span><span></span><span></span></button><nav id="site-nav" class="site-nav"><a href="../../../../#about">About</a><a href="../../../">Notes</a><a href="../../../../#work">Work</a><a href="../../../../#contact">Contact</a></nav></header>
+    <header class="site-header">
+      <a class="brand" href="../../../../" aria-label="Kaizen home">KAIZEN<span>.</span></a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="sr-only">Toggle navigation</span><span></span><span></span></button>
+      <nav id="site-nav" class="site-nav" aria-label="Main navigation"><a href="../../../../#about">About</a><a href="../../../">Notes</a><a href="../../../../#work">Work</a><a href="../../../../#contact">Contact</a></nav>
+    </header>
+
     <main>
-      <section class="note-hero"><div class="note-kicker"><a href="../">← Supervised learning</a><span>/</span><span>Neural-network foundations</span></div><div class="note-title"><h1>Train a Neural Network</h1><p class="key-idea">Loss measures the miss, backpropagation assigns responsibility, and gradient descent turns those gradients into better parameters.</p></div></section>
-      <nav class="neural-lesson-switch" aria-label="Neural network learning path"><span>Neural-network path</span><div><a href="../build-neural-network/">1 · Build</a><a href="../train-neural-network/" aria-current="page">2 · Train</a><a href="../mlp-regression/">3 · Apply</a></div></nav>
-      <section class="neural-next-page"><p class="case-section-label">Next foundation</p><h2>The mountain comes next.</h2><p>This lesson will reuse the network you built, then add loss, the gradient-descent landscape, backpropagation, parameter updates, batches, epochs, and validation.</p><a class="button" href="../build-neural-network/">Start by building the network</a></section>
+      <section class="note-hero">
+        <div class="note-kicker"><a href="../">← Supervised learning</a><span>/</span><span>Neural-network foundations</span></div>
+        <div class="note-title"><h1>Train a Neural Network</h1><p class="key-idea">Loss measures the miss, backpropagation assigns responsibility, and gradient descent turns those gradients into better parameters.</p></div>
+      </section>
+
+      <section class="supervised-overview">
+        <p>In the Build lesson, the network could pass signals forward and make a prediction. Training is the next loop: make a prediction, compare it with the answer key, then adjust the parameters so the next prediction is less wrong.</p>
+        <p>The mountain metaphor is useful here. Loss creates the landscape. Gradients point downhill. The learning rate decides how big each step should be.</p>
+      </section>
+
+      <nav class="neural-lesson-switch" aria-label="Neural network learning path">
+        <span>Neural-network path</span>
+        <div><a href="../build-neural-network/">1 · Build</a><a href="../train-neural-network/" aria-current="page">2 · Train</a><a href="../mlp-regression/">3 · Apply</a></div>
+      </nav>
+
+      <section class="learning-loop train-loop" aria-label="Neural network training loop">
+        <article><span>01</span><h2>Predict</h2><p>A feedforward pass produces <code>ŷ</code> (“y-hat”), the current guess.</p></article>
+        <article><span>02</span><h2>Measure loss</h2><p>The known target <code>y</code> turns a miss into a number the model can reduce.</p></article>
+        <article><span>03</span><h2>Update backward</h2><p>Backpropagation finds responsibility; gradient descent changes the parameters.</p></article>
+      </section>
+
+      <section class="train-lab-panel" aria-labelledby="train-lab-title">
+        <div class="regularization-lab-heading train-lab-heading">
+          <p class="case-section-label">Streaming | First-week completion</p>
+          <h2 id="train-lab-title">Walk downhill on the loss mountain.</h2>
+          <p>Train a small neural output unit on examples with known completion rates. The math is real, but the model is intentionally compact so every update can stay visible.</p>
+        </div>
+
+        <div class="train-lab-grid">
+          <section class="train-stage" aria-labelledby="train-stage-title">
+            <div class="train-stage-header">
+              <div><p class="case-section-label">Loss surface</p><h3 id="train-stage-title">Current parameters live somewhere on the map.</h3></div>
+              <strong id="train-status">Ready to train</strong>
+            </div>
+            <svg id="train-surface" viewBox="0 0 740 420" role="img" aria-label="A loss landscape showing the current weight position"></svg>
+            <div class="train-surface-legend"><span><i class="low"></i>Lower loss</span><span><i class="high"></i>Higher loss</span><span id="train-step-copy">Choose a learning rate, then step downhill.</span></div>
+          </section>
+
+          <aside class="train-readout">
+            <p class="case-section-label">Selected example</p>
+            <div class="prediction-card"><span>Predicted completion ŷ (y-hat)</span><strong id="train-prediction">0%</strong></div>
+            <div class="train-stat-grid">
+              <article><span>Actual target y</span><strong id="train-target">0%</strong></article>
+              <article><span>Residual y − ŷ</span><strong id="train-residual">0</strong></article>
+              <article><span>Squared error</span><strong id="train-example-loss">0</strong></article>
+              <article><span>Epoch</span><strong id="train-epoch">0</strong></article>
+              <article><span>Train MSE</span><strong id="train-loss">0</strong></article>
+              <article><span>Held-out MSE</span><strong id="train-heldout">0</strong></article>
+            </div>
+            <div class="train-gradient-card">
+              <span>Backprop responsibility</span>
+              <strong id="train-gradient-title">No update yet</strong>
+              <dl id="train-gradients"></dl>
+            </div>
+          </aside>
+        </div>
+
+        <div class="train-controls">
+          <fieldset>
+            <legend>Training example</legend>
+            <select id="train-example" aria-label="Choose a training example"></select>
+            <p id="train-example-copy">Pick one answer-key example to inspect.</p>
+          </fieldset>
+          <fieldset>
+            <legend>Learning rate</legend>
+            <input id="train-rate" type="range" min="1" max="80" value="20" />
+            <label for="train-rate"><strong><span id="train-rate-output">0.20</span> η (eta)</strong><span>Step size for each parameter update.</span></label>
+            <div class="train-rate-presets"><button type="button" data-rate="0.03">Tiny</button><button type="button" data-rate="0.20" class="is-selected">Useful</button><button type="button" data-rate="1.35">Oversized</button></div>
+          </fieldset>
+          <fieldset class="train-actions">
+            <legend>Gradient descent</legend>
+            <button id="train-step" type="button">Train selected example</button>
+            <button id="train-epoch-button" type="button">Train one epoch</button>
+            <button id="train-reset" type="button">Reset</button>
+          </fieldset>
+        </div>
+
+        <section class="train-parameter-strip" aria-label="Current learned parameters">
+          <article><span>Parameter</span><strong id="train-w-affinity">0</strong><p>Audience-affinity weight</p></article>
+          <article><span>Parameter</span><strong id="train-w-awareness">0</strong><p>Title-awareness weight</p></article>
+          <article><span>Parameter</span><strong id="train-w-tone">0</strong><p>Tone-match weight</p></article>
+          <article><span>Parameter</span><strong id="train-bias">0</strong><p>Bias</p></article>
+        </section>
+
+        <section class="train-residuals" aria-labelledby="train-residuals-title">
+          <div><p class="case-section-label">Residuals</p><h3 id="train-residuals-title">Every example pulls on the parameters.</h3><p>A positive residual means the model predicted too low. A negative residual means it predicted too high.</p></div>
+          <div id="train-residual-bars" class="train-residual-bars"></div>
+        </section>
+
+        <section class="train-trace" aria-labelledby="train-trace-title">
+          <div><p class="case-section-label">One update, slowed down</p><h3 id="train-trace-title">Backpropagation does the accounting.</h3></div>
+          <ol>
+            <li id="train-trace-forward"><span>01</span><strong>Forward pass</strong><p>Calculate the current prediction.</p></li>
+            <li id="train-trace-loss"><span>02</span><strong>Loss</strong><p>Turn the miss into squared error.</p></li>
+            <li id="train-trace-backward"><span>03</span><strong>Backpropagate</strong><p>Find how each parameter affected loss.</p></li>
+            <li id="train-trace-update"><span>04</span><strong>Update</strong><p>Move parameters against the gradient.</p></li>
+          </ol>
+          <div class="train-update-equation"><span>Selected update</span><strong id="train-update-math">Choose “Train selected example.”</strong><p id="train-update-copy">The update will show old parameter − η (eta) × gradient = new parameter.</p></div>
+        </section>
+
+        <aside class="watch-panel train-watch">
+          <p class="case-section-label">What to watch</p>
+          <ul>
+            <li>Tiny learning rates move steadily but slowly; useful rates drop loss faster.</li>
+            <li>Oversized rates can bounce around the valley or make held-out loss worse.</li>
+            <li>Residual bars shrink when the model is learning the training examples.</li>
+            <li>Held-out loss is the early warning that “better on practice cards” is not always better on new cards.</li>
+          </ul>
+        </aside>
+
+        <section class="mechanics-section" aria-labelledby="train-mechanics-title">
+          <div class="mechanics-heading"><p class="case-section-label">How it is trained</p><h2 id="train-mechanics-title">Miss. Measure. Move.</h2><p>The lab uses Mean Squared Error and gradient descent. The formulas below are the same operations used by the demo.</p></div>
+          <div class="equation-grid">
+            <article class="equation-card"><span>01 · Residual</span><div class="equation equation-compact">residual = y − ŷ</div><p><code>y</code> is the known answer. <code>ŷ</code> (“y-hat”) is the prediction. The residual says which way the prediction missed.</p></article>
+            <article class="equation-card"><span>02 · Mean Squared Error</span><div class="equation equation-mse">MSE = (1/n) Σ(y<sub>i</sub> − ŷ<sub>i</sub>)²</div><p><code>Σ</code> (“capital sigma”) means add the squared misses. <code>n</code> is the number of examples.</p></article>
+            <article class="equation-card"><span>03 · Gradient descent</span><div class="equation equation-compact">w ← w − η(∂L/∂w)</div><p><code>η</code> (“eta”) is the learning rate. <code>∂L/∂w</code> (“partial L over partial w”) is how sensitive loss is to this weight.</p></article>
+          </div>
+        </section>
+
+        <section class="train-generalization" aria-labelledby="train-generalization-title">
+          <div><p class="case-section-label">Generalization</p><h2 id="train-generalization-title">The goal is not to memorize the practice set.</h2></div>
+          <div>
+            <p>Training loss measures performance on examples used for updates. Held-out loss measures examples kept aside. When both improve, the model is probably learning a useful pattern. When training loss keeps falling but held-out loss rises, the model may be overfitting.</p>
+            <p>That is why modern training workflows separate training examples, validation or held-out examples, and final test examples. The model should earn trust on data it did not use to tune itself.</p>
+          </div>
+        </section>
+
+        <section class="terms-section" aria-labelledby="train-terms-title">
+          <div class="terms-heading"><p class="case-section-label">Key terms</p><h2 id="train-terms-title">The vocabulary of learning from error.</h2><p>These terms show up across neural networks, linear models, and many other supervised methods.</p></div>
+          <dl class="term-grid">
+            <div><dt>Residual</dt><dd>The difference between the known answer and the prediction.</dd></div>
+            <div><dt>Loss function</dt><dd>A rule that turns prediction error into a number the model can minimize.</dd></div>
+            <div><dt>Gradient</dt><dd>The slope of loss with respect to a parameter.</dd></div>
+            <div><dt>Gradient descent</dt><dd>An update rule that steps parameters opposite the gradient.</dd></div>
+            <div><dt>Learning rate</dt><dd>The hyperparameter controlling the size of each update step.</dd></div>
+            <div><dt>Backpropagation</dt><dd>The efficient backward pass that calculates parameter responsibility.</dd></div>
+            <div><dt>Epoch</dt><dd>One training pass through every example in the training set.</dd></div>
+            <div><dt>Held-out examples</dt><dd>Examples not used for updates, used to check whether learning generalizes.</dd></div>
+          </dl>
+        </section>
+
+        <nav class="train-next-nav" aria-label="Neural network lesson navigation">
+          <a href="../build-neural-network/">← Build the network</a>
+          <a href="../mlp-regression/">Apply an MLP →</a>
+        </nav>
+      </section>
     </main>
     <footer class="site-footer"><p>Built with care and a little curiosity.</p><a href="https://github.com/jefflovell">@jefflovell</a></footer>
   </body>
