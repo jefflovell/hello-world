@@ -59,8 +59,10 @@ Backlinks should preserve this hierarchy:
 - `supervised/build-neural-network/`
   - Features, vectors, weights, bias, activations, hidden layer, feedforward.
 - `supervised/train-neural-network/`
-  - Planned deeper training lesson: loss, gradients, gradient descent,
+  - Training lesson: parameters, loss, gradients, gradient descent,
     backpropagation, learning rate, epochs, and generalization.
+  - Key teaching point: this is where the machine changes weights and biases
+    from examples, which is the "learning" in machine learning.
 
 Neural networks are a model family, not only regression. For now they live
 inside the supervised sequence because the existing lessons are supervised. If
@@ -79,15 +81,26 @@ models, create a broader neural-network hub.
 ## Planned neural-network mini-labs
 
 The training lesson should use small, focused interactions before the all-up MLP
-lab:
+lab. Teach the mechanism before the metaphor: define parameters, weights, bias,
+loss, gradients, and learning rate in inspectable language before using compact
+phrases like "downhill."
 
-- **Loss surface:** move a weight and watch error rise or fall.
-- **Gradient descent:** step downhill toward a valley; compare learning rates.
+- **Loss map:** show a two-parameter heat map where each point is one setting
+  of two weights and color shows loss.
+- **Gradient descent:** trace the machine-driven parameter updates across the
+  loss map; compare learning rates.
 - **Residuals:** show prediction minus actual for individual examples.
-- **Backpropagation:** highlight responsibility flowing backward through edges.
+- **Backpropagation:** show gradients for weights and bias; avoid leaning on
+  "responsibility" until the concrete gradient numbers are visible.
 - **Parameters vs. hyperparameters:** weights and biases are learned;
   architecture and learning rate are chosen by the builder.
 - **Generalization:** compare training improvement with held-out examples.
+
+Revision lesson from `train-neural-network/`: when copy feels pithy but
+self-referential, slow down. Say what the learner can see and name who changes
+what. Example: "the machine changes the parameters using the loss signal" is
+stronger than "gradient descent changes the parameters" because it connects the
+mechanism to machine learning itself.
 
 ## Future expansion ideas
 

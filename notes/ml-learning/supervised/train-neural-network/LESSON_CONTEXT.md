@@ -1,4 +1,4 @@
-# Lesson context: Train a Neural Network
+# Lesson context: Training a Neural Network
 
 Use with `../../LESSON_PLAYBOOK.md`, `../../ML_ROADMAP.md`, and
 `../../NEURAL-NETWORK-PLAN.md`.
@@ -8,25 +8,52 @@ Use with `../../LESSON_PLAYBOOK.md`, `../../ML_ROADMAP.md`, and
 Second neural-network foundation lesson. This page should bridge “we built a
 network” and “now the network learns.”
 
-Current page is a lightweight scaffold, not the final lesson.
+Current page is a working interactive lesson that still benefits from teaching
+voice passes and polish.
 
 ## Intended teaching frame
 
-The mountain comes next: loss creates the landscape, gradients point downhill,
-and gradient descent updates parameters toward lower loss.
+Keep the title active and parallel with the previous lesson:
+**Building a Neural Network** → **Training a Neural Network**.
+
+The opening must teach, not pitch. Define the model's adjustable numbers before
+using training vocabulary:
+
+- A **parameter** is an internal number the model can learn from data.
+- A **weight** is a parameter attached to an input or connection.
+- A **bias** is also a parameter; it shifts the neuron's baseline.
+- Training changes parameters after the model sees examples with known answers.
+- Make the machine-learning moment explicit: in Build, humans inspected or set
+  the numbers; in Training, the machine changes those parameters using the loss
+  signal. That automatic parameter update is the "learning" in machine
+  learning.
+
+Use the map carefully. The lab shows a 2D heat map, not a 3D mountain. It is a
+slice through two parameters: audience-affinity weight on the horizontal axis
+and title-awareness weight on an intentionally inverted vertical axis. The
+inversion makes useful gradient steps visibly descend on screen. Cooler/cyan
+cells mean lower loss; warmer/red cells mean higher loss. If the word "downhill"
+appears, explain that it means moving from warmer, higher-loss cells toward
+cooler, lower-loss cells on this map. The yellow dot marks the current
+two-weight position. The trail is one continuous model path because every
+example updates the same shared parameters. Draw it as colored segments so each
+segment can show which training example caused that update, with a tooltip for
+example name, loss, and learning rate.
 
 Key promise:
 
-> Loss measures the miss, backpropagation assigns responsibility, and gradient
-> descent turns those gradients into better parameters.
+> Training is where the machine changes the numbers inside the model, using
+> answer-key examples to make future predictions less wrong.
 
 ## Planned mini-labs
 
 - **Residuals:** show actual minus prediction for individual examples.
-- **Loss surface:** move a weight and watch error rise or fall.
-- **Gradient descent:** step downhill; compare tiny, useful, and oversized
-  learning rates.
-- **Backpropagation:** highlight responsibility moving backward through edges.
+- **Loss map:** show a two-parameter slice where each point is one setting of two
+  weights and each color shows the resulting loss.
+- **Gradient descent:** compare tiny, useful, and oversized learning rates by
+  watching how far the yellow weight point moves after an update.
+- **Backpropagation:** show gradients for weights and bias without leading with
+  the abstract "responsibility" shorthand.
 - **Parameters vs hyperparameters:** learned weights and biases versus chosen
   settings like learning rate, epochs, and architecture.
 - **Generalization:** compare training loss with held-out/new-example loss.
@@ -43,11 +70,11 @@ Implement this as a full interactive lesson, not a placeholder.
    - run a forward pass
    - compare prediction to the known target
    - turn the miss into loss
-   - send responsibility backward
-   - update parameters with gradient descent
-3. Keep the mountain mental model: loss creates the landscape, gradients point
-   downhill, and learning rate controls step size. Clarify that this is guided
-   by slope, not random wandering.
+   - calculate a gradient for each weight and the bias
+   - use gradient descent to update those parameters
+3. Introduce the map as a two-parameter view of loss, not a literal mountain.
+   Clarify what the horizontal axis, vertical axis, colors, and yellow point
+   mean before asking learners to interpret movement.
 4. End by separating training improvement from generalization: lower training
    loss is useful only when held-out examples also improve.
 
@@ -57,7 +84,8 @@ Follow the lesson playbook:
 
 1. Hero and neural-network path navigation.
 2. Short recap from Build: feedforward makes a prediction.
-3. Three-stage learning loop: predict, measure, update.
+3. Three-stage learning loop: predict with current numbers, measure the miss,
+   let the machine update.
 4. Interactive training lab.
 5. “What to watch” guidance.
 6. Mechanics cards with equations that match the implementation.
@@ -76,14 +104,14 @@ is inspectable:
   example
 - visible selected example with feature values, actual target `y`, prediction
   `ŷ`, residual, and squared loss
-- one or two trainable weights plus bias for a readable loss surface
+- one or two trainable weights plus bias for a readable loss map
 - controls for learning rate, selected example, step once, train one epoch,
   compare preset learning rates, and reset
 - train loss and held-out loss readouts
-- a simple SVG loss landscape where the current parameter position moves
-  downhill as updates apply
-- a backward-responsibility view that highlights which parameter is being
-  updated without requiring a full chain-rule derivation
+- a simple SVG loss map where the current two-weight position moves as updates
+  apply
+- a gradient preview that shows one gradient per weight and bias without
+  requiring a full chain-rule derivation
 
 ### Equations to use
 
@@ -104,8 +132,9 @@ Expand notation on first use:
 ### Visual and code direction
 
 - Reuse the established neural lesson path navigation.
-- Keep the Build lesson’s “object, arithmetic, algebra” spirit, but shift the
-  main visual metaphor to a loss mountain/valley.
+- Keep the Build lesson’s “object, arithmetic, algebra” spirit. When using the
+  loss map, name what the learner can actually see instead of using unsupported
+  mountain/valley shorthand.
 - Add scoped `train-*` classes in `styles.css`.
 - Avoid disturbing existing MLP lab behavior unless shared styles require a
   careful adjustment.
@@ -145,9 +174,11 @@ Before considering the lesson ready:
 Build up from neuron to network, and keep the 3Blue1Brown-ish alignment between
 object diagram, arithmetic, and algebra.
 
-The user specifically likes the “randomly walks down the mountain to the
-valley” mental model for gradient descent, but the lesson should clarify that
-gradient descent is guided by slope, not truly random wandering.
+Do not lead with pithy abstractions such as "loss creates the landscape" or
+"backpropagation finds responsibility." They are too self-referential for this
+lesson. Say what is happening in inspectable terms: predictions, known answers,
+residuals, squared error, gradients, weights, bias, learning rate, and parameter
+updates.
 
 ## Navigation
 

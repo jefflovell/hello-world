@@ -26,6 +26,26 @@ enough that the math and vocabulary are not hand-waved away.
 - When a concept first appears, explain what it is, how it works, and why it
   helps.
 
+### Revision Pattern: Mechanism Before Slogan
+
+When a lesson starts to sound polished but abstract, slow the copy down and
+name the mechanism in inspectable terms.
+
+- Define load-bearing terms before using them. For neural networks, explain
+  that parameters are learnable internal numbers, and that weights and biases
+  are parameters.
+- Make agency clear. If the lesson is about training, say that the machine is
+  changing parameters from examples; that automatic parameter update is the
+  "learning" in machine learning.
+- Prefer concrete state changes over pithy summaries. "The update rule changes
+  this weight from 0.2000 to 0.2325" teaches more than "gradient descent
+  improves the model."
+- Keep metaphors accountable to the visual. If the screen shows a 2D heat map,
+  call it a map or slice before calling anything a mountain. If you use
+  "downhill," explain what moves and what counts as lower.
+- Treat user critique as a signal to update context docs, not only page copy,
+  when it reveals a repeatable teaching rule.
+
 ### Current tone benchmark
 
 The preferred voice is polished but not bloodless: a curious teacher with enough
@@ -163,7 +183,7 @@ Neural nets are deep enough to deserve a small sequence:
 
 1. **Build a neural network:** features, vectors, weights, bias, activations,
    hidden layers, and feedforward signal flow.
-2. **Train a neural network:** loss, residuals, gradients, learning rate,
+2. **Training a neural network:** loss, residuals, gradients, learning rate,
    gradient descent, backpropagation, epochs, and generalization.
 3. **Apply an MLP:** use the full lab to explore nonlinear prediction,
    capacity, and overfitting.
@@ -174,5 +194,6 @@ arithmetic to algebra.
 For the neural-network sequence, preserve the distinction between:
 
 - **Build:** representation and feedforward evaluation; no learning yet.
-- **Train:** loss, gradients, backpropagation, and parameter updates.
+- **Training:** loss, gradients, backpropagation, and machine-driven parameter
+  updates; this is where the "learning" in machine learning becomes visible.
 - **Apply:** capacity, nonlinear fit, generalization, and overfitting.

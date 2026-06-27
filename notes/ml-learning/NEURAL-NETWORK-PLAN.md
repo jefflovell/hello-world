@@ -111,8 +111,10 @@ By the end of the lesson, a learner should be able to explain:
    linear stack cannot.
 4. A forward pass produces a prediction.
 5. A loss function measures how wrong the prediction is.
-6. Backpropagation assigns responsibility backward through the network.
-7. Gradient descent uses those gradients to update weights and biases.
+6. Backpropagation calculates gradients for weights and biases.
+7. Gradient descent uses those gradients to let the machine update weights and
+   biases; this automatic parameter change is the "learning" in machine
+   learning.
 8. Architecture choices and training settings are hyperparameters.
 9. Lower training loss does not guarantee better performance on new examples.
 
@@ -133,6 +135,29 @@ Carry forward the tone established in `supervised/build-neural-network/`:
 - Preserve the boundary between building/evaluating a network and training one.
   Build pages may mention training as future work, but should not teach loss,
   gradients, or backpropagation as if they are already happening.
+
+## Teaching-tone decision from Training revision
+
+Carry forward the revision cycle from `supervised/train-neural-network/`:
+
+- Use active lesson naming for the foundation sequence: **Building a Neural
+  Network**, **Training a Neural Network**, then Apply.
+- Teach before compressing. Define parameters before saying they update:
+  parameters are the model's learnable internal numbers; weights and bias are
+  parameters.
+- Make the machine-learning moment explicit. In Build, humans inspect or set
+  numbers and the model only performs a forward pass. In Training, the machine
+  changes those numbers using answer-key examples and loss. That is the
+  "learning" in machine learning.
+- Avoid self-referential shorthand as the first explanation. Phrases like
+  "loss creates the landscape" or "backpropagation assigns responsibility" can
+  sound polished while hiding the mechanism. Prefer inspectable language:
+  prediction, known answer, residual, squared error, gradient, weight, bias,
+  learning rate, and parameter update.
+- Keep visual metaphors honest. If the lesson shows a 2D heat map, call it a
+  loss map or two-parameter slice, not a mountain. If "downhill" is used,
+  explain exactly what moves, which colors mean lower loss, and why the plotted
+  path descends on screen.
 
 ## Interactive lab
 
@@ -194,8 +219,8 @@ Use precise state language. If no neuron or prediction exists yet, show
    layers still collapse into one linear transformation.
 2. **Nonlinear interaction:** Turn on ReLU and reveal a learned interaction,
    such as audience affinity mattering more when awareness is also high.
-3. **One training step:** Highlight the forward pass, loss, backward
-   responsibility signals, and resulting weight updates.
+3. **One training step:** Highlight the forward pass, loss, gradients for
+   weights and bias, and resulting machine-driven parameter updates.
 4. **Capacity:** Add neurons and show that greater flexibility can improve fit
    but overfit a small training set.
 5. **Learning rate:** Compare cautious learning, productive learning, and
@@ -207,7 +232,7 @@ Follow `LESSON-TEMPLATE.md` with these lesson-specific sections:
 
 1. Problem opener
 2. From perceptron to network
-3. Three-stage loop: forward pass, measure loss, update backward
+3. Three-stage loop: forward pass, measure loss, update parameters
 4. Interactive lab
 5. “What to watch”
 6. Mechanics cards
