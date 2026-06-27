@@ -22,6 +22,7 @@ const ui = {
   scalar:document.querySelector("#builder-scalar"), scalarCopy:document.querySelector("#builder-scalar-copy"),
   matrix:document.querySelector("#builder-matrix"), matrixCopy:document.querySelector("#builder-matrix-copy"),
   output:document.querySelector("#builder-output"), outputCopy:document.querySelector("#builder-output-copy"),
+  notice:document.querySelector("#builder-notice"),
   features:document.querySelector("#builder-features"), weights:document.querySelector("#builder-weights"),
   bias:document.querySelector("#builder-bias"), biasValue:document.querySelector("#builder-bias-value"),
   activationCopy:document.querySelector("#builder-activation-copy"), width:document.querySelector("#builder-width"),
@@ -34,7 +35,7 @@ const ui = {
   controlInstruction:document.querySelector("#builder-control-instruction"),
 };
 const stageContent = {
-  1:["Features become a vector.","A model cannot read a title–audience relationship directly. Each piece of evidence becomes a consistently ordered number."],
+  1:["Features become a vector.","The model does not see a title, a genre, or an audience. It sees an ordered list of numbers. The order is what gives each number its meaning."],
   2:["One neuron weighs the evidence.","Every edge multiplies an input by a weight. The neuron adds those contributions."],
   3:["Bias shifts the starting point.","Bias is a learned offset added after the weighted inputs. It changes how readily the neuron responds."],
   4:["Activation shapes the signal.","The activation function transforms the weighted sum into the neuron’s outgoing signal."],
@@ -42,12 +43,20 @@ const stageContent = {
   6:["The network feeds forward.","The output neuron combines hidden activations into one prediction. The entire diagram is now one nested function."],
 };
 const controlInstructions = {
-  1:"Move a feature and watch its number change in the object, arithmetic, and algebra views.",
+  1:"Move a feature and watch its number change in the diagram, the individual calculation, and the feature vector.",
   2:"Move a feature or weight. The edge changes strength and the neuron recalculates its weighted evidence.",
   3:"Adjust bias and watch the neuron’s starting offset move the total without changing any feature.",
   4:"Switch Linear, ReLU, and Sigmoid. The same pre-activation value becomes three different outgoing signals.",
   5:"Add or remove hidden neurons. Each new node repeats the same operation with a different set of parameters.",
   6:"Run the feedforward pass and watch the current signals travel left to right. No learning happens yet."
+};
+const stageNotices = {
+  1:"The same three numbers appear in the diagram and in the vector. Their position is part of the meaning.",
+  2:"The neuron does not read labels. It multiplies each input by the weight attached to that position.",
+  3:"Bias changes the starting point. It can make the neuron easier or harder to activate without changing the features.",
+  4:"Activation is the first bend in the system. Linear preserves the total; ReLU and sigmoid reshape it.",
+  5:"A hidden layer repeats the same calculation several times, creating a new vector of intermediate signals.",
+  6:"Feedforward is just evaluation. The network produces a prediction, but none of its parameters learn yet."
 };
 const explainers = {
   1:{
@@ -122,7 +131,7 @@ function renderMath(){
     ui.scalarCopy.textContent=`“Audience–title affinity” has become the numeric feature x₁ (“x sub one”).`;
     ui.matrix.textContent=`x = [${state.features.map(v=>v.toFixed(2)).join(", ")}]`;
     ui.matrixCopy.textContent="x is the feature vector: an ordered list describing one title–audience pair.";
-    ui.output.textContent="—"; ui.outputCopy.textContent="No neuron exists yet.";
+    ui.output.textContent="<undefined>"; ui.outputCopy.textContent="No neuron exists yet.";
   } else if(state.stage<=4){
     const biasTerm=state.stage>=3?` + (${state.bias.toFixed(2)})`:"";
     ui.scalar.textContent=`z = ${products.join(" + ")}${biasTerm} = ${one.z.toFixed(3)}`;
@@ -188,6 +197,7 @@ function render(){
   ui.why.textContent=explainer.why;
   ui.termCheck.textContent=explainer.check;
   ui.controlInstruction.textContent=controlInstructions[state.stage];
+  ui.notice.textContent=stageNotices[state.stage];
   ui.controls.classList.toggle("is-feature-only",state.stage===1);
   ui.biasValue.textContent=format(state.bias);ui.widthValue.textContent=state.width;
   ui.activationCopy.textContent=state.activation==="relu"?"ReLU keeps positive signals and suppresses negative ones.":state.activation==="sigmoid"?"Sigmoid squeezes any value into the range from 0 to 1.":"Linear passes the weighted sum through unchanged.";

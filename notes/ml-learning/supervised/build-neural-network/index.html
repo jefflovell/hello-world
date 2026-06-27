@@ -8,9 +8,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../../../../styles.css?v=17" />
+    <link rel="stylesheet" href="../../../../styles.css?v=21" />
     <script src="../../../../script.js" defer></script>
-    <script src="build-neural-network.js?v=5" defer></script>
+    <script src="build-neural-network.js?v=8" defer></script>
   </head>
   <body class="note-page">
     <header class="site-header">
@@ -21,12 +21,104 @@
     <main>
       <section class="note-hero">
         <div class="note-kicker"><a href="../">← Supervised learning</a><span>/</span><span>Neural-network foundations</span></div>
-        <div class="note-title"><h1>Building a Neural Network</h1><p class="key-idea">Start with human-readable descriptions of the real-world descriptions, turn them into data sets of of machine-readable numbers, and assemble one complete prediction from the inside out.</p></div>
+        <div class="note-title"><h1>Building a Neural Network</h1><p class="key-idea">Start with human-readable facts about the world, translate them into machine-readable numbers, and assemble one complete prediction from the inside out.</p></div>
       </section>
 
-      <section class="supervised-overview">
-        <p>To the uninitiated, a neural network diagram might look like an arcane pictogram of mysterious geometry and alchemical symbols. In reality, it is merely a visual learning aid to help reason about how data is passed around and transformed as it travels through a neural net. This is a common paradigm in computer science: taking abstract, mathematical ideas and comparing them to real world objects. We talk about queues and stacks, heaps and trees, addresses and memory, parents and children.  Neural networks are an extension of this ontology. This isn't the way neurons work, it's not how humans think. It is useful analogy to reason with other human beings about a complicated and abstract idea. That complexity is hidden as a circle with some lines attached to it and the assumption that all participants understand what it means (though this is frequently not the case). In this lesson we'll attempt to peel back some of that symbolism and expose what's actually happening under the hood one operation at a time.</p>
-        <p>Throughout this multi-part lab we will grow a classic neural network:  the <em>multi-layer perceptron</em>. MLPs form the core of Large Language Models like Claude, ChatGPT, Gemini and Grok. We will start with a set of real world features that describe an objec or idea we're interested in learning about. Those features become a mathematical vector. The vector enters a neuron, where bias and activation shape its response, and several neurons are then wired together to become a feed-forward network that allows us to make useful predictions about information we feed to it. </p>
+      <section class="supervised-overview dnn-overview">
+        <figure class="dnn-preview" aria-labelledby="dnn-preview-title">
+          <figcaption><span>Eventually</span><strong id="dnn-preview-title">A deep neural network</strong></figcaption>
+          <svg viewBox="0 0 720 460" role="img" aria-label="A formal deep neural network diagram with an input vector, hidden layers, weights, biases, activations, and one output prediction">
+            <defs>
+              <marker id="dnn-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" /></marker>
+            </defs>
+            <g class="dnn-preview-edges">
+              <line x1="108" y1="100" x2="245" y2="72" />
+              <line x1="108" y1="100" x2="245" y2="134" />
+              <line x1="108" y1="100" x2="245" y2="196" />
+              <line x1="108" y1="100" x2="245" y2="320" />
+              <line x1="108" y1="180" x2="245" y2="72" />
+              <line x1="108" y1="180" x2="245" y2="134" />
+              <line x1="108" y1="180" x2="245" y2="196" />
+              <line x1="108" y1="180" x2="245" y2="320" />
+              <line x1="108" y1="280" x2="245" y2="72" />
+              <line x1="108" y1="280" x2="245" y2="134" />
+              <line x1="108" y1="280" x2="245" y2="196" />
+              <line x1="108" y1="280" x2="245" y2="320" />
+              <line x1="245" y1="72" x2="390" y2="92" />
+              <line x1="245" y1="72" x2="390" y2="166" />
+              <line x1="245" y1="72" x2="390" y2="314" />
+              <line x1="245" y1="134" x2="390" y2="92" />
+              <line x1="245" y1="134" x2="390" y2="166" />
+              <line x1="245" y1="134" x2="390" y2="314" />
+              <line x1="245" y1="196" x2="390" y2="92" />
+              <line x1="245" y1="196" x2="390" y2="166" />
+              <line x1="245" y1="196" x2="390" y2="314" />
+              <line x1="245" y1="320" x2="390" y2="92" />
+              <line x1="245" y1="320" x2="390" y2="166" />
+              <line x1="245" y1="320" x2="390" y2="314" />
+              <line x1="390" y1="92" x2="535" y2="122" />
+              <line x1="390" y1="92" x2="535" y2="220" />
+              <line x1="390" y1="92" x2="535" y2="318" />
+              <line x1="390" y1="166" x2="535" y2="122" />
+              <line x1="390" y1="166" x2="535" y2="220" />
+              <line x1="390" y1="166" x2="535" y2="318" />
+              <line x1="390" y1="314" x2="535" y2="122" />
+              <line x1="390" y1="314" x2="535" y2="220" />
+              <line x1="390" y1="314" x2="535" y2="318" />
+              <line x1="535" y1="122" x2="655" y2="220" />
+              <line x1="535" y1="220" x2="655" y2="220" />
+              <line x1="535" y1="318" x2="655" y2="220" />
+            </g>
+            <g class="dnn-input-vector">
+              <text x="42" y="72">Input x</text>
+              <rect x="48" y="92" width="52" height="220" />
+              <circle cx="74" cy="118" r="13" />
+              <circle cx="74" cy="158" r="13" />
+              <text class="dnn-input-ellipsis" x="74" y="211">⋮</text>
+              <circle cx="74" cy="286" r="13" />
+              <text x="74" y="340">D</text>
+            </g>
+            <g class="dnn-preview-layer">
+              <circle cx="245" cy="72" r="28" /><text x="245" y="67">H1</text><text x="245" y="88">[1]</text>
+              <circle cx="245" cy="134" r="28" /><text x="245" y="129">H1</text><text x="245" y="150">[2]</text>
+              <circle cx="245" cy="196" r="28" /><text x="245" y="191">H1</text><text x="245" y="212">[3]</text>
+              <text x="245" y="260">⋮</text>
+              <circle cx="245" cy="320" r="28" /><text x="245" y="315">H1</text><text x="245" y="336">[n]</text>
+            </g>
+            <g class="dnn-preview-layer">
+              <circle cx="390" cy="92" r="28" /><text x="390" y="87">H2</text><text x="390" y="108">[1]</text>
+              <circle cx="390" cy="166" r="28" /><text x="390" y="161">H2</text><text x="390" y="182">[2]</text>
+              <text x="390" y="240">⋮</text>
+              <circle cx="390" cy="314" r="28" /><text x="390" y="309">H2</text><text x="390" y="330">[m]</text>
+            </g>
+            <g class="dnn-preview-layer">
+              <circle cx="535" cy="122" r="28" /><text x="535" y="117">H3</text><text x="535" y="138">[1]</text>
+              <circle cx="535" cy="220" r="28" /><text x="535" y="215">H3</text><text x="535" y="236">[2]</text>
+              <circle cx="535" cy="318" r="28" /><text x="535" y="313">H3</text><text x="535" y="334">[r]</text>
+            </g>
+            <g class="dnn-preview-output">
+              <circle cx="655" cy="220" r="30" /><text x="655" y="213">OP</text><text x="655" y="234">(k)</text>
+            </g>
+            <g class="dnn-preview-labels">
+              <text x="245" y="35">Hidden Layer 1</text>
+              <text x="390" y="35">Hidden Layer 2</text>
+              <text x="535" y="35">Hidden Layer 3</text>
+              <text x="160" y="106">Wᵢⱼ</text>
+              <text x="315" y="112">Wⱼₖ</text>
+              <text x="468" y="154">Wₖₗ</text>
+              <text x="596" y="174">Wₗₖ</text>
+              <text x="169" y="396">h₁ = f(W₁x + b₁)</text>
+              <text x="376" y="396">h₂ = f(W₂h₁ + b₂)</text>
+              <text x="576" y="396">ŷ = g(Wₒh₃ + bₒ)</text>
+            </g>
+          </svg>
+          <p>This is the intimidating version. By the end of the build, each circle, line, weight, bias, activation, and prediction will have a job you can point to.</p>
+        </figure>
+        <div class="dnn-overview-copy">
+          <p>To the uninitiated, a neural network diagram can look like an arcane pictogram: circles, arrows, weights, hidden layers, and algebraic labels all pretending to be obvious. In reality, the diagram is a visual language for tracking how numbers move through a model. Computer science does this constantly. We talk about queues and stacks, heaps and trees, addresses and memory, parents and children. Neural networks belong to that same tradition: useful symbols for reasoning about an abstract machine.</p>
+          <p>This is not how biological neurons work, and it is not how humans think. It is a structured analogy. The danger is that the analogy often hides the actual arithmetic behind a few circles and lines. In this lesson we will peel back that symbolism one operation at a time.</p>
+          <p>Throughout this multi-part lab we will grow a classic neural network: the <em>multi-layer perceptron</em>. MLP-style feedforward layers are one of the core building blocks inside modern systems like Claude, ChatGPT, Gemini, and Grok. We will start with real-world features that describe an object or idea, turn those features into a vector, pass that vector through neurons, and assemble a feedforward network that can make a useful prediction.</p>
+        </div>
       </section>
 
       <section class="builder-model-brief" aria-labelledby="builder-model-title">
@@ -35,8 +127,8 @@
           <h2 id="builder-model-title">One title. One audience. One prediction.</h2>
         </div>
         <div>
-          <p>This is a stripped-down <strong>regression model</strong>. Its training example is a library title paired with an audience segment—such as “families who often finish animated adventures.” Its target is the percentage of exposed viewers (viewers who see the title) expected to complete the title during its first week.  In other words, how likely are you to click play if I put this in front of your face?</p>
-          <p>It is <strong>not</strong> an end-to-end recommender system. A real system will have an entire system to retrieve hundreds or thousands of candidate titles, then use a second ranking system to filter those candidates and use a simplified scorer like this as one of hundreds or thousands of inputs to ranking. Just as the diagram abstracts away the complexity of the system, here we abstract that surrounding system away so we can inspect the neural-network math.</p>
+          <p>This is a stripped-down <strong>regression model</strong>. We give the network one library title and one audience segment, then ask it for a number: what percentage of exposed viewers are likely to complete the title during its first week? Not “is this movie good?” Not “will everyone love it?” Just one narrower question: if this title appears in front of this audience, how much attention might it earn?</p>
+          <p>That narrowness is the point. A real recommender system is a city of machinery: retrieval systems gather candidates, ranking systems compare them, business rules reshape the list, and feedback loops keep changing the ground underneath. We are not building that city yet. We are taking one small room, turning on the lights, and inspecting the math inside.</p>
           <dl>
             <div><dt>Input unit</dt><dd>Title × audience cohort</dd></div>
             <div><dt>Prediction</dt><dd>First-week completion rate</dd></div>
@@ -52,11 +144,11 @@
 
       <section class="builder-lab-panel" aria-labelledby="builder-title">
         <div class="builder-language builder-language-intro">
-          <div><p class="case-section-label">One system. Three different descriptions.</p><h2 id="builder-title">Object. Arithmetic. Algebra.</h2><p>We will build one network three ways at once: as an object diagram, as individual calculations, and as compact linear algebra.</p></div>
+          <div><p class="case-section-label">One system. Three different descriptions.</p><h2 id="builder-title">Object. Arithmetic. Algebra.</h2><p>We will build one network three ways at once: first as a diagram, then as arithmetic, then as the compact algebra engineers use when the system gets large.</p></div>
           <div class="builder-language-grid">
-            <article><span>Object</span><h3>Nodes and edges</h3><p>The diagram is fundamentally a special form of <a href="https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)" aria-current="link to wikipedia">graph</a>. The circles are called nodes, or in this case "neurons" and the lines are called edges. Nodes hold some numerical value, and edges show which values are connected to each other.</p></article>
-            <article><span>Arithmetic</span><h3>One operation at a time</h3><p>In a neural net, the edges are called "weights" and show the strength of connection between different neurons (the nodes). Those neurons have an 'activation threshold' which controls how much signal they need to light up. There isn't really a line, it's just some basic arithmetic, the line symbolizes the signal.</p></article>
-            <article><span>Algebra</span><h3>Many operations together</h3><p>The real magic of a neural net is linear algebra. Formatting the numbers as we do:  feature vectors of real numbers and matricies of activations and weights allows special forms of addition and multiplication on vast amounts of data that can be compressed into a single numerical output without losing information. From thousands of inputs we can feed-forward to a useable prediction like "78% chance of click-through". </p></article>
+            <article><span>Object</span><h3>Nodes and edges</h3><p>The diagram is a kind of <a href="https://en.wikipedia.org/wiki/Graph_(discrete_mathematics)">graph</a>. The circles are <a href="https://en.wikipedia.org/wiki/Vertex_(graph_theory)">nodes</a>, or neurons, and the lines are <a href="https://en.wikipedia.org/wiki/Glossary_of_graph_theory#edge">edges</a>. Nodes hold numbers; edges show which numbers can influence each other.</p></article>
+            <article><span>Arithmetic</span><h3>One operation at a time</h3><p>In a neural net, edges carry <a href="https://en.wikipedia.org/wiki/Weighting">weights</a>: numbers that strengthen, weaken, or reverse an input. A neuron multiplies, adds, then passes the result through an <a href="https://en.wikipedia.org/wiki/Activation_function">activation function</a>.</p></article>
+            <article><span>Algebra</span><h3>Many operations together</h3><p><a href="https://en.wikipedia.org/wiki/Linear_algebra">Linear algebra</a> lets us write many tiny calculations at once. Feature <a href="https://en.wikipedia.org/wiki/Vector_(mathematics_and_physics)">vectors</a>, weight <a href="https://en.wikipedia.org/wiki/Matrix_(mathematics)">matrices</a>, and activation vectors turn a pile of arithmetic into one feedforward prediction.</p></article>
           </div>
         </div>
 
@@ -71,11 +163,11 @@
 
         <div class="builder-grid">
           <div class="builder-stage">
-            <div class="builder-stage-heading"><div><p class="case-section-label">Object view</p><h3 id="builder-stage-title">Features become a vector.</h3></div><strong id="builder-stage-number">01 / 06</strong></div>
+            <div class="builder-stage-heading"><div><p class="case-section-label">The diagram</p><h3 id="builder-stage-title">Features become a vector.</h3></div><strong id="builder-stage-number">01 / 06</strong></div>
             <svg id="builder-network" viewBox="0 0 820 530" role="img" aria-label="A progressively constructed neural network"></svg>
             <p id="builder-stage-copy" class="builder-stage-copy">A model cannot read concepts directly. Each title property becomes a consistently ordered number.</p>
             <section class="builder-controls builder-controls-inline" aria-label="Interactive network controls">
-              <div class="builder-control-instruction"><span>Try it</span><p id="builder-control-instruction">Move a feature and watch its number change in the object, arithmetic, and algebra views.</p></div>
+              <div class="builder-control-instruction"><span>Try it</span><p id="builder-control-instruction">Move a feature and watch its number change in the diagram, the individual calculation, and the feature vector.</p></div>
               <fieldset class="builder-features"><legend>A · Input features</legend><div id="builder-features"></div></fieldset>
               <fieldset class="builder-weights" id="builder-weights-panel"><legend>B · Connection weights</legend><div id="builder-weights"></div></fieldset>
               <fieldset class="builder-bias" id="builder-bias-panel"><legend>C · Bias</legend><input id="builder-bias" type="range" min="-100" max="100" value="-55" /><label for="builder-bias"><strong><span id="builder-bias-value">−0.55</span> bias</strong><span>Shift how much evidence the neuron needs.</span></label></fieldset>
@@ -86,10 +178,22 @@
           </div>
 
           <aside class="builder-math">
-            <p class="case-section-label">Numbers underneath</p>
-            <div class="builder-equation"><span>Scalar view</span><strong id="builder-scalar">x₁ = 0.78</strong><p id="builder-scalar-copy">One feature is one number.</p></div>
-            <div class="builder-equation matrix"><span>Linear-algebra view</span><strong id="builder-matrix">x = [0.78, 0.64, 0.56]</strong><p id="builder-matrix-copy">The ordered feature values form a vector.</p></div>
-            <div class="builder-readout"><span>Current output</span><strong id="builder-output">—</strong><p id="builder-output-copy">No neuron exists yet.</p></div>
+            <p class="case-section-label">The numbers</p>
+            <div class="builder-equation"><span>Individual feature</span><strong id="builder-scalar">x₁ = 0.78</strong><p id="builder-scalar-copy">One feature is one number.</p></div>
+            <div class="builder-equation matrix"><span>Title as feature vector</span><strong id="builder-matrix">x = [0.78, 0.64, 0.56]</strong><p id="builder-matrix-copy">The ordered feature values form a vector.</p></div>
+            <div class="builder-readout"><span>Network output</span><strong id="builder-output">&lt;undefined&gt;</strong><p id="builder-output-copy">No neuron exists yet.</p></div>
+            <div class="builder-lab-note"><span>What to notice</span><p id="builder-notice">The same three numbers appear in the diagram and in the vector. Their position is part of the meaning.</p></div>
+            <div class="builder-symbol-key">
+              <span>Symbol key</span>
+              <dl>
+                <div><dt>x</dt><dd>feature vector</dd></div>
+                <div><dt>x₁</dt><dd>first feature</dd></div>
+                <div><dt>w</dt><dd>weight vector</dd></div>
+                <div><dt>b</dt><dd>bias</dd></div>
+                <div><dt>z</dt><dd>pre-activation</dd></div>
+                <div><dt>a</dt><dd>activation</dd></div>
+              </dl>
+            </div>
           </aside>
         </div>
 
@@ -107,25 +211,25 @@
         <section class="builder-feature-provenance" aria-labelledby="feature-provenance-title">
           <div class="builder-feature-heading">
             <p class="case-section-label">The behavior layer, compressed</p>
-            <h3 id="feature-provenance-title">These numbers came from somewhere.</h3>
-            <p>A production model would consume many raw events and learned embeddings. For this lesson, we compress that upstream behavior into three inspectable teaching features.</p>
+            <h3 id="feature-provenance-title">These numbers are not magic.</h3>
+            <p>Before a neural network ever sees a vector, another system has already turned messy human behavior into measured signals. For this lesson, we compress that upstream machinery into three inspectable teaching features.</p>
           </div>
           <article>
             <span>01 · Audience–title affinity</span>
-            <h4>How likely is this cohort to care?</h4>
-            <dl><div><dt>Could come from</dt><dd>Past watches, searches, clicks, completions, skips, likes, and similarity to related titles.</dd></div><div><dt>Why useful</dt><dd>Behavior often reveals preference more reliably than a survey or broad demographic label.</dd></div><div><dt>Why imperfect</dt><dd>New users and titles have little history; popularity and prior recommendations can reinforce themselves.</dd></div></dl>
+            <h4>Does this audience lean toward this title?</h4>
+            <dl><div><dt>Could come from</dt><dd>Past watches, searches, clicks, completions, skips, likes, and similarity to neighboring titles.</dd></div><div><dt>Why useful</dt><dd>Behavior often reveals preference before a person can name it. The trail of choices is noisy, but it is rarely empty.</dd></div><div><dt>Why imperfect</dt><dd>New users and titles have little history, and yesterday’s recommendations can shape today’s “preference.”</dd></div></dl>
           </article>
           <article>
             <span>02 · Title awareness</span>
-            <h4>Does the cohort know the title exists?</h4>
-            <dl><div><dt>Could come from</dt><dd>Campaign reach, trailer views, impressions, searches, franchise familiarity, and talent recognition.</dd></div><div><dt>Why useful</dt><dd>People rarely start a title they never notice. Awareness can strongly affect early viewing.</dd></div><div><dt>Why imperfect</dt><dd>Awareness does not equal interest, and recommendations can themselves create awareness—making cause and effect messy.</dd></div></dl>
+            <h4>Has this title entered the room?</h4>
+            <dl><div><dt>Could come from</dt><dd>Campaign reach, trailer views, impressions, searches, franchise familiarity, and talent recognition.</dd></div><div><dt>Why useful</dt><dd>People rarely choose a title they never notice. Awareness can move first-week behavior before taste has a chance to speak.</dd></div><div><dt>Why imperfect</dt><dd>Awareness is not affection, and recommendations can create the very awareness they later try to measure.</dd></div></dl>
           </article>
           <article>
             <span>03 · Tone preference match</span>
-            <h4>Does the title feel like what this cohort enjoys?</h4>
-            <dl><div><dt>Could come from</dt><dd>Content metadata or embeddings matched against prior behavior: lighthearted, serious, tense, comforting, fast, or slow.</dd></div><div><dt>Why useful</dt><dd>Two titles in the same genre can produce very different reactions because their emotional experience differs.</dd></div><div><dt>Why imperfect</dt><dd>Tone labels are subjective, tastes change by context, and one cohort score hides differences among individuals.</dd></div></dl>
+            <h4>Does the title feel like the mood this audience seeks?</h4>
+            <dl><div><dt>Could come from</dt><dd>Content metadata or embeddings matched against prior behavior: lighthearted, serious, tense, comforting, fast, or slow.</dd></div><div><dt>Why useful</dt><dd>Genre is a blunt instrument. Two horror films, comedies, or dramas can ask for completely different kinds of attention.</dd></div><div><dt>Why imperfect</dt><dd>Tone is subjective, context changes taste, and one cohort score hides the unruly differences among individuals.</dd></div></dl>
           </article>
-          <aside><strong>What was abstracted away?</strong><p>Individual user sequences, item embeddings, device and session context, availability, novelty, household composition, candidate retrieval, exploration, business rules, and feedback loops.</p></aside>
+          <aside><strong>What was abstracted away?</strong><p>Individual user sequences, item embeddings, device and session context, availability, novelty, household composition, candidate retrieval, exploration, business rules, and feedback loops. The lesson keeps the vector small so the mechanism can be seen.</p></aside>
         </section>
 
       </section>
