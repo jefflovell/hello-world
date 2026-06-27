@@ -36,27 +36,27 @@ const ui = {
 };
 const stageContent = {
   1:["Features become a vector.","The model does not see a title, a genre, or an audience. It sees an ordered list of numbers. The order is what gives each number its meaning."],
-  2:["One neuron weighs the evidence.","Every edge multiplies an input by a weight. The neuron adds those contributions."],
-  3:["Bias shifts the starting point.","Bias is a learned offset added after the weighted inputs. It changes how readily the neuron responds."],
-  4:["Activation shapes the signal.","The activation function transforms the weighted sum into the neuron’s outgoing signal."],
-  5:["One calculation becomes a layer.","A hidden layer repeats the neuron operation with different weights and biases, creating several intermediate signals."],
-  6:["The network feeds forward.","The output neuron combines hidden activations into one prediction. The entire diagram is now one nested function."],
+  2:["One neuron weighs the evidence.","Now the numbers meet the model. Each connection has a weight: a learned setting that decides how loudly one feature should speak."],
+  3:["Bias shifts the starting point.","Bias is the neuron’s learned starting opinion. It raises or lowers the total before activation gets a say."],
+  4:["Activation shapes the signal.","Activation decides what leaves the neuron. The weighted total is still there, but the outgoing signal may be clipped, bent, or squeezed."],
+  5:["One calculation becomes a layer.","A hidden layer repeats the same little ritual several times. Same inputs, different weights, different intermediate signals."],
+  6:["The network feeds forward.","The network now has a path from input vector to prediction. Nothing learns yet; the machine is only answering with the parameters it already has."],
 };
 const controlInstructions = {
   1:"Move a feature and watch its number change in the diagram, the individual calculation, and the feature vector.",
-  2:"Move a feature or weight. The edge changes strength and the neuron recalculates its weighted evidence.",
-  3:"Adjust bias and watch the neuron’s starting offset move the total without changing any feature.",
+  2:"Move a feature or weight. The line thickens or thins, and the neuron recalculates the evidence it receives.",
+  3:"Adjust bias. The neuron’s total moves even when the feature values and weights stay fixed.",
   4:"Switch Linear, ReLU, and Sigmoid. The same pre-activation value becomes three different outgoing signals.",
-  5:"Add or remove hidden neurons. Each new node repeats the same operation with a different set of parameters.",
-  6:"Run the feedforward pass and watch the current signals travel left to right. No learning happens yet."
+  5:"Add or remove hidden neurons. Each node runs the same recipe with its own weights and bias.",
+  6:"Run the feedforward pass and watch signals travel left to right. The network predicts; it does not train."
 };
 const stageNotices = {
   1:"The same three numbers appear in the diagram and in the vector. Their position is part of the meaning.",
-  2:"The neuron does not read labels. It multiplies each input by the weight attached to that position.",
-  3:"Bias changes the starting point. It can make the neuron easier or harder to activate without changing the features.",
+  2:"A weight belongs to a position in the vector. If the order changes, the model listens to the wrong evidence.",
+  3:"Bias is not attached to any one feature. It is the neuron’s baseline, added after all weighted evidence is counted.",
   4:"Activation is the first bend in the system. Linear preserves the total; ReLU and sigmoid reshape it.",
-  5:"A hidden layer repeats the same calculation several times, creating a new vector of intermediate signals.",
-  6:"Feedforward is just evaluation. The network produces a prediction, but none of its parameters learn yet."
+  5:"The hidden layer’s output is another vector. The network has transformed the original evidence into new internal evidence.",
+  6:"Feedforward is evaluation. The network produces a prediction, but none of its parameters learn yet."
 };
 const explainers = {
   1:{
@@ -67,39 +67,39 @@ const explainers = {
     check:"A feature is input data. The model receives it; this small network does not learn the feature itself. Later, embeddings will show how networks can learn representations."
   },
   2:{
-    question:"What is a neuron—and where do parameters fit?",
-    what:"A neuron is a small mathematical unit that combines several incoming numbers into one outgoing signal.",
-    how:"Each input is multiplied by a weight, then the contributions are added. The weights are parameters learned during training: positive weights support the response and negative weights oppose it.",
-    why:"A neuron can summarize a useful pattern—such as strong audience fit despite weak awareness—into one signal that later parts of the network can reuse.",
-    check:"Feature values describe this title. Weights are model parameters reused for every title. Moving a feature changes the example; moving a weight changes the model."
+    question:"What is a neuron actually doing?",
+    what:"A neuron is a tiny scoring machine. It takes several numbers in and produces one number out.",
+    how:"Each input is multiplied by a weight, then the weighted pieces are added. Positive weights amplify evidence; negative weights push against it.",
+    why:"A neuron lets the model turn several raw clues into one reusable signal, such as “strong fit, even if awareness is weak.”",
+    check:"Feature values describe this title. Weights describe the model. Moving a feature changes the example; moving a weight changes how the model judges every example."
   },
   3:{
-    question:"What is bias?",
-    what:"Bias is a learned starting offset for a neuron—an extra number added after the weighted inputs.",
-    how:"The neuron totals the weighted evidence and then adds b (bias). A positive bias raises the result; a negative bias lowers it. Training adjusts bias just as it adjusts weights.",
-    why:"Without bias, every neuron is forced to behave as though zero input must produce zero evidence. Bias lets the neuron set a useful threshold for when a pattern should activate.",
-    check:"Model bias b is not social bias, dataset bias, or the bias in the bias–variance tradeoff. The same word is used for different concepts."
+    question:"Why does the neuron need bias?",
+    what:"Bias is a learned offset: one extra number added after the weighted inputs.",
+    how:"The neuron counts the weighted evidence, then adds b. Positive bias lifts the total; negative bias drags it down.",
+    why:"Without bias, every neuron is chained to the origin, as if zero input must always mean zero signal. Bias gives the neuron room to set its own threshold.",
+    check:"Model bias b is not social bias, dataset bias, or the bias in the bias-variance tradeoff. Same word, different machinery."
   },
   4:{
-    question:"What does activation mean?",
-    what:"Activation is the signal a neuron sends onward after it has combined its inputs and bias.",
-    how:"The weighted sum plus bias is z, the pre-activation value. An activation function transforms z into a. Linear passes it through, ReLU blocks negative values, and sigmoid squeezes it between 0 and 1.",
-    why:"Nonlinear activations let a network represent bends, thresholds, and interactions. Without them, stacking many layers still behaves like one linear equation.",
-    check:"The activation function is usually a hyperparameter chosen by the designer. The activation a is a temporary signal calculated for this example."
+    question:"Why not just send the total onward?",
+    what:"Activation is the outgoing signal after the neuron has counted its weighted evidence and bias.",
+    how:"The pre-activation value is z. The activation function turns z into a. Linear passes it through, ReLU blocks negatives, and sigmoid squeezes the result between 0 and 1.",
+    why:"Activation gives the network bends and thresholds. Without a nonlinear activation, many layers collapse back into one linear calculation.",
+    check:"The activation function is chosen by the builder. The activation value a is temporary; it is recalculated for each example."
   },
   5:{
     question:"Hidden layer—hidden from whom?",
-    what:"A hidden layer is a group of neurons between the original input features and the final prediction.",
-    how:"Each hidden neuron receives the same input vector but uses different weights and bias. The resulting activations form a new vector that is passed to the next layer.",
-    why:"The layer can transform raw features into several reusable intermediate patterns. Later layers combine those patterns instead of repeatedly reasoning from the raw inputs.",
-    check:"“Hidden” does not mean secret or unknowable. We can inspect every value here. It means the layer is neither directly supplied as input nor directly observed as the target."
+    what:"A hidden layer is a group of neurons between the original input vector and the final prediction.",
+    how:"Each hidden neuron sees the same input vector, but each uses its own weights and bias. Their activations become a new vector.",
+    why:"The layer lets the network invent intermediate signals. Later parts of the model can combine those signals instead of starting from raw features every time.",
+    check:"Hidden does not mean unknowable. We can inspect every value here. It only means the layer is neither supplied as input nor observed as the target."
   },
   6:{
     question:"What does feedforward mean?",
-    what:"Feedforward is the process of using the network’s current values to calculate one prediction.",
-    how:"The input vector moves through weighted sums, biases, and activations from left to right until the output is produced. There are no loops, and no parameters change during the pass.",
-    why:"It is how a trained network answers a new question. It also produces the prediction that training later compares with the known target to calculate loss.",
-    check:"Feedforward makes a prediction. Training is separate: loss measures the miss, backpropagation computes gradients, and gradient descent updates parameters."
+    what:"Feedforward is the network answering a question with its current settings.",
+    how:"The input vector moves left to right through weights, biases, and activations until the output appears. There are no loops, and no parameters change.",
+    why:"This is how a trained network makes a prediction. During training, the same pass also creates the guess that loss will judge.",
+    check:"Feedforward predicts. Training is separate: loss measures the miss, backpropagation assigns responsibility, and gradient descent updates parameters."
   },
 };
 function format(n){ return `${n<0?"−":""}${Math.abs(n).toFixed(2)}`; }
@@ -107,6 +107,9 @@ function activate(z){
   if(state.activation==="relu") return Math.max(0,z);
   if(state.activation==="sigmoid") return 1/(1+Math.exp(-z));
   return z;
+}
+function activationLabel(){
+  return state.activation==="relu"?"ReLU":state.activation==="sigmoid"?"Sigmoid":"Linear";
 }
 function neuron(profile=hiddenProfiles[0]){
   const contributions=state.features.map((x,i)=>x*profile.weights[i]);
@@ -135,19 +138,19 @@ function renderMath(){
   } else if(state.stage<=4){
     const biasTerm=state.stage>=3?` + (${state.bias.toFixed(2)})`:"";
     ui.scalar.textContent=`z = ${products.join(" + ")}${biasTerm} = ${one.z.toFixed(3)}`;
-    ui.scalarCopy.textContent=state.stage>=3?"Each feature is multiplied by its weight; bias is added after the contributions.":"Each feature is multiplied by its weight, then the three contributions are added.";
+    ui.scalarCopy.textContent=state.stage>=3?"Each feature is multiplied by its weight; bias is added after the weighted evidence.":"Each feature is multiplied by its weight, then the weighted pieces are added.";
     ui.matrix.textContent=state.stage>=3?`z = w · x + b`:`z = w · x`;
     ui.matrixCopy.textContent=`w = [${state.weights.map(v=>v.toFixed(2)).join(", ")}], x = [${state.features.map(v=>v.toFixed(2)).join(", ")}]${state.stage>=3?`, b = ${state.bias.toFixed(2)}`:""}`;
     ui.output.textContent=state.stage<4?one.z.toFixed(3):one.a.toFixed(3);
-    ui.outputCopy.textContent=state.stage<4?"The neuron currently exposes its pre-activation value z.":`${state.activation} transforms z into activation a.`;
+    ui.outputCopy.textContent=state.stage<4?"The neuron is showing z: the total before activation.":`${activationLabel()} transforms z into activation a.`;
   } else {
     const matrixRows=hiddenProfiles.slice(0,state.width).map(p=>`[${p.weights.map(v=>v.toFixed(2)).join(", ")}]`).join(" ");
     ui.scalar.textContent=`a₁ = f(${net.hidden[0].z.toFixed(3)}) = ${net.hidden[0].a.toFixed(3)}`;
-    ui.scalarCopy.textContent="Each hidden neuron performs the same scalar operation with its own parameters.";
+    ui.scalarCopy.textContent="Each hidden neuron runs the same operation with its own parameters.";
     ui.matrix.textContent=`a = f(Wx + b)`;
-    ui.matrixCopy.textContent=`W has ${state.width} rows: ${matrixRows}`;
+    ui.matrixCopy.textContent=`W has ${state.width} rows, one for each hidden neuron: ${matrixRows}`;
     ui.output.textContent=state.stage===6?`${Math.round(net.prediction*100)}%`:`[${net.hidden.map(n=>n.a.toFixed(2)).join(", ")}]`;
-    ui.outputCopy.textContent=state.stage===6?"The output neuron converts hidden signals into a completion prediction.":"The hidden-layer output is itself a vector of activations.";
+    ui.outputCopy.textContent=state.stage===6?"The output neuron converts hidden signals into a completion prediction.":"The hidden layer has produced a new vector of activations.";
   }
 }
 function renderNetwork(){
