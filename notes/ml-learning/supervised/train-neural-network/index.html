@@ -8,9 +8,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../../../../styles.css?v=24" />
+    <link rel="stylesheet" href="../../../../styles.css?v=29" />
     <script src="../../../../script.js" defer></script>
-    <script src="train-neural-network.js?v=5" defer></script>
+    <script src="train-neural-network.js?v=8" defer></script>
   </head>
   <body class="note-page">
     <header class="site-header">
@@ -28,14 +28,15 @@
       <section class="supervised-overview">
         <p>In the Build lesson, the network could pass signals forward and make a prediction. The inputs were fixed facts about a title and audience. The output was a guessed completion rate. Between those two ends were the model’s adjustable numbers: the weights on each input and the bias that shifts the neuron’s baseline.</p>
         <p>Those adjustable numbers are called <strong>parameters</strong>. A weight is a parameter. A bias is also a parameter. “Parameter” is the umbrella word for any internal number the model is allowed to learn from data. Training is the process where the machine changes those parameters after it sees examples with known answers. That is the learning in machine learning.</p>
-        <p>For one example, the loop is small: make a prediction <code>ŷ</code>, compare it with the known answer <code>y</code>, turn the miss into loss, calculate how each parameter contributed to that loss, then let the update rule nudge the parameters so the same example would be predicted a little better next time.</p>
+        <p>For one example, the loop is small: make a prediction <code>ŷ</code>, compare it with the known answer <code>y</code>, turn that miss into one loss number, calculate how each parameter affects that loss, then let the update rule nudge the parameters so the same example would be predicted a little better next time.</p>
+        <p><strong>Loss is the thing training tries to minimize.</strong> The residual tells us the direction and size of a miss. The loss function turns that miss into a score the optimizer can chase downward. In this lesson, the score is squared error for one example and Mean Squared Error across many examples. Lower loss means the model's predictions are closer to the answer key under that rule.</p>
       </section>
 
       <section class="train-system-overview" aria-labelledby="train-system-title">
         <div>
           <p class="case-section-label">The object we are training</p>
           <h2 id="train-system-title">The machine learns by rewriting parameters.</h2>
-          <p>The forward pass uses the current parameters to make <code>ŷ</code> (“y-hat”). Loss compares that prediction with <code>y</code>, the answer key. Backpropagation computes a gradient for each parameter: a signed number that says how loss would change if that parameter moved. Gradient descent uses those gradients to choose the actual update. We are not choosing the new weights by hand; the training algorithm is.</p>
+          <p>The forward pass uses the current parameters to make <code>ŷ</code> (“y-hat”). Loss compares that prediction with <code>y</code>, the answer key, and gives the optimizer one number to minimize. Backpropagation computes a gradient for each parameter: a signed number that says how loss would change if that parameter moved. Gradient descent uses those gradients to update the model parameters themselves. It is not updating the gradient, and it is not comparing against the original baseline model forever. We are not choosing the new weights by hand; the training algorithm is.</p>
         </div>
         <figure class="train-system-diagram" aria-label="A training loop from features to prediction, loss, gradients, and parameter update">
           <svg viewBox="0 0 880 440" role="img" aria-labelledby="train-system-svg-title">
@@ -73,8 +74,8 @@
 
       <section class="learning-loop train-loop" aria-label="Neural network training loop">
         <article><span>01</span><h2>Predict with current numbers</h2><p>A feedforward pass multiplies inputs by weights, adds the bias, and produces <code>ŷ</code>, the current guess.</p></article>
-        <article><span>02</span><h2>Measure the miss</h2><p>The known target <code>y</code> lets us calculate the residual <code>y − ŷ</code> and squared error for this example.</p></article>
-        <article><span>03</span><h2>Let the machine update</h2><p>Backpropagation calculates gradients. Gradient descent subtracts a learning-rate-sized piece of each gradient from the matching parameter.</p></article>
+        <article><span>02</span><h2>Measure the miss</h2><p>The known target <code>y</code> lets us calculate the residual <code>y − ŷ</code>. The loss function turns that miss into a number to minimize.</p></article>
+        <article><span>03</span><h2>Let the machine update</h2><p>Backpropagation calculates gradients. Gradient descent subtracts a learning-rate-sized piece of each gradient from the matching weight or bias.</p></article>
       </section>
 
       <section class="train-lab-panel" aria-labelledby="train-lab-title">
@@ -103,19 +104,41 @@
             </div>
             <svg id="train-surface" viewBox="0 0 740 420" role="img" aria-label="A loss landscape showing the current weight position"></svg>
             <div class="train-surface-legend"><span><i class="low"></i>Lower loss</span><span><i class="high"></i>Higher loss</span><span id="train-step-copy">Choose a learning rate, then watch the weight point move.</span></div>
-            <p class="train-map-note">On this 2D map, “downhill” means moving from warmer, higher-loss cells toward cooler, lower-loss cells. The vertical axis is inverted so useful gradient steps visibly descend. The yellow dot is the current pair of weights; each colored trail segment is the example that caused that update. Hover a segment to see the example, loss, and learning rate.</p>
+            <p class="train-map-note">On this 2D map, “downhill” means moving from warmer, higher-loss cells toward cooler, lower-loss cells. The vertical axis is inverted so useful gradient steps visibly descend. The open crosshair marks the current pair of weights; the colored dot inside it matches the latest training example. Hover a trail segment to see the example, loss, and learning rate.</p>
+            <div class="train-controls">
+              <fieldset>
+                <legend>Training example</legend>
+                <select id="train-example" aria-label="Choose a training example"></select>
+                <p id="train-example-copy">Pick one answer-key example to inspect.</p>
+              </fieldset>
+              <fieldset>
+                <legend>Learning rate</legend>
+                <input id="train-rate" type="range" min="1" max="80" value="20" />
+                <label for="train-rate"><strong><span id="train-rate-output">0.20</span> η (eta)</strong><span>Step size for each parameter update.</span></label>
+                <div class="train-rate-presets"><button type="button" data-rate="0.03">Tiny</button><button type="button" data-rate="0.20" class="is-selected">Useful</button><button type="button" data-rate="1.35">Oversized</button></div>
+              </fieldset>
+              <fieldset class="train-actions">
+                <legend>Gradient descent</legend>
+                <button id="train-step" type="button">Start one update</button>
+                <button id="train-epoch-button" type="button">Train one epoch</button>
+                <button id="train-reset" type="button">Reset</button>
+              </fieldset>
+            </div>
           </section>
 
           <aside class="train-readout">
             <p class="case-section-label">The numbers</p>
             <div class="prediction-card"><span>Predicted completion ŷ (y-hat)</span><strong id="train-prediction">0%</strong></div>
+            <div class="train-loss-callout" aria-label="Model loss scores">
+              <article><span>Train MSE</span><strong id="train-loss">0</strong><p>Practice examples</p></article>
+              <article><span>Held-out MSE</span><strong id="train-heldout">0</strong><p>Examples not used for updates</p></article>
+            </div>
+            <p class="train-readout-note">An update changes the model's weights and bias. Training examples cause updates; held-out examples only grade the current model.</p>
             <div class="train-stat-grid">
               <article><span>Actual target y</span><strong id="train-target">0%</strong></article>
               <article><span>Residual y − ŷ</span><strong id="train-residual">0</strong></article>
               <article><span>Squared error</span><strong id="train-example-loss">0</strong></article>
               <article><span>Epoch</span><strong id="train-epoch">0</strong></article>
-              <article><span>Train MSE</span><strong id="train-loss">0</strong></article>
-              <article><span>Held-out MSE</span><strong id="train-heldout">0</strong></article>
             </div>
             <div class="train-gradient-card">
               <span>Gradient preview</span>
@@ -135,32 +158,17 @@
           </aside>
         </div>
 
-        <div class="train-controls">
-          <fieldset>
-            <legend>Training example</legend>
-            <select id="train-example" aria-label="Choose a training example"></select>
-            <p id="train-example-copy">Pick one answer-key example to inspect.</p>
-          </fieldset>
-          <fieldset>
-            <legend>Learning rate</legend>
-            <input id="train-rate" type="range" min="1" max="80" value="20" />
-            <label for="train-rate"><strong><span id="train-rate-output">0.20</span> η (eta)</strong><span>Step size for each parameter update.</span></label>
-            <div class="train-rate-presets"><button type="button" data-rate="0.03">Tiny</button><button type="button" data-rate="0.20" class="is-selected">Useful</button><button type="button" data-rate="1.35">Oversized</button></div>
-          </fieldset>
-          <fieldset class="train-actions">
-            <legend>Gradient descent</legend>
-            <button id="train-step" type="button">Start one update</button>
-            <button id="train-epoch-button" type="button">Train one epoch</button>
-            <button id="train-reset" type="button">Reset</button>
-          </fieldset>
-        </div>
-
         <section class="train-parameter-strip" aria-label="Current learned parameters">
           <article><span>Parameter</span><strong id="train-w-affinity">0</strong><p>Audience-affinity weight</p></article>
           <article><span>Parameter</span><strong id="train-w-awareness">0</strong><p>Title-awareness weight</p></article>
           <article><span>Parameter</span><strong id="train-w-tone">0</strong><p>Tone-match weight</p></article>
           <article><span>Parameter</span><strong id="train-bias">0</strong><p>Bias</p></article>
         </section>
+
+        <aside class="train-concept-note train-bias-note">
+          <span>Bias, without the fog</span>
+          <p>A bias is a learned offset. In this tiny model there is one output unit, so there is one bias for that unit. In a larger neural network, each neuron usually has its own bias parameter. The bias is not chosen by a data scientist one neuron at a time; the scientist chooses the architecture and training setup, then gradient descent adjusts each bias along with the weights. “Adjusting the baseline” means shifting what the neuron would output before the input features push it up or down.</p>
+        </aside>
 
         <section class="train-residuals" aria-labelledby="train-residuals-title">
           <div><p class="case-section-label">Residuals</p><h3 id="train-residuals-title">Every example gives the model a correction signal.</h3><p>A positive residual means the model predicted too low. A negative residual means it predicted too high. The gradient combines that miss with the example’s feature values.</p></div>
@@ -192,7 +200,7 @@
           <div class="mechanics-heading"><p class="case-section-label">How it is trained</p><h2 id="train-mechanics-title">Predict. Measure. Update.</h2><p>The lab uses Mean Squared Error and gradient descent. The formulas below are the same operations used by the demo.</p></div>
           <div class="equation-grid">
             <article class="equation-card"><span>01 · Residual</span><div class="equation equation-compact">residual = y − ŷ</div><p><code>y</code> is the known answer. <code>ŷ</code> (“y-hat”) is the prediction. The residual says which way the prediction missed.</p></article>
-            <article class="equation-card"><span>02 · Mean Squared Error</span><div class="equation equation-mse">MSE = (1/n) Σ(y<sub>i</sub> − ŷ<sub>i</sub>)²</div><p><code>Σ</code> (“capital sigma”) means add the squared misses. <code>n</code> is the number of examples.</p></article>
+            <article class="equation-card"><span>02 · Mean Squared Error</span><div class="equation equation-mse">MSE = (1/n) Σ(y<sub>i</sub> − ŷ<sub>i</sub>)²</div><p><code>Σ</code> (“capital sigma”) means add the squared misses. <code>n</code> is the number of examples. Training tries to make this average smaller.</p></article>
             <article class="equation-card"><span>03 · Gradient descent</span><div class="equation equation-compact">w ← w − η(∂L/∂w)</div><p><code>η</code> (“eta”) is the learning rate. <code>∂L/∂w</code> (“partial L over partial w”) is how sensitive loss is to this weight.</p></article>
           </div>
         </section>
@@ -200,9 +208,17 @@
         <section class="train-generalization" aria-labelledby="train-generalization-title">
           <div><p class="case-section-label">Generalization</p><h2 id="train-generalization-title">The goal is not to memorize the practice set.</h2></div>
           <div>
-            <p>Training loss measures performance on examples used for updates. Held-out loss measures examples kept aside. When both improve, the model is probably learning a useful pattern. When training loss keeps falling but held-out loss rises, the model may be overfitting.</p>
+            <p>Training loss measures performance on examples used to update the model's parameters. Held-out loss measures examples kept aside: the model predicts them, but their errors do not change the weights or bias.</p>
+            <p>“Learning generalizes” means the model is not merely getting better at the exact practice cards it has already seen. It has found a pattern that also helps on examples that did not participate in the updates. When training loss keeps falling but held-out loss rises, the model may be overfitting: memorizing quirks of the practice set instead of learning a reusable relationship.</p>
             <p>That is why modern training workflows separate training examples, validation or held-out examples, and final test examples. The model should earn trust on data it did not use to tune itself.</p>
           </div>
+        </section>
+
+        <section class="train-concept-note train-reward-note" aria-labelledby="train-reward-title">
+          <span>About “reward” language</span>
+          <h3 id="train-reward-title">This lesson uses loss, not reward.</h3>
+          <p>In supervised learning, the usual signal is a loss function: a number the optimizer tries to minimize. “Reward” belongs most naturally to reinforcement learning, where an agent takes actions and receives scores to maximize. Modern chat systems may also use human preferences or reward models during alignment steps such as RLHF, but that is a later training stage, not the basic supervised loop shown here.</p>
+          <p>Words like <em>learn</em>, <em>reward</em>, and <em>reason</em> are useful shorthand, but they can sound more human than the mechanism is. On this page, “learning” means automatic parameter adjustment that reduces measured loss.</p>
         </section>
 
         <section class="terms-section" aria-labelledby="train-terms-title">
@@ -214,9 +230,11 @@
             <div><dt>Gradient descent</dt><dd>An update rule that steps parameters opposite the gradient.</dd></div>
             <div><dt>Learning rate</dt><dd>The hyperparameter controlling the size of each update step.</dd></div>
             <div><dt>Parameter</dt><dd>An internal number the model can learn, such as a weight or bias.</dd></div>
+            <div><dt>Bias</dt><dd>A learned offset for a neuron, adjusted by training along with the weights.</dd></div>
             <div><dt>Backpropagation</dt><dd>The efficient backward pass that calculates gradients for the parameters.</dd></div>
             <div><dt>Epoch</dt><dd>One training pass through every example in the training set.</dd></div>
-            <div><dt>Held-out examples</dt><dd>Examples not used for updates, used to check whether learning generalizes.</dd></div>
+            <div><dt>Held-out examples</dt><dd>Examples not used to update parameters, used to check whether the learned pattern transfers.</dd></div>
+            <div><dt>Reward</dt><dd>A score to maximize in reinforcement learning; different from supervised loss minimization.</dd></div>
           </dl>
         </section>
 

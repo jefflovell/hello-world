@@ -111,7 +111,7 @@ function applyGradients(draft) {
     exampleName: draft.exampleName,
     loss: draft.loss,
     rate: state.rate,
-  }].slice(-36);
+  }];
 }
 
 function trainExample(index = state.example) {
@@ -142,6 +142,21 @@ function mapSurfacePoint(weights, min, max, width, height, pad) {
     x: mapWeight(weights[0], min, max, width, pad),
     y: mapWeight(weights[1], min, max, height, pad),
   };
+}
+
+function offsetPoint(point, direction, distance) {
+  return {
+    x: point.x + direction.x * distance,
+    y: point.y + direction.y * distance,
+  };
+}
+
+function directionVector(start, end) {
+  const dx = end.x - start.x;
+  const dy = end.y - start.y;
+  const length = Math.hypot(dx, dy);
+  if (!length) return null;
+  return { x: dx / length, y: dy / length };
 }
 
 function renderSurface() {
@@ -177,27 +192,43 @@ function renderSurface() {
     const previous = tracePoints[index];
     const update = state.surfaceTrace[index + 1];
     const color = exampleColors[update.exampleIndex] || "#07101f";
-    return `<line class="train-descent-segment" x1="${previous.x}" y1="${previous.y}" x2="${point.x}" y2="${point.y}" style="stroke:${color}" ${index === tracePoints.length - 2 ? 'marker-end="url(#train-arrow)"' : ""}><title>${update.exampleName}: loss ${format(update.loss, 4)}, η ${format(update.rate, 2)}</title></line>`;
+    const title = `<title>${update.exampleName}: loss ${format(update.loss, 4)}, η ${format(update.rate, 2)}</title>`;
+    return `<g class="train-descent-step"><line class="train-descent-underlay" x1="${previous.x}" y1="${previous.y}" x2="${point.x}" y2="${point.y}"/>` +
+      `<line class="train-descent-segment" x1="${previous.x}" y1="${previous.y}" x2="${point.x}" y2="${point.y}" style="stroke:${color}">${title}</line></g>`;
   }).join("");
+  const latestDirection = tracePoints.length > 1 ? directionVector(tracePoints.at(-2), tracePoints.at(-1)) : null;
+  const directionArrow = latestDirection ? (() => {
+    const start = offsetPoint(currentPoint, latestDirection, 11);
+    const end = offsetPoint(currentPoint, latestDirection, 24);
+    return `<line class="train-direction-arrow" x1="${start.x}" y1="${start.y}" x2="${end.x}" y2="${end.y}" marker-end="url(#train-arrow)"><title>Latest update direction</title></line>`;
+  })() : "";
   const traceMarkers = tracePoints.slice(0, -1).map((point, index) => {
     const update = state.surfaceTrace[index + 1];
     const color = update ? exampleColors[update.exampleIndex] || "#07101f" : "#07101f";
     return `<circle class="train-trace-point" cx="${point.x}" cy="${point.y}" r="4" style="fill:${color}"/>`;
   }).join("");
+  const currentEntry = state.surfaceTrace.at(-1);
+  const currentColor = currentEntry?.exampleIndex >= 0 ? exampleColors[currentEntry.exampleIndex] : "#07101f";
 
   ui.surface.innerHTML = `
-    <defs><marker id="train-arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#07101f"/></marker></defs>
+    <defs><marker id="train-arrow" markerWidth="9" markerHeight="9" refX="8" refY="4.5" orient="auto" markerUnits="userSpaceOnUse"><path d="M0,0 L0,9 L9,4.5 z" fill="#07101f"/></marker></defs>
     <text class="train-axis-label" x="${width / 2}" y="${height - 13}">Audience-affinity weight</text>
     <text class="train-axis-label train-axis-y" x="18" y="${height / 2}">Title-awareness weight (inverted)</text>
-    <text class="train-layer-label" x="${pad}" y="34">WARMER = HIGHER LOSS</text>
-    <text class="train-layer-label" x="${width - pad}" y="34" text-anchor="end">COOLER = LOWER LOSS</text>
+    <text class="train-layer-label train-layer-label-left" x="${pad + 8}" y="46">WARMER = HIGHER LOSS</text>
+    <text class="train-layer-label train-layer-label-right" x="${width - pad - 8}" y="46">COOLER = LOWER LOSS</text>
     ${rects}
     <line class="train-axis" x1="${pad}" y1="${height - pad}" x2="${width - pad}" y2="${height - pad}"/>
     <line class="train-axis" x1="${pad}" y1="${pad}" x2="${pad}" y2="${height - pad}"/>
     ${traceSegments}
     ${traceMarkers}
-    <circle class="train-position-ring" cx="${currentPoint.x}" cy="${currentPoint.y}" r="15"/>
-    <circle class="train-position" cx="${currentPoint.x}" cy="${currentPoint.y}" r="7"/>
+    ${directionArrow}
+    <g class="train-position-crosshair">
+      <circle class="train-current-step-dot" cx="${currentPoint.x}" cy="${currentPoint.y}" r="3.5" style="fill:${currentColor}"/>
+      <line class="train-position-line" x1="${currentPoint.x - 12}" y1="${currentPoint.y}" x2="${currentPoint.x - 5}" y2="${currentPoint.y}"/>
+      <line class="train-position-line" x1="${currentPoint.x + 5}" y1="${currentPoint.y}" x2="${currentPoint.x + 12}" y2="${currentPoint.y}"/>
+      <line class="train-position-line" x1="${currentPoint.x}" y1="${currentPoint.y - 12}" x2="${currentPoint.x}" y2="${currentPoint.y - 5}"/>
+      <line class="train-position-line" x1="${currentPoint.x}" y1="${currentPoint.y + 5}" x2="${currentPoint.x}" y2="${currentPoint.y + 12}"/>
+    </g>
   `;
 }
 

@@ -27,6 +27,26 @@ using training vocabulary:
   the numbers; in Training, the machine changes those parameters using the loss
   signal. That automatic parameter update is the "learning" in machine
   learning.
+- When saying "turn the miss into loss," immediately decode it: a residual is
+  the miss, and the loss function converts that miss into one number the
+  optimizer tries to minimize. For this page, squared error and MSE are the
+  concrete loss measures.
+- Be precise about **updates**. An update changes the model parameters
+  themselves: weights and biases. It does not update "the gradient," and it is
+  not a permanent comparison against the original baseline model.
+- Explain held-out examples as examples that grade the current model but do not
+  cause parameter updates. "Generalization" means the learned pattern helps on
+  examples that did not participate in the updates.
+- Bias needs a concrete explanation. A bias is a learned offset for a neuron.
+  In the tiny Train lab, the output unit has one bias. In larger neural
+  networks, neurons usually have their own bias parameters. Data scientists
+  choose the architecture and training setup; gradient descent adjusts the
+  biases along with the weights.
+- Separate supervised **loss** from reinforcement-learning **reward**. This
+  page teaches loss minimization, not reward maximization. If reward language
+  appears, explain that it belongs most naturally to reinforcement learning or
+  later alignment stages such as RLHF, and avoid letting words like "learn,"
+  "reward," or "reason" imply human agency.
 
 Use the map carefully. The lab shows a 2D heat map, not a 3D mountain. It is a
 slice through two parameters: audience-affinity weight on the horizontal axis
