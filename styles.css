@@ -1228,6 +1228,247 @@ h1 {
   text-underline-offset: 4px;
 }
 
+.classifier-draft-nav {
+  width: min(1200px, calc(100% - 48px));
+  margin: 40px auto 80px;
+}
+
+.classifier-draft-nav .classification-menu {
+  margin: 0;
+  width: 100%;
+}
+
+.classifier-draft-nav .algo-card {
+  min-height: 170px;
+}
+
+.classifier-draft-lab {
+  display: grid;
+  grid-template-columns: 0.92fr 1.08fr;
+  gap: 28px;
+  align-items: stretch;
+  width: min(1200px, calc(100% - 48px));
+  margin: 0 auto 110px;
+  padding-top: 80px;
+  border-top: 1px solid var(--line);
+}
+
+.classifier-draft-lab > * {
+  min-width: 0;
+}
+
+.classifier-draft-copy {
+  padding: 28px;
+  border: 2px solid var(--ink);
+  background: #fff;
+  box-shadow: 9px 9px 0 rgba(255, 117, 95, 0.24);
+}
+
+.classifier-draft-copy h2 {
+  margin: 8px 0 18px;
+  font-size: clamp(2rem, 3.6vw, 3.8rem);
+  letter-spacing: -0.05em;
+  line-height: 0.98;
+}
+
+.classifier-draft-copy p:not(.case-section-label) {
+  color: var(--muted);
+  font-size: 1.03rem;
+}
+
+.classifier-scenario-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 26px;
+}
+
+.classifier-scenario-buttons button {
+  min-height: 72px;
+  padding: 13px 14px;
+  border: 2px solid var(--ink);
+  background: #fff;
+  color: var(--ink);
+  font: 800 0.86rem var(--body);
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 4px 4px 0 rgba(18, 24, 43, 0.12);
+}
+
+.classifier-scenario-buttons button.is-selected {
+  background: var(--blue);
+  color: #fff;
+  box-shadow: 4px 4px 0 rgba(49, 85, 245, 0.28);
+}
+
+.classifier-draft-stage {
+  display: grid;
+  gap: 16px;
+  padding: 28px;
+  border: 2px solid var(--ink);
+  background: #07101f;
+  color: #fff;
+  box-shadow: 9px 9px 0 #9deeff;
+}
+
+.classifier-draft-stage h3 {
+  margin: 4px 0 0;
+  font-size: clamp(1.7rem, 2.8vw, 2.7rem);
+  letter-spacing: -0.04em;
+}
+
+.classifier-draft-stage .case-section-label {
+  color: #9deeff;
+}
+
+.classifier-draft-readout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.classifier-draft-readout article {
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.classifier-draft-readout article:first-child {
+  grid-column: 1 / -1;
+  background:
+    linear-gradient(135deg, rgba(75, 243, 255, 0.18), rgba(166, 112, 255, 0.16)),
+    rgba(255, 255, 255, 0.08);
+}
+
+.classifier-draft-readout span {
+  display: block;
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.classifier-draft-readout strong {
+  display: block;
+  margin-top: 8px;
+  color: #fff;
+  font-family: var(--display);
+  font-size: 1.55rem;
+  line-height: 1.05;
+}
+
+.classifier-visual {
+  position: relative;
+  min-height: 230px;
+  overflow: hidden;
+  border: 1px solid rgba(157, 238, 255, 0.35);
+  background:
+    linear-gradient(90deg, rgba(75, 243, 255, 0.12) 1px, transparent 1px),
+    linear-gradient(0deg, rgba(75, 243, 255, 0.1) 1px, transparent 1px),
+    #101928;
+  background-size: 44px 44px;
+}
+
+.classifier-visual::before,
+.classifier-visual::after {
+  position: absolute;
+  content: "";
+  transition:
+    transform 220ms ease,
+    opacity 220ms ease,
+    border-color 220ms ease;
+}
+
+.classifier-visual::before {
+  inset: 34px 52px;
+  border: 3px solid #4bf3ff;
+  border-radius: 999px;
+  opacity: 0.45;
+}
+
+.classifier-visual::after {
+  top: 28px;
+  bottom: 28px;
+  left: 50%;
+  width: 4px;
+  background: #ffd45c;
+  box-shadow: 0 0 18px rgba(255, 212, 92, 0.5);
+  transform: rotate(24deg);
+  transform-origin: center;
+}
+
+.classifier-visual[data-state="probability"]::before {
+  border-color: #a670ff;
+  transform: scaleX(0.72);
+}
+
+.classifier-visual[data-state="neighbors"]::before {
+  border-color: #9deeff;
+  transform: scale(0.58) translateX(-18%);
+}
+
+.classifier-visual[data-state="likelihood"]::after {
+  transform: rotate(0deg) scaleX(1.8);
+}
+
+.classifier-visual[data-state="tree"]::after {
+  left: 28%;
+  transform: rotate(0deg);
+}
+
+.classifier-visual[data-state="margin"]::before {
+  inset: 54px 78px;
+  border-color: #ffd45c;
+}
+
+.classifier-visual[data-state="ensemble"]::before {
+  border-color: #ff755f;
+  transform: scale(0.86);
+}
+
+.classifier-visual[data-state="neural"]::before {
+  border-color: #a670ff;
+  transform: skewX(-12deg) scale(0.82);
+}
+
+.classifier-demo-note {
+  min-height: 78px;
+  margin: 0;
+  padding: 16px;
+  border-left: 4px solid #9deeff;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.76);
+}
+
+.classifier-draft-watch {
+  grid-column: 1 / -1;
+}
+
+.classifier-next-nav {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  width: min(1200px, calc(100% - 48px));
+  margin: -42px auto 110px;
+}
+
+.classifier-next-nav a {
+  padding: 16px 18px;
+  border: 2px solid var(--ink);
+  background: #fff;
+  color: var(--ink);
+  font-weight: 800;
+  text-align: center;
+  text-decoration: none;
+  box-shadow: 6px 6px 0 rgba(166, 112, 255, 0.24);
+}
+
+.classifier-next-nav a:last-child {
+  background: var(--blue);
+  color: #fff;
+}
+
 .tree-lab-panel {
   width: min(1200px, calc(100% - 48px));
   margin: 0 auto 110px;
@@ -4022,6 +4263,10 @@ h1 {
     grid-template-columns: 1fr;
   }
 
+  .classifier-draft-lab {
+    grid-template-columns: 1fr;
+  }
+
   .tree-lab-heading,
   .tree-lab-grid,
   .knn-lab-heading,
@@ -4073,6 +4318,12 @@ h1 {
     grid-template-columns: 1fr;
   }
 
+  .classifier-scenario-buttons,
+  .classifier-draft-readout,
+  .classifier-next-nav {
+    grid-template-columns: 1fr;
+  }
+
   .mechanics-heading,
   .terms-heading,
   .equation-grid {
@@ -4104,6 +4355,8 @@ h1 {
   .algorithm-path-label,
   .algo-grid,
   .lab-panel,
+  .classifier-draft-lab,
+  .classifier-next-nav,
   .tree-lab-panel,
   .knn-lab-panel,
   .svr-lab-panel,

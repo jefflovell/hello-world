@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="A first-draft lesson on logistic regression for classification: linear scores, sigmoid probabilities, thresholds, and calibration." />
+    <title>Logistic Regression Classification | Kaizen</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="../../../../styles.css?v=46" />
+    <script src="../../../../script.js" defer></script>
+    <script src="../classifier-draft.js?v=1" defer></script>
+  </head>
+  <body class="note-page">
+    <header class="site-header">
+      <a class="brand" href="../../../../" aria-label="Kaizen home">KAIZEN<span>.</span></a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav"><span class="sr-only">Toggle navigation</span><span></span><span></span></button>
+      <nav id="site-nav" class="site-nav" aria-label="Main navigation"><a href="../../../../#about">About</a><a href="../../../">Notes</a><a href="../../../../#work">Work</a><a href="../../../../#contact">Contact</a></nav>
+    </header>
+    <main>
+      <section class="note-hero">
+        <div class="note-kicker"><a href="../classification/">← Classification</a><span>/</span><span>Classifier family</span></div>
+        <div class="note-title"><h1>Logistic Regression Classification</h1><p class="key-idea">Use a straight-line score when you need a category decision and a probability you can inspect.</p></div>
+      </section>
+      <section class="supervised-overview">
+        <p>The perceptron gave us a first classifier: score the example, guess a side, and update the boundary after mistakes. Logistic regression keeps the straight-line score, but it adds an important layer of interpretation. Instead of only saying “this side or that side,” it squeezes the score into a probability between 0 and 1.</p>
+        <p>That matters when the decision has a cost. If a moderation model is 51% sure a message needs review, you may route it differently than a message at 97%. The boundary is still linear, but the readout becomes a calibrated-looking statement: how strongly does the current evidence favor the positive class?</p>
+      </section>
+      <section class="learning-loop" aria-label="Logistic regression learning loop">
+        <article><span>01</span><h2>Calculate a score</h2><p>Multiply features by weights, add the bias, and get one linear score <code>z</code>.</p></article>
+        <article><span>02</span><h2>Squeeze to probability</h2><p>The sigmoid function turns <code>z</code> into <code>p</code>, a number between 0 and 1.</p></article>
+        <article><span>03</span><h2>Choose a threshold</h2><p>Predict the positive class when the probability crosses the decision threshold.</p></article>
+      </section>
+      <section class="classifier-draft-lab" data-classifier-demo aria-labelledby="logistic-lab-title">
+        <div class="classifier-draft-copy">
+          <p class="case-section-label">Draft lab | Message review</p>
+          <h2 id="logistic-lab-title">A linear score becomes a probability.</h2>
+          <p>Try each case as if the model is deciding whether a message should be sent to human review. The features could include flagged words, sender history, link risk, and user reports. Logistic regression adds those signals into one score, then uses the sigmoid curve to make that score readable as probability.</p>
+          <div class="classifier-scenario-buttons">
+            <button type="button" class="is-selected" data-demo-title="Clear review case" data-demo-prediction="Review · p = 0.94" data-demo-trust="Trust: high, if calibration holds" data-demo-copy="The score is far above the threshold, so small feature changes are unlikely to flip the class. The probability is useful only if similar examples were represented in training." data-demo-state="probability">High-risk message</button>
+            <button type="button" data-demo-title="Near the threshold" data-demo-prediction="Review · p = 0.53" data-demo-trust="Trust: fragile" data-demo-copy="The class label says review, but the probability is close to the cutoff. This is where threshold choice matters more than the word “positive.”" data-demo-state="probability">Borderline promo</button>
+            <button type="button" data-demo-title="Low-risk message" data-demo-prediction="No review · p = 0.08" data-demo-trust="Trust: high for familiar traffic" data-demo-copy="The score is far below the threshold. The model is not finding enough weighted evidence for the review class." data-demo-state="probability">Routine message</button>
+            <button type="button" data-demo-title="Unfamiliar pattern" data-demo-prediction="No review · p = 0.41" data-demo-trust="Trust: inspect" data-demo-copy="A probability can look precise even when the message is unlike the training examples. Calibration should be checked on held-out or recent examples." data-demo-state="probability">New scam style</button>
+          </div>
+        </div>
+        <div class="classifier-draft-stage">
+          <div><p class="case-section-label">Model readout</p><h3 data-demo-title-output>Clear review case</h3></div>
+          <div class="classifier-visual" data-demo-visual data-state="probability"></div>
+          <div class="classifier-draft-readout">
+            <article><span>Prediction</span><strong data-demo-prediction-output>Review · p = 0.94</strong></article>
+            <article><span>Trust cue</span><strong data-demo-trust-output>Trust: high</strong></article>
+            <article><span>Mechanism</span><strong>sigmoid(z)</strong></article>
+          </div>
+          <p class="classifier-demo-note" data-demo-copy-output>The score is far above the threshold, so small feature changes are unlikely to flip the class.</p>
+        </div>
+        <aside class="watch-panel classifier-draft-watch"><p class="case-section-label">What to watch</p><ul><li>The boundary is still straight.</li><li>The score can become a probability instead of only a side.</li><li>The threshold turns probability into action.</li><li>Calibration asks whether probabilities match real frequencies.</li></ul></aside>
+        <section class="mechanics-section">
+          <div class="mechanics-heading"><p class="case-section-label">How it is built</p><h2>Logistic regression scores, squashes, and thresholds.</h2><p>The model is linear until the final probability conversion. Training usually minimizes log loss, which strongly penalizes confident wrong probabilities.</p></div>
+          <div class="equation-grid">
+            <article class="equation-card"><span>01 · Linear score</span><div class="equation">z = w · x + b</div><p><code>x</code> is the feature vector, <code>w</code> is the weight vector, and <code>b</code> is the learned bias offset.</p></article>
+            <article class="equation-card"><span>02 · Probability</span><div class="equation">p = 1 / (1 + e<sup>-z</sup>)</div><p>The sigmoid function turns any score into a value between 0 and 1. Large positive scores move toward 1; large negative scores move toward 0.</p></article>
+            <article class="equation-card"><span>03 · Class decision</span><div class="equation">ŷ = 1 if p ≥ t</div><p><code>ŷ</code> (“y-hat”) is the predicted class. <code>t</code> is the threshold, often 0.5 unless the cost of mistakes suggests otherwise.</p></article>
+          </div>
+        </section>
+        <section class="terms-section">
+          <div class="terms-heading"><p class="case-section-label">Key terms</p><h2>Words that make the probability honest.</h2></div>
+          <dl class="term-grid"><div><dt>Logit</dt><dd>The raw linear score before the sigmoid function.</dd></div><div><dt>Sigmoid</dt><dd>An S-shaped function that maps a score to a probability-like value.</dd></div><div><dt>Threshold</dt><dd>The cutoff that turns probability into a class action.</dd></div><div><dt>Calibration</dt><dd>Whether examples predicted near 80% really happen about 80% of the time.</dd></div></dl>
+        </section>
+      </section>
+      <nav class="classifier-next-nav"><a href="../classification/">Back to classification</a><a href="../knn-classification/">Next: k-nearest neighbors</a></nav>
+    </main>
+    <footer id="contact" class="site-footer"><p>Built with care and a little curiosity.</p><a href="https://github.com/jefflovell" rel="me">@jefflovell</a><a class="back-to-top" href="#" aria-label="Back to top">↑</a></footer>
+  </body>
+</html>

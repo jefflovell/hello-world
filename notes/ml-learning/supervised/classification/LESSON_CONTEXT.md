@@ -30,9 +30,30 @@ card should make a mechanism promise:
 - neural networks: bend the decision surface through hidden-layer
   transformations
 
-Keep these cards as a roadmap until child pages exist. When child pages arrive,
-link the cards and keep this page focused on the classification task family plus
-the perceptron foundation.
+The cards now link to first-draft child pages. Keep this page focused on the
+classification task family plus the perceptron foundation; deepen model-specific
+labs on the child pages instead of expanding the overview into a catalog.
+
+## Current classifier child drafts
+
+- `../logistic-regression/`: linear score, sigmoid probability, threshold, and
+  calibration.
+- `../knn-classification/`: distance, local votes, `k`, and feature scaling.
+- `../naive-bayes-classification/`: priors, likelihoods, independence
+  assumption, and smoothing.
+- `../decision-tree-classification/`: feature questions, leaf votes, impurity,
+  depth, and pruning.
+- `../support-vector-classification/`: boundary, margin, support vectors, soft
+  margin, and kernels.
+- `../ensemble-classification/`: random-forest style votes and boosting-style
+  corrections in one first-draft ensemble page.
+- `../neural-network-classification/`: hidden activations, logits, sigmoid or
+  softmax probability outputs, cross-entropy loss, and generalization.
+
+These are first drafts. They use a shared compact case-switching lab in
+`../classifier-draft.js` rather than fully bespoke visualizations. Future passes
+should replace the shared draft labs with richer interactions where the teaching
+need justifies the complexity.
 
 ## Current learning loop
 
@@ -69,8 +90,6 @@ cards as the standard evolves.
 - This page has received a first voice/mechanism pass after the neural-network
   sequence. Future work should deepen the lab and styling, not revert it to a
   generic catalog.
-- Planned classifier siblings include logistic regression, k-nearest neighbors,
-  Naive Bayes, decision trees, support vector classifiers, ensembles, and
-  neural networks.
-- When classifier child pages arrive, keep this page as the task-family
-  overview, not a dumping ground for every model.
+- Classifier child pages now exist as first drafts. Prioritize tightening the
+  most confusing or high-value model-specific labs before adding more
+  classifiers.
