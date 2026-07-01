@@ -1703,6 +1703,49 @@ h1 {
   font-size: 0.92rem;
 }
 
+.tree-edge {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.18);
+  stroke-width: 3;
+}
+
+.tree-edge.is-active {
+  stroke: #9deeff;
+  stroke-width: 7;
+  filter: drop-shadow(0 0 10px rgba(157, 238, 255, 0.32));
+}
+
+.tree-edge-label {
+  fill: rgba(255, 255, 255, 0.5);
+  font: 800 10px var(--body);
+  letter-spacing: 0.08em;
+  text-anchor: middle;
+  text-transform: uppercase;
+}
+
+.tree-node rect {
+  fill: #121c2d;
+  stroke: rgba(255, 255, 255, 0.28);
+  stroke-width: 2;
+}
+
+.tree-node text {
+  fill: rgba(255, 255, 255, 0.72);
+  font: 800 13px var(--body);
+  text-anchor: middle;
+}
+
+.tree-node.is-active rect {
+  fill: rgba(49, 85, 245, 0.9);
+  stroke: #fff;
+  stroke-width: 3;
+  filter: drop-shadow(0 0 10px rgba(49, 85, 245, 0.45));
+}
+
+.tree-node.is-active text {
+  fill: #fff;
+}
+
 .classifier-axis-label,
 .classifier-chart-label,
 .classifier-tick {
