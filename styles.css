@@ -1788,6 +1788,90 @@ h1 {
   filter: drop-shadow(0 0 10px rgba(49, 85, 245, 0.55));
 }
 
+.ensemble-mode-buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.ensemble-mode-buttons button {
+  padding: 12px;
+  border: 2px solid rgba(255, 255, 255, 0.32);
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font: 800 0.82rem var(--body);
+  cursor: pointer;
+}
+
+.ensemble-mode-buttons button.is-selected {
+  border-color: #fff;
+  background: var(--blue);
+}
+
+.ensemble-vote-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.ensemble-vote-grid span {
+  display: grid;
+  min-height: 72px;
+  border: 2px solid rgba(255, 255, 255, 0.22);
+  color: #fff;
+  font: 800 1rem var(--display);
+  place-items: center;
+}
+
+.ensemble-vote-grid .review {
+  background: rgba(255, 117, 95, 0.78);
+}
+
+.ensemble-vote-grid .allow {
+  background: rgba(75, 243, 255, 0.32);
+}
+
+.ensemble-boost-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.ensemble-boost-grid article {
+  display: grid;
+  grid-template-columns: 42px 1fr 70px;
+  gap: 10px;
+  align-items: center;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.ensemble-boost-grid span,
+.ensemble-boost-grid strong {
+  color: #fff;
+  font-weight: 800;
+}
+
+.ensemble-boost-grid i {
+  display: block;
+  height: 10px;
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.ensemble-boost-grid b {
+  display: block;
+  height: 100%;
+}
+
+.ensemble-boost-grid b.positive {
+  background: #ff755f;
+}
+
+.ensemble-boost-grid b.negative {
+  background: #9deeff;
+}
+
 .classifier-axis-label,
 .classifier-chart-label,
 .classifier-tick {
