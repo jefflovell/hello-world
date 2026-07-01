@@ -4,13 +4,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="A first-draft lesson on logistic regression for classification: linear scores, sigmoid probabilities, thresholds, and calibration." />
-    <title>Logistic Regression Classification | Kaizen</title>
+    <title>Logistic Regression as a Classifier | Kaizen</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="../../../../styles.css?v=47" />
+    <link rel="stylesheet" href="../../../../styles.css?v=48" />
     <script src="../../../../script.js" defer></script>
-    <script src="logistic-regression.js?v=1" defer></script>
+    <script src="logistic-regression.js?v=2" defer></script>
   </head>
   <body class="note-page">
     <header class="site-header">
@@ -21,10 +21,11 @@
     <main>
       <section class="note-hero">
         <div class="note-kicker"><a href="../classification/">← Classification</a><span>/</span><span>Classifier family</span></div>
-        <div class="note-title"><h1>Logistic Regression Classification</h1><p class="key-idea">Use a straight-line score when you need a category decision and a probability you can inspect.</p></div>
+        <div class="note-title"><h1>Logistic Regression as a Classifier</h1><p class="key-idea">Use a straight-line score when you need a category decision and a probability you can inspect.</p></div>
       </section>
       <section class="supervised-overview">
         <p>The perceptron gave us a first classifier: score the example, guess a side, and update the boundary after mistakes. Logistic regression keeps the straight-line score, but it adds an important layer of interpretation. Instead of only saying “this side or that side,” it squeezes the score into a probability between 0 and 1.</p>
+        <p>The name is annoying on purpose, or at least it feels that way. Logistic regression is usually used for classification, not numeric regression. The “regression” part comes from the model’s linear score: it still computes a weighted sum like a regression model. The “logistic” part is the S-shaped curve that converts that score into a probability. So the name really means: a regression-style score passed through a logistic curve so it can support a class decision.</p>
         <p>That matters when the decision has a cost. If a moderation model is 51% sure a message needs review, you may route it differently than a message at 97%. The boundary is still linear, but the readout now says how far the example sits from that boundary in probability language. The useful question becomes: is this probability calibrated, or is it just a clean-looking number?</p>
       </section>
       <section class="learning-loop" aria-label="Logistic regression learning loop">
@@ -43,12 +44,18 @@
           <div class="classifier-lab-stage">
             <div class="classifier-stage-header">
               <div>
-                <p class="case-section-label">Sigmoid readout</p>
-                <h3>Linear evidence → probability</h3>
+                <p class="case-section-label">Model state</p>
+                <h3 id="logistic-stage-title">Linear score first</h3>
               </div>
               <button id="logistic-reset" type="button">Reset</button>
             </div>
+            <div class="classifier-stage-steps" role="group" aria-label="Logistic regression calculation stages">
+              <button type="button" data-logistic-stage="linear">1 · Linear score</button>
+              <button type="button" data-logistic-stage="sigmoid">2 · Sigmoid</button>
+              <button type="button" data-logistic-stage="threshold">3 · Threshold</button>
+            </div>
             <svg id="logistic-chart" viewBox="0 0 720 430" role="img" aria-label="Sigmoid probability curve with current score and decision threshold"></svg>
+            <p class="classifier-stage-note" id="logistic-stage-copy">First the model calculates the raw linear score <code>z = w · x + b</code>. No probability exists yet.</p>
             <div class="classifier-symbol-key">
               <span>Symbol key</span>
               <dl>
@@ -118,6 +125,18 @@
         </div>
 
         <aside class="watch-panel classifier-production-watch"><p class="case-section-label">What to watch</p><ul><li>Raising weighted evidence moves <code>z</code> to the right on the sigmoid curve.</li><li>The sigmoid converts that score into probability, but the curve flattens near 0 and 1.</li><li>The threshold controls the action. It does not retrain the model.</li><li>Trust comes from calibration on held-out or recent examples, not from a clean probability display.</li></ul></aside>
+
+        <section class="logistic-stats-bridge" aria-labelledby="logistic-stats-title">
+          <div>
+            <p class="case-section-label">Stats bridge</p>
+            <h2 id="logistic-stats-title">From least-squares lines to trained classifiers.</h2>
+          </div>
+          <div>
+            <p>If you have taken college statistics, you may remember least-squares linear regression: measure the residuals, square them, add them up, and choose the line that makes that total as small as possible. In the simplest ordinary least-squares setting, the algebra can solve directly for the best line. That is the clean old friend hiding behind <code>y = mx + b</code>.</p>
+            <p>Logistic regression expands that idea so the line can support classification. It still builds a linear score, <code>z = w · x + b</code>, but it does not use that score as the final numeric prediction. It passes the score through the logistic sigmoid so the readout lands between 0 and 1, then trains the weights and bias against classification loss instead of squared-error loss.</p>
+            <p>That extra sigmoid-and-loss step is why this lesson starts to feel like the bridge into neural networks. We are no longer just drawing the line with one tidy least-squares formula. Modern implementations use linear algebra to compute many scores and gradients at once, then an optimizer changes the parameters until the loss gets smaller. Deep neural networks scale up the same habit: weighted sums, nonlinear functions, loss, gradients, and parameter updates.</p>
+          </div>
+        </section>
 
         <section class="mechanics-section">
           <div class="mechanics-heading"><p class="case-section-label">How it is built</p><h2>Logistic regression scores, squashes, and thresholds.</h2><p>The model is linear until the final probability conversion. Training usually minimizes log loss, which strongly penalizes confident wrong probabilities.</p></div>

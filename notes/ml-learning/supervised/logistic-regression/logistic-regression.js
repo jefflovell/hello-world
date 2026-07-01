@@ -1,4 +1,5 @@
 const logisticState = {
+  stage: "linear",
   threshold: 0.5,
   features: {
     flagged: 84,
@@ -25,8 +26,24 @@ const logisticPresets = {
 
 const logisticFeatureInputs = Array.from(document.querySelectorAll("[data-logistic-feature]"));
 const logisticPresetButtons = Array.from(document.querySelectorAll("[data-logistic-preset]"));
+const logisticStageButtons = Array.from(document.querySelectorAll("[data-logistic-stage]"));
 const logisticThresholdInput = document.querySelector("#logistic-threshold");
 const logisticChart = document.querySelector("#logistic-chart");
+
+const logisticStageCopy = {
+  linear: {
+    title: "Linear score first",
+    copy: "First the model calculates the raw linear score <code>z = w · x + b</code>. This is still regression-shaped evidence on an open-ended number line. No probability exists yet.",
+  },
+  sigmoid: {
+    title: "Sigmoid turns score into probability",
+    copy: "Next the logistic sigmoid maps the raw score onto <code>0</code> to <code>1</code>. The model is still using the same linear evidence, but the readout is now probability-shaped.",
+  },
+  threshold: {
+    title: "Threshold turns probability into action",
+    copy: "Finally, the threshold <code>t</code> turns probability into a class decision. Moving the threshold changes the action rule; it does not retrain the weights or bias.",
+  },
+};
 
 function sigmoid(value) {
   return 1 / (1 + Math.exp(-value));
@@ -69,6 +86,9 @@ function drawLogisticChart(score, probability) {
   const currentX = xForScore(Math.max(scoreMin, Math.min(scoreMax, score)));
   const currentY = yForProbability(probability);
   const thresholdX = xForScore(Math.max(scoreMin, Math.min(scoreMax, probabilityForThreshold)));
+  const stage = logisticState.stage;
+  const lineProbability = stage === "linear" ? 0.08 : probability;
+  const linearY = bottom + 50;
 
   const curve = [];
   for (let i = 0; i <= 120; i += 1) {
@@ -77,18 +97,22 @@ function drawLogisticChart(score, probability) {
     curve.push(`${command}${xForScore(raw).toFixed(1)} ${yForProbability(sigmoid(raw)).toFixed(1)}`);
   }
 
+  logisticChart.dataset.stage = stage;
   logisticChart.innerHTML = `
     <path class="classifier-axis" d="M${left} ${bottom}H${right}M${left} ${bottom}V${top}" />
     <path class="classifier-gridline" d="M${left} ${yForProbability(0.5)}H${right}" />
     <path class="classifier-gridline" d="M${xForScore(0)} ${bottom}V${top}" />
-    <path class="logistic-curve" d="${curve.join(" ")}" />
-    <path class="logistic-threshold-line" d="M${thresholdX} ${bottom}V${top}" />
-    <path class="logistic-score-line" d="M${currentX} ${bottom}V${currentY}" />
-    <circle class="logistic-point" cx="${currentX}" cy="${currentY}" r="12" />
+    <path class="logistic-curve ${stage === "linear" ? "is-muted" : ""}" d="${curve.join(" ")}" />
+    <path class="logistic-threshold-line ${stage === "threshold" ? "is-active" : "is-muted"}" d="M${thresholdX} ${bottom}V${top}" />
+    <path class="logistic-score-line" d="M${currentX} ${bottom}V${stage === "linear" ? yForProbability(lineProbability) : currentY}" />
+    <path class="logistic-linear-track ${stage === "linear" ? "is-active" : ""}" d="M${left} ${linearY}H${right}" />
+    <circle class="logistic-linear-point ${stage === "linear" ? "is-active" : ""}" cx="${currentX}" cy="${linearY}" r="10" />
+    <circle class="logistic-point ${stage === "linear" ? "is-muted" : ""}" cx="${currentX}" cy="${currentY}" r="12" />
     <text class="classifier-axis-label" x="${right}" y="${bottom + 34}">linear score z</text>
     <text class="classifier-axis-label" x="${left}" y="${top - 14}">probability p</text>
-    <text class="classifier-chart-label" x="${Math.min(currentX + 16, right - 170)}" y="${Math.max(currentY - 18, top + 18)}">p = ${Math.round(probability * 100)}%</text>
-    <text class="classifier-chart-label threshold" x="${Math.min(thresholdX + 10, right - 150)}" y="${bottom - 16}">threshold t</text>
+    <text class="classifier-chart-label ${stage === "linear" ? "is-primary" : ""}" x="${Math.min(currentX + 16, right - 170)}" y="${linearY + 6}">z = ${score.toFixed(2)}</text>
+    <text class="classifier-chart-label ${stage === "sigmoid" ? "is-primary" : ""}" x="${Math.min(currentX + 16, right - 170)}" y="${Math.max(currentY - 18, top + 18)}">p = ${Math.round(probability * 100)}%</text>
+    <text class="classifier-chart-label threshold ${stage === "threshold" ? "is-primary" : "is-muted"}" x="${Math.min(thresholdX + 10, right - 150)}" y="${bottom - 16}">threshold t</text>
     <text class="classifier-tick" x="${left}" y="${bottom + 22}">-6</text>
     <text class="classifier-tick" x="${xForScore(0)}" y="${bottom + 22}">0</text>
     <text class="classifier-tick" x="${right}" y="${bottom + 22}">6</text>
@@ -135,6 +159,15 @@ function updateLogisticLab() {
 
   setText("#logistic-trust-title", trustTitle);
   setText("#logistic-trust-copy", trustCopy);
+
+  const activeStage = logisticStageCopy[logisticState.stage] || logisticStageCopy.linear;
+  setText("#logistic-stage-title", activeStage.title);
+  const stageCopy = document.querySelector("#logistic-stage-copy");
+  if (stageCopy) stageCopy.innerHTML = activeStage.copy;
+  logisticStageButtons.forEach((button) => {
+    button.classList.toggle("is-selected", button.dataset.logisticStage === logisticState.stage);
+  });
+
   drawLogisticChart(score, probability);
 }
 
@@ -161,6 +194,13 @@ logisticPresetButtons.forEach((button) => {
     Object.assign(logisticState.features, preset);
     delete logisticState.features.threshold;
     logisticPresetButtons.forEach((item) => item.classList.toggle("is-selected", item === button));
+    updateLogisticLab();
+  });
+});
+
+logisticStageButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    logisticState.stage = button.dataset.logisticStage;
     updateLogisticLab();
   });
 });
