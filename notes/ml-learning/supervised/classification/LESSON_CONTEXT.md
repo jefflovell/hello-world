@@ -34,7 +34,7 @@ The cards now link to first-draft child pages. Keep this page focused on the
 classification task family plus the perceptron foundation; deepen model-specific
 labs on the child pages instead of expanding the overview into a catalog.
 
-## Current classifier child drafts
+## Current classifier child lessons
 
 - `../logistic-regression/`: linear score, sigmoid probability, threshold, and
   calibration.
@@ -50,10 +50,9 @@ labs on the child pages instead of expanding the overview into a catalog.
 - `../neural-network-classification/`: hidden activations, logits, sigmoid or
   softmax probability outputs, cross-entropy loss, and generalization.
 
-These are first drafts. They use a shared compact case-switching lab in
-`../classifier-draft.js` rather than fully bespoke visualizations. Future passes
-should replace the shared draft labs with richer interactions where the teaching
-need justifies the complexity.
+Each classifier child now has a production interaction plus a local `HANDOFF.md`
+for future split-out chats. The old shared draft lab script remains in the tree
+only as historical/scaffold code until unused cleanup is scheduled.
 
 ## Current learning loop
 
@@ -90,6 +89,6 @@ cards as the standard evolves.
 - This page has received a first voice/mechanism pass after the neural-network
   sequence. Future work should deepen the lab and styling, not revert it to a
   generic catalog.
-- Classifier child pages now exist as first drafts. Prioritize tightening the
-  most confusing or high-value model-specific labs before adding more
+- Classifier child pages now have model-specific production labs. Prioritize
+  tightening the most confusing or high-value interactions before adding more
   classifiers.

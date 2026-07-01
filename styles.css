@@ -1872,6 +1872,46 @@ h1 {
   background: #9deeff;
 }
 
+.nn-class-edge {
+  fill: none;
+  stroke: rgba(157, 238, 255, 0.28);
+  stroke-width: 2;
+}
+
+.nn-class-edge.strong {
+  stroke: rgba(255, 255, 255, 0.32);
+  stroke-width: 3;
+}
+
+.nn-class-node circle {
+  fill: #121c2d;
+  stroke: rgba(255, 255, 255, 0.38);
+  stroke-width: 2;
+}
+
+.nn-class-node.hidden circle {
+  stroke: #a670ff;
+  stroke-width: 4;
+}
+
+.nn-class-node.output circle {
+  fill: #3155f5;
+  stroke: #fff;
+  stroke-width: 3;
+  filter: drop-shadow(0 0 10px rgba(49, 85, 245, 0.42));
+}
+
+.nn-class-node text {
+  fill: #fff;
+  font: 800 12px var(--body);
+  text-anchor: middle;
+}
+
+.nn-class-node .value {
+  fill: rgba(255, 255, 255, 0.72);
+  font-size: 11px;
+}
+
 .classifier-axis-label,
 .classifier-chart-label,
 .classifier-tick {

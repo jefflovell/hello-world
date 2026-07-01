@@ -32,13 +32,12 @@ Backlinks should preserve this hierarchy:
 - `supervised/classification/`
   - Purpose: classification family overview.
   - Current lesson anchor: perceptron / linear classification foundation.
-  - First-draft child pages now exist for logistic regression, k-nearest
+  - Child pages now exist for logistic regression, k-nearest
     neighbors, Naive Bayes, decision trees, support vector classification,
     ensemble classification, and neural-network classification.
-  - The child drafts use a shared compact case-switching lab to make each model
-    answer an inspectable question about boundaries, probability, votes,
-    likelihoods, margins, or hidden representations. Future passes should
-    deepen those interactions model by model.
+  - Each child page has a production lab and handoff doc. The labs make each
+    model answer an inspectable question about boundaries, probability, votes,
+    likelihoods, margins, aggregation, or hidden representations.
 
 ### Regression
 
@@ -78,7 +77,7 @@ models, create a broader neural-network hub.
 
 1. Tighten `train-neural-network/`.
 2. Revisit `mlp-regression/` after the training concepts have a foundation.
-3. Tighten the first-draft classification siblings:
+3. Continue tightening the classifier sibling labs:
    - logistic regression,
    - k-nearest-neighbor classification,
    - Naive Bayes classification,
