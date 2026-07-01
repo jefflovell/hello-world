@@ -1606,6 +1606,39 @@ h1 {
   filter: drop-shadow(0 0 10px rgba(255, 117, 95, 0.5));
 }
 
+.knn-radius {
+  fill: rgba(157, 238, 255, 0.08);
+  stroke: rgba(157, 238, 255, 0.34);
+  stroke-width: 2;
+  stroke-dasharray: 8 8;
+}
+
+.knn-neighbor-line {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.36);
+  stroke-width: 2;
+}
+
+.knn-point {
+  stroke: rgba(255, 255, 255, 0.78);
+  stroke-width: 2;
+  opacity: 0.72;
+}
+
+.knn-point.is-neighbor {
+  opacity: 1;
+  stroke: #fff;
+  stroke-width: 4;
+  filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.35));
+}
+
+.knn-current {
+  fill: #fff;
+  stroke: #3155f5;
+  stroke-width: 6;
+  filter: drop-shadow(0 0 10px rgba(49, 85, 245, 0.55));
+}
+
 .classifier-axis-label,
 .classifier-chart-label,
 .classifier-tick {
